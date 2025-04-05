@@ -3,23 +3,24 @@
 # Exit immediately if a command exits with a non-zero status.
 set -e
 
-# Define the dataset source (Kaggle in this example)
+# Dataset info
 DATASET="ravindrasinghrana/job-description-dataset"
 DATA_DIR="./data"
 
+# Print header
 echo "========================================"
 echo "  Dataset Download Script"
 echo "========================================"
 
-# 1. Create the data directory if it doesn't already exist
-echo "Creating data directory: $DATA_DIR (if not already present)"
+# Step 1: Create data directory (if needed)
+echo "Creating data directory: $DATA_DIR"
 mkdir -p "$DATA_DIR"
 
-# 2. Download the dataset from Kaggle
+# Step 2: Download dataset from Kaggle
 echo "Downloading dataset from Kaggle: $DATASET"
 kaggle datasets download -d "$DATASET" -p "$DATA_DIR" --unzip
 
-# 3. Provide a confirmation message
-echo "Dataset downloaded and unzipped in '$DATA_DIR'."
+# Step 3: Provide a confirmation message
+echo "Dataset downloaded and extracted to '$DATA_DIR'."
 echo "========================================"
 echo "Download complete!"
