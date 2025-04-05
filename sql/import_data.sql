@@ -27,4 +27,6 @@ FROM STDIN
 WITH CSV 
      HEADER 
      DELIMITER ',' 
-     NULL 'null';
+     NULL 'null'
+     QUOTE '"'
+     ESCAPE '"';
