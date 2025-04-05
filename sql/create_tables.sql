@@ -1,4 +1,6 @@
-CREATE TABLE IF NOT EXISTS job_descriptions (
+DROP TABLE job_descriptions CASCADE;
+
+CREATE TABLE job_descriptions (
     id SERIAL PRIMARY KEY,
     job_id BIGINT UNIQUE NOT NULL,
     experience TEXT,
@@ -22,7 +24,7 @@ CREATE TABLE IF NOT EXISTS job_descriptions (
     skills TEXT,
     responsibilities TEXT,
     company_name TEXT,
-    company_profile JSONB,
+    company_profile TEXT,
     
     -- Additional constraints
     CHECK (latitude BETWEEN -90 AND 90),

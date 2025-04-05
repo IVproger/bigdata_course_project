@@ -25,6 +25,7 @@ with psql.connect(conn_string) as conn:
         conn.commit()
         
         # Handle import_data.sql with COPY commands
+        print("Import data")
         with open(os.path.join("sql", "import_data.sql")) as file:
            content = file.read()
         
@@ -34,10 +35,42 @@ with psql.connect(conn_string) as conn:
            for table_name in copy_commands:
             # Extract the specific COPY command for this table
             copy_pattern = rf'COPY\s+{table_name}\s+.*?;'
-            copy_command = re.search(copy_pattern, content, re.IGNORECASE | re.DOTALL).group(0)
-         
-            
-            csv_file = os.path.join("data", f"{table_name}.csv")
-            with open(csv_file, "r") as data_file:
-                # Use copy_expert to execute the COPY command
-                cur.copy_expert(copy_command, data_file)
+            match = re.search(copy_pattern, content, re.IGNORECASE | re.DOTALL)
+            if match:
+                copy_command = match.group(0)
+                # Use the table name to get the correct CSV file
+                csv_file = os.path.join("data", f"{table_name}.csv")
+                if os.path.exists(csv_file):
+                    with open(csv_file, "r") as data_file:
+                        # Use copy_expert to execute the COPY command
+                        cur.copy_expert(copy_command, data_file)
+                else:
+                    print(f"Warning: CSV file {csv_file} not found")
+
+        conn.commit() 
+        
+        # Execute test queries
+        print("Running test queries")
+        cur = conn.cursor()
+        with open(os.path.join("sql", "test_database.sql")) as file:
+                # Combine all lines into a single string
+                sql_content = file.read()
+                
+                # Split by semicolons to separate commands
+                sql_commands = sql_content.split(';')
+                
+                for command in sql_commands:
+                    command = command.strip()
+
+                    # Remove all standalone comment lines
+                    cleaned_command = '\n'.join([line for line in command.split('\n')])
+                    if cleaned_command.strip():
+                        try:
+                           cur.execute(cleaned_command)
+                           
+                           # Fetch and print results if available
+                           if cur.description:
+                                    pprint(cur.fetchall())
+                        except psql.Error as e:
+                                print(f"Error executing: {cleaned_command}")
+                                print(f"Error message: {e}")
