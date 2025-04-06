@@ -1,6 +1,5 @@
 #!/bin/bash
 # Data import script to collect data and load it into HDFS
-
 # Exit on error, undefined variables, and propagate pipe failures
 set -euo pipefail
 
@@ -20,7 +19,7 @@ bash scripts/data_collection.sh
 
 # Build project database
 echo "Building project database..."
-python3.10 scripts/build_projectdb.py
+python3.11 scripts/build_projectdb.py
 
 # First clean existing output directory (optional but safer approach)
 echo "Cleaning existing output directory..."
