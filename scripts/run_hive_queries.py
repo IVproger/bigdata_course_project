@@ -1,161 +1,159 @@
 #!/usr/bin/env python3
 """
-Script to run Hive queries using PySpark.
-This script reads HiveQL statements from SQL files and executes them using PySpark.
+Script to run Hive EDA queries using PySpark, store results in PostgreSQL,
+and export results to CSV.
 """
 
 import os
 import sys
-import re
 from pyspark.sql import SparkSession
-from pyspark.sql.functions import col, count, desc, explode, split, regexp_replace, round, expr
 
 def read_password(file_path):
-    """Read the Hive password from a file."""
-    with open(file_path, "r") as file:
-        return file.read().rstrip()
-
-def execute_hive_script(spark, script_path, output_file=None):
-    """Execute a HiveQL script using PySpark."""
+    """Read a password from a file."""
     try:
-        # Read the script file
-        with open(script_path, "r") as file:
-            script = file.read()
-        
-        # Split the script into individual statements
-        # Use a more robust method to split SQL statements
-        statements = []
-        current_statement = ""
-        
-        # Process each line
-        for line in script.split('\n'):
-            # Skip comments
-            if line.strip().startswith('--'):
-                continue
-                
-            # Add the line to the current statement
-            current_statement += line + "\n"
-            
-            # If the line ends with a semicolon, it's the end of a statement
-            if line.strip().endswith(';'):
-                # Clean up the statement
-                clean_stmt = current_statement.strip()
-                if clean_stmt:
-                    statements.append(clean_stmt)
-                current_statement = ""
-        
-        # Add any remaining statement (without semicolon)
-        if current_statement.strip():
-            statements.append(current_statement.strip())
-        
-        # Execute each statement
-        for statement in statements:
-            print(f"Executing: {statement[:100]}...")
-            spark.sql(statement)
-        
-        # If an output file is specified, save the results
-        if output_file and statements:
-            # Get the last result set
-            result = spark.sql(statements[-1])
-            
-            # Save to the output file
-            result.write.mode("overwrite").csv(output_file, header=True)
-            print(f"Results saved to {output_file}")
-            
-            # Display the results
-            result.show()
-            
+        with open(file_path, "r") as file:
+            return file.read().rstrip()
+    except FileNotFoundError:
+        print(f"Error: Password file not found at {file_path}", file=sys.stderr)
+        sys.exit(1)
     except Exception as e:
-        print(f"Error executing script {script_path}: {e}")
-        raise
+        print(f"Error reading password file {file_path}: {e}", file=sys.stderr)
+        sys.exit(1)
 
-def export_to_csv(spark, table_name, output_file):
-    """Export a Hive table to a CSV file with headers."""
+def execute_eda_query(spark, query_num, pg_url, pg_properties):
+    """Execute a single EDA Hive query, save to PostgreSQL, and export to CSV."""
+    query_file = f"sql/q{query_num}.hql"
+    pg_table = f"q{query_num}_results"
+    csv_file = f"output/q{query_num}.csv"
+
+    print(f"\nExecuting Query {query_num}: {query_file}")
     try:
-        # Create output directory if it doesn't exist
-        os.makedirs(os.path.dirname(output_file), exist_ok=True)
-        
-        # Get the table data
-        df = spark.sql(f"SELECT * FROM {table_name}")
-        
-        # Write to CSV with header
-        df.write.mode("overwrite").option("header", "true").csv(output_file)
-        
-        # Combine all part files into a single CSV
-        os.system(f"echo '{','.join(df.columns)}' > {output_file}.csv")
-        os.system(f"hdfs dfs -cat {output_file}/* >> {output_file}.csv")
-        
-        print(f"Results exported to {output_file}.csv")
-        
+        # Read the HQL query
+        with open(query_file, "r") as file:
+            query = file.read()
+
+        # Remove USE statement if present (although we'll remove it from files too)
+        query_lines = query.split('\n')
+        cleaned_query = "\n".join(line for line in query_lines if not line.strip().upper().startswith('USE '))
+
+        # Execute the query using Spark SQL
+        print(f"Running query {query_num}...")
+        result_df = spark.sql(cleaned_query)
+        print(f"Query {query_num} executed successfully. Result preview:")
+        result_df.show(5)
+
+        # Write the result to PostgreSQL
+        print(f"Writing results of query {query_num} to PostgreSQL table {pg_table}...")
+        result_df.write \
+            .format("jdbc") \
+            .option("url", pg_url) \
+            .option("dbtable", pg_table) \
+            .option("user", pg_properties["user"]) \
+            .option("password", pg_properties["password"]) \
+            .option("driver", "org.postgresql.Driver") \
+            .mode("overwrite") \
+            .save()
+        print(f"Successfully wrote query {query_num} results to PostgreSQL.")
+
+        # Export the result from PostgreSQL to CSV
+        print(f"Exporting results of query {query_num} from PostgreSQL to {csv_file}...")
+        # Read back from PostgreSQL to ensure it was written correctly and handle export
+        pg_df = spark.read \
+            .format("jdbc") \
+            .option("url", pg_url) \
+            .option("dbtable", pg_table) \
+            .option("user", pg_properties["user"]) \
+            .option("password", pg_properties["password"]) \
+            .option("driver", "org.postgresql.Driver") \
+            .load()
+
+        # Coalesce to a single partition for a single CSV file
+        pg_df.coalesce(1).write \
+            .option("header", "true") \
+            .mode("overwrite") \
+            .csv(f"{csv_file}.tmp") # Write to a temporary directory
+
+        # Find the part- file and rename it
+        # This assumes Spark creates a directory named {csv_file}.tmp
+        # and writes a single part- file inside it due to coalesce(1).
+        # temp_dir = f"{csv_file}.tmp"
+        # part_files = [f for f in os.listdir(temp_dir) if f.startswith('part-') and f.endswith('.csv')]
+        # if part_files:
+        #     os.rename(os.path.join(temp_dir, part_files[0]), csv_file)
+        #     os.rmdir(temp_dir) # Remove the now empty temporary directory
+        #     print(f"Successfully exported query {query_num} results to {csv_file}.")
+        # else:
+        #      print(f"Warning: Could not find part- file for {csv_file} in {temp_dir}. Manual cleanup might be needed.")
+
+
     except Exception as e:
-        print(f"Error exporting table {table_name} to CSV: {e}")
+        print(f"Error processing query {query_num} ({query_file}): {e}", file=sys.stderr)
+        # Re-raise the exception to stop the script
         raise
 
 def main():
-    """Main function to run Hive queries using PySpark."""
+    """Main function to run Hive EDA queries."""
+    spark = None  # Initialize spark to None for finally block
     try:
-        # Read the password from secrets file
-        password = read_password("secrets/.hive.pass")
-        if not password:
-            raise ValueError("Hive password is empty")
-        
-        # Create a Spark session with Hive support
+        # --- Configuration ---
+        warehouse = "project/hive/warehouse"
+        hive_metastore_uri = "thrift://hadoop-02.uni.innopolis.ru:9883"
+        postgres_jdbc_url = "jdbc:postgresql://hadoop-04.uni.innopolis.ru/team14_projectdb"
+        postgres_user = "team14"
+        postgres_password_file = "secrets/.psql.pass"
+        jdbc_driver_path = "/shared/postgresql-42.6.1.jar"
+
+        # --- Read Passwords ---
+        # Hive password might not be needed if connecting via Spark with correct config/permissions
+        # hive_password = read_password("secrets/.hive.pass")
+        postgres_password = read_password(postgres_password_file)
+
+        # --- Spark Session Creation ---
+        print("Creating Spark session...")
         spark = SparkSession.builder \
-            .appName("HiveQueries") \
-            .config("spark.sql.warehouse.dir", "project/hive/warehouse") \
-            .config("hive.metastore.uris", "thrift://hadoop-02.uni.innopolis.ru:9883") \
-            .config("hive.exec.dynamic.partition", "true") \
-            .config("hive.exec.dynamic.partition.mode", "nonstrict") \
+            .master("yarn") \
+            .appName("Spark SQL Hive EDA to PostgreSQL") \
+            .config("spark.sql.catalogImplementation", "hive") \
+            .config("hive.metastore.uris", hive_metastore_uri) \
+            .config("spark.sql.warehouse.dir", warehouse) \
+            .config("spark.driver.extraClassPath", jdbc_driver_path) \
+            .config("spark.jars", jdbc_driver_path) \
             .enableHiveSupport() \
             .getOrCreate()
-        
-        # Set the Hive password
-        spark.conf.set("hive.password", password)
-        
-        # Create output directory if it doesn't exist
+        print("Spark session created successfully.")
+
+        # --- Set Database Context ---
+        print("Setting database context to team14_projectdb...")
+        spark.sql("USE team14_projectdb;")
+        print("Database context set.")
+
+        # --- PostgreSQL Connection Properties ---
+        pg_properties = {
+            "user": postgres_user,
+            "password": postgres_password,
+            "driver": "org.postgresql.Driver" # Optional: Specify driver class
+        }
+
+        # --- Ensure Output Directory Exists ---
         os.makedirs("output", exist_ok=True)
-        
-        # Execute database creation script
-        print("Creating Hive database and tables...")
-        execute_hive_script(spark, "sql/db.hql", "output/hive_db_results.txt")
-        
-        # Execute EDA queries
-        print("\nExecuting EDA queries...")
-        
-        # Query 1: Job postings by country
-        print("\nQuery 1: Job postings by country")
-        execute_hive_script(spark, "sql/q1.hql", "output/q1")
-        export_to_csv(spark, "q1_results", "output/q1")
-        
-        # Query 2: Job postings by work type
-        print("\nQuery 2: Job postings by work type")
-        execute_hive_script(spark, "sql/q2.hql", "output/q2")
-        export_to_csv(spark, "q2_results", "output/q2")
-        
-        # Query 3: Job postings by company size
-        print("\nQuery 3: Job postings by company size")
-        execute_hive_script(spark, "sql/q3.hql", "output/q3")
-        export_to_csv(spark, "q3_results", "output/q3")
-        
-        # Query 4: Job postings by job title
-        print("\nQuery 4: Job postings by job title")
-        execute_hive_script(spark, "sql/q4.hql", "output/q4")
-        export_to_csv(spark, "q4_results", "output/q4")
-        
-        # Query 5: Job postings by skills
-        print("\nQuery 5: Job postings by skills")
-        execute_hive_script(spark, "sql/q5.hql", "output/q5")
-        export_to_csv(spark, "q5_results", "output/q5")
-        
-        print("\nAll queries executed successfully!")
-        
+
+        # --- Execute EDA Queries ---
+        # No need to run db.hql as tables are assumed to exist
+        print("Starting EDA query execution...")
+        for i in range(1, 6): # Assuming 5 queries: q1.hql to q5.hql
+            execute_eda_query(spark, i, postgres_jdbc_url, pg_properties)
+
+        print("\nAll EDA queries processed successfully!")
+
     except Exception as e:
-        print(f"Error: {e}")
+        print(f"An error occurred in the main script: {e}", file=sys.stderr)
         sys.exit(1)
     finally:
         # Stop the Spark session
-        if 'spark' in locals():
+        if spark:
+            print("Stopping Spark session...")
             spark.stop()
+            print("Spark session stopped.")
 
 if __name__ == "__main__":
     main() 

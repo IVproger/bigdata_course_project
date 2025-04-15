@@ -5,39 +5,36 @@ set -euo pipefail
 
 echo "Starting Stage 2: Data Storage/Preparation & EDA"
 
-# Load Hive password from secrets file
-echo "Loading Hive password from secrets file..."
-HIVE_PASS=$(head -n 1 secrets/.hive.pass)
-if [ -z "$HIVE_PASS" ]; then
-    echo "Error: Hive password is empty"
-    exit 1
-fi
-
 # Create output directory if it doesn't exist
 mkdir -p output
 
-# Clean and create HDFS warehouse directory
-echo "Cleaning and creating HDFS warehouse directory..."
-hdfs dfs -rm -r -f project/hive/warehouse
-hdfs dfs -mkdir -p project/hive/warehouse
-echo "HDFS warehouse directory created successfully."
-
-
-# Run the PySpark script to create Hive database and tables
-echo "Creating Hive database and tables"
-
 # Activate virtual environment if it exists
+# This might be needed if run_hive_queries.py has specific dependencies
 if [ -d ".venv" ]; then
     echo "Activating virtual environment..."
     source .venv/bin/activate
 fi
 
-# Run the Python script with proper Spark configuration
+# Set YARN configuration directory
+export YARN_CONF_DIR=/etc/hadoop/conf
+echo "Set YARN_CONF_DIR to $YARN_CONF_DIR"
+
+# Create tables in Hive for EDA 
+echo "Create tables in Hive for EDA"
 bash scripts/create_hive_tables.sh
 
-echo "Perfome the EDA analysis using job_descriptions_part HIVE table"
+# Run the EDA PySpark script
+echo "Performing EDA analysis using job_descriptions_part HIVE table..."
+echo "Executing Hive queries, storing results in PostgreSQL, and exporting to CSV..."
 
+# Note: Adjust master, driver memory, executor memory/cores as needed for your cluster
+spark-submit \
+    --master yarn \
+    --deploy-mode client \
+    --jars /shared/postgresql-42.6.1.jar \
+    scripts/run_hive_queries.py
 
+echo "EDA analysis script finished."
 
 echo "Stage 2 completed successfully!"
-echo "Note: Datasets and charts will be created in Apache Superset manually."
+echo "Note: Datasets and charts need to be created manually in Apache Superset using the PostgreSQL tables (q1_results, q2_results, etc.)."
