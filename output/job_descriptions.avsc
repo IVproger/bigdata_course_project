@@ -1,0 +1,151 @@
+{
+  "type" : "record",
+  "name" : "job_descriptions",
+  "doc" : "Sqoop import of job_descriptions",
+  "fields" : [ {
+    "name" : "id",
+    "type" : [ "null", "int" ],
+    "default" : null,
+    "columnName" : "id",
+    "sqlType" : "4"
+  }, {
+    "name" : "job_id",
+    "type" : [ "null", "long" ],
+    "default" : null,
+    "columnName" : "job_id",
+    "sqlType" : "-5"
+  }, {
+    "name" : "experience",
+    "type" : [ "null", "string" ],
+    "default" : null,
+    "columnName" : "experience",
+    "sqlType" : "12"
+  }, {
+    "name" : "qualifications",
+    "type" : [ "null", "string" ],
+    "default" : null,
+    "columnName" : "qualifications",
+    "sqlType" : "12"
+  }, {
+    "name" : "salary_range",
+    "type" : [ "null", "string" ],
+    "default" : null,
+    "columnName" : "salary_range",
+    "sqlType" : "12"
+  }, {
+    "name" : "location",
+    "type" : [ "null", "string" ],
+    "default" : null,
+    "columnName" : "location",
+    "sqlType" : "12"
+  }, {
+    "name" : "country",
+    "type" : [ "null", "string" ],
+    "default" : null,
+    "columnName" : "country",
+    "sqlType" : "12"
+  }, {
+    "name" : "latitude",
+    "type" : [ "null", "string" ],
+    "default" : null,
+    "columnName" : "latitude",
+    "sqlType" : "2"
+  }, {
+    "name" : "longitude",
+    "type" : [ "null", "string" ],
+    "default" : null,
+    "columnName" : "longitude",
+    "sqlType" : "2"
+  }, {
+    "name" : "work_type",
+    "type" : [ "null", "string" ],
+    "default" : null,
+    "columnName" : "work_type",
+    "sqlType" : "12"
+  }, {
+    "name" : "company_size",
+    "type" : [ "null", "int" ],
+    "default" : null,
+    "columnName" : "company_size",
+    "sqlType" : "4"
+  }, {
+    "name" : "job_posting_date",
+    "type" : [ "null", "long" ],
+    "default" : null,
+    "columnName" : "job_posting_date",
+    "sqlType" : "91"
+  }, {
+    "name" : "preference",
+    "type" : [ "null", "string" ],
+    "default" : null,
+    "columnName" : "preference",
+    "sqlType" : "12"
+  }, {
+    "name" : "contact_person",
+    "type" : [ "null", "string" ],
+    "default" : null,
+    "columnName" : "contact_person",
+    "sqlType" : "12"
+  }, {
+    "name" : "contact",
+    "type" : [ "null", "string" ],
+    "default" : null,
+    "columnName" : "contact",
+    "sqlType" : "12"
+  }, {
+    "name" : "job_title",
+    "type" : [ "null", "string" ],
+    "default" : null,
+    "columnName" : "job_title",
+    "sqlType" : "12"
+  }, {
+    "name" : "role",
+    "type" : [ "null", "string" ],
+    "default" : null,
+    "columnName" : "role",
+    "sqlType" : "12"
+  }, {
+    "name" : "job_portal",
+    "type" : [ "null", "string" ],
+    "default" : null,
+    "columnName" : "job_portal",
+    "sqlType" : "12"
+  }, {
+    "name" : "job_description",
+    "type" : [ "null", "string" ],
+    "default" : null,
+    "columnName" : "job_description",
+    "sqlType" : "12"
+  }, {
+    "name" : "benefits",
+    "type" : [ "null", "string" ],
+    "default" : null,
+    "columnName" : "benefits",
+    "sqlType" : "12"
+  }, {
+    "name" : "skills",
+    "type" : [ "null", "string" ],
+    "default" : null,
+    "columnName" : "skills",
+    "sqlType" : "12"
+  }, {
+    "name" : "responsibilities",
+    "type" : [ "null", "string" ],
+    "default" : null,
+    "columnName" : "responsibilities",
+    "sqlType" : "12"
+  }, {
+    "name" : "company_name",
+    "type" : [ "null", "string" ],
+    "default" : null,
+    "columnName" : "company_name",
+    "sqlType" : "12"
+  }, {
+    "name" : "company_profile",
+    "type" : [ "null", "string" ],
+    "default" : null,
+    "columnName" : "company_profile",
+    "sqlType" : "12"
+  } ],
+  "tableName" : "job_descriptions"
+}
