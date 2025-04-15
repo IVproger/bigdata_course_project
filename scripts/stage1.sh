@@ -13,6 +13,8 @@ if [ -z "$password" ]; then
   exit 1
 fi
 
+source .venv/bin/activate
+
 # Run data collection script
 echo "Collecting data..."
 bash scripts/data_collection.sh
@@ -33,8 +35,16 @@ sqoop import-all-tables \
   --password "$password" \
   --compression-codec=snappy \
   --compress \
-  --as-parquetfile \
+  --as-avrodatafile \
   --warehouse-dir=project/warehouse \
-  --m 3
+  --m 3 
+
+hdfs dfs -rm -r -f project/warehouse/avsc
+hdfs dfs -mkdir -p project/warehouse/avsc
+
+mv *.avsc output/
+mv *.java output/
+
+hdfs dfs -put output/*.avsc project/warehouse/avsc
 
 echo "Data import completed successfully!"

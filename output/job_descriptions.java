@@ -2,7 +2,7 @@
 // WARNING: This class is AUTO-GENERATED. Modify at your own risk.
 //
 // Debug information:
-// Generated date: Sun Apr 06 15:37:23 MSK 2025
+// Generated date: Tue Apr 15 20:45:55 MSK 2025
 // For connector: org.apache.sqoop.manager.PostgresqlManager
 import org.apache.hadoop.io.BytesWritable;
 import org.apache.hadoop.io.Text;
@@ -34,7 +34,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.HashMap;
 
-public class codegen_job_descriptions extends SqoopRecord  implements DBWritable, Writable {
+public class job_descriptions extends SqoopRecord  implements DBWritable, Writable {
   private final int PROTOCOL_VERSION = 3;
   public int getClassFormatVersion() { return PROTOCOL_VERSION; }
   public static interface FieldSetterCommand {    void setField(Object value);  }  protected ResultSet __cur_result_set;
@@ -43,149 +43,149 @@ public class codegen_job_descriptions extends SqoopRecord  implements DBWritable
     setters.put("id", new FieldSetterCommand() {
       @Override
       public void setField(Object value) {
-        codegen_job_descriptions.this.id = (Integer)value;
+        job_descriptions.this.id = (Integer)value;
       }
     });
     setters.put("job_id", new FieldSetterCommand() {
       @Override
       public void setField(Object value) {
-        codegen_job_descriptions.this.job_id = (Long)value;
+        job_descriptions.this.job_id = (Long)value;
       }
     });
     setters.put("experience", new FieldSetterCommand() {
       @Override
       public void setField(Object value) {
-        codegen_job_descriptions.this.experience = (String)value;
+        job_descriptions.this.experience = (String)value;
       }
     });
     setters.put("qualifications", new FieldSetterCommand() {
       @Override
       public void setField(Object value) {
-        codegen_job_descriptions.this.qualifications = (String)value;
+        job_descriptions.this.qualifications = (String)value;
       }
     });
     setters.put("salary_range", new FieldSetterCommand() {
       @Override
       public void setField(Object value) {
-        codegen_job_descriptions.this.salary_range = (String)value;
+        job_descriptions.this.salary_range = (String)value;
       }
     });
     setters.put("location", new FieldSetterCommand() {
       @Override
       public void setField(Object value) {
-        codegen_job_descriptions.this.location = (String)value;
+        job_descriptions.this.location = (String)value;
       }
     });
     setters.put("country", new FieldSetterCommand() {
       @Override
       public void setField(Object value) {
-        codegen_job_descriptions.this.country = (String)value;
+        job_descriptions.this.country = (String)value;
       }
     });
     setters.put("latitude", new FieldSetterCommand() {
       @Override
       public void setField(Object value) {
-        codegen_job_descriptions.this.latitude = (java.math.BigDecimal)value;
+        job_descriptions.this.latitude = (java.math.BigDecimal)value;
       }
     });
     setters.put("longitude", new FieldSetterCommand() {
       @Override
       public void setField(Object value) {
-        codegen_job_descriptions.this.longitude = (java.math.BigDecimal)value;
+        job_descriptions.this.longitude = (java.math.BigDecimal)value;
       }
     });
     setters.put("work_type", new FieldSetterCommand() {
       @Override
       public void setField(Object value) {
-        codegen_job_descriptions.this.work_type = (String)value;
+        job_descriptions.this.work_type = (String)value;
       }
     });
     setters.put("company_size", new FieldSetterCommand() {
       @Override
       public void setField(Object value) {
-        codegen_job_descriptions.this.company_size = (Integer)value;
+        job_descriptions.this.company_size = (Integer)value;
       }
     });
     setters.put("job_posting_date", new FieldSetterCommand() {
       @Override
       public void setField(Object value) {
-        codegen_job_descriptions.this.job_posting_date = (java.sql.Date)value;
+        job_descriptions.this.job_posting_date = (java.sql.Date)value;
       }
     });
     setters.put("preference", new FieldSetterCommand() {
       @Override
       public void setField(Object value) {
-        codegen_job_descriptions.this.preference = (String)value;
+        job_descriptions.this.preference = (String)value;
       }
     });
     setters.put("contact_person", new FieldSetterCommand() {
       @Override
       public void setField(Object value) {
-        codegen_job_descriptions.this.contact_person = (String)value;
+        job_descriptions.this.contact_person = (String)value;
       }
     });
     setters.put("contact", new FieldSetterCommand() {
       @Override
       public void setField(Object value) {
-        codegen_job_descriptions.this.contact = (String)value;
+        job_descriptions.this.contact = (String)value;
       }
     });
     setters.put("job_title", new FieldSetterCommand() {
       @Override
       public void setField(Object value) {
-        codegen_job_descriptions.this.job_title = (String)value;
+        job_descriptions.this.job_title = (String)value;
       }
     });
     setters.put("role", new FieldSetterCommand() {
       @Override
       public void setField(Object value) {
-        codegen_job_descriptions.this.role = (String)value;
+        job_descriptions.this.role = (String)value;
       }
     });
     setters.put("job_portal", new FieldSetterCommand() {
       @Override
       public void setField(Object value) {
-        codegen_job_descriptions.this.job_portal = (String)value;
+        job_descriptions.this.job_portal = (String)value;
       }
     });
     setters.put("job_description", new FieldSetterCommand() {
       @Override
       public void setField(Object value) {
-        codegen_job_descriptions.this.job_description = (String)value;
+        job_descriptions.this.job_description = (String)value;
       }
     });
     setters.put("benefits", new FieldSetterCommand() {
       @Override
       public void setField(Object value) {
-        codegen_job_descriptions.this.benefits = (String)value;
+        job_descriptions.this.benefits = (String)value;
       }
     });
     setters.put("skills", new FieldSetterCommand() {
       @Override
       public void setField(Object value) {
-        codegen_job_descriptions.this.skills = (String)value;
+        job_descriptions.this.skills = (String)value;
       }
     });
     setters.put("responsibilities", new FieldSetterCommand() {
       @Override
       public void setField(Object value) {
-        codegen_job_descriptions.this.responsibilities = (String)value;
+        job_descriptions.this.responsibilities = (String)value;
       }
     });
     setters.put("company_name", new FieldSetterCommand() {
       @Override
       public void setField(Object value) {
-        codegen_job_descriptions.this.company_name = (String)value;
+        job_descriptions.this.company_name = (String)value;
       }
     });
     setters.put("company_profile", new FieldSetterCommand() {
       @Override
       public void setField(Object value) {
-        codegen_job_descriptions.this.company_profile = (String)value;
+        job_descriptions.this.company_profile = (String)value;
       }
     });
   }
-  public codegen_job_descriptions() {
+  public job_descriptions() {
     init0();
   }
   private Integer id;
@@ -195,7 +195,7 @@ public class codegen_job_descriptions extends SqoopRecord  implements DBWritable
   public void set_id(Integer id) {
     this.id = id;
   }
-  public codegen_job_descriptions with_id(Integer id) {
+  public job_descriptions with_id(Integer id) {
     this.id = id;
     return this;
   }
@@ -206,7 +206,7 @@ public class codegen_job_descriptions extends SqoopRecord  implements DBWritable
   public void set_job_id(Long job_id) {
     this.job_id = job_id;
   }
-  public codegen_job_descriptions with_job_id(Long job_id) {
+  public job_descriptions with_job_id(Long job_id) {
     this.job_id = job_id;
     return this;
   }
@@ -217,7 +217,7 @@ public class codegen_job_descriptions extends SqoopRecord  implements DBWritable
   public void set_experience(String experience) {
     this.experience = experience;
   }
-  public codegen_job_descriptions with_experience(String experience) {
+  public job_descriptions with_experience(String experience) {
     this.experience = experience;
     return this;
   }
@@ -228,7 +228,7 @@ public class codegen_job_descriptions extends SqoopRecord  implements DBWritable
   public void set_qualifications(String qualifications) {
     this.qualifications = qualifications;
   }
-  public codegen_job_descriptions with_qualifications(String qualifications) {
+  public job_descriptions with_qualifications(String qualifications) {
     this.qualifications = qualifications;
     return this;
   }
@@ -239,7 +239,7 @@ public class codegen_job_descriptions extends SqoopRecord  implements DBWritable
   public void set_salary_range(String salary_range) {
     this.salary_range = salary_range;
   }
-  public codegen_job_descriptions with_salary_range(String salary_range) {
+  public job_descriptions with_salary_range(String salary_range) {
     this.salary_range = salary_range;
     return this;
   }
@@ -250,7 +250,7 @@ public class codegen_job_descriptions extends SqoopRecord  implements DBWritable
   public void set_location(String location) {
     this.location = location;
   }
-  public codegen_job_descriptions with_location(String location) {
+  public job_descriptions with_location(String location) {
     this.location = location;
     return this;
   }
@@ -261,7 +261,7 @@ public class codegen_job_descriptions extends SqoopRecord  implements DBWritable
   public void set_country(String country) {
     this.country = country;
   }
-  public codegen_job_descriptions with_country(String country) {
+  public job_descriptions with_country(String country) {
     this.country = country;
     return this;
   }
@@ -272,7 +272,7 @@ public class codegen_job_descriptions extends SqoopRecord  implements DBWritable
   public void set_latitude(java.math.BigDecimal latitude) {
     this.latitude = latitude;
   }
-  public codegen_job_descriptions with_latitude(java.math.BigDecimal latitude) {
+  public job_descriptions with_latitude(java.math.BigDecimal latitude) {
     this.latitude = latitude;
     return this;
   }
@@ -283,7 +283,7 @@ public class codegen_job_descriptions extends SqoopRecord  implements DBWritable
   public void set_longitude(java.math.BigDecimal longitude) {
     this.longitude = longitude;
   }
-  public codegen_job_descriptions with_longitude(java.math.BigDecimal longitude) {
+  public job_descriptions with_longitude(java.math.BigDecimal longitude) {
     this.longitude = longitude;
     return this;
   }
@@ -294,7 +294,7 @@ public class codegen_job_descriptions extends SqoopRecord  implements DBWritable
   public void set_work_type(String work_type) {
     this.work_type = work_type;
   }
-  public codegen_job_descriptions with_work_type(String work_type) {
+  public job_descriptions with_work_type(String work_type) {
     this.work_type = work_type;
     return this;
   }
@@ -305,7 +305,7 @@ public class codegen_job_descriptions extends SqoopRecord  implements DBWritable
   public void set_company_size(Integer company_size) {
     this.company_size = company_size;
   }
-  public codegen_job_descriptions with_company_size(Integer company_size) {
+  public job_descriptions with_company_size(Integer company_size) {
     this.company_size = company_size;
     return this;
   }
@@ -316,7 +316,7 @@ public class codegen_job_descriptions extends SqoopRecord  implements DBWritable
   public void set_job_posting_date(java.sql.Date job_posting_date) {
     this.job_posting_date = job_posting_date;
   }
-  public codegen_job_descriptions with_job_posting_date(java.sql.Date job_posting_date) {
+  public job_descriptions with_job_posting_date(java.sql.Date job_posting_date) {
     this.job_posting_date = job_posting_date;
     return this;
   }
@@ -327,7 +327,7 @@ public class codegen_job_descriptions extends SqoopRecord  implements DBWritable
   public void set_preference(String preference) {
     this.preference = preference;
   }
-  public codegen_job_descriptions with_preference(String preference) {
+  public job_descriptions with_preference(String preference) {
     this.preference = preference;
     return this;
   }
@@ -338,7 +338,7 @@ public class codegen_job_descriptions extends SqoopRecord  implements DBWritable
   public void set_contact_person(String contact_person) {
     this.contact_person = contact_person;
   }
-  public codegen_job_descriptions with_contact_person(String contact_person) {
+  public job_descriptions with_contact_person(String contact_person) {
     this.contact_person = contact_person;
     return this;
   }
@@ -349,7 +349,7 @@ public class codegen_job_descriptions extends SqoopRecord  implements DBWritable
   public void set_contact(String contact) {
     this.contact = contact;
   }
-  public codegen_job_descriptions with_contact(String contact) {
+  public job_descriptions with_contact(String contact) {
     this.contact = contact;
     return this;
   }
@@ -360,7 +360,7 @@ public class codegen_job_descriptions extends SqoopRecord  implements DBWritable
   public void set_job_title(String job_title) {
     this.job_title = job_title;
   }
-  public codegen_job_descriptions with_job_title(String job_title) {
+  public job_descriptions with_job_title(String job_title) {
     this.job_title = job_title;
     return this;
   }
@@ -371,7 +371,7 @@ public class codegen_job_descriptions extends SqoopRecord  implements DBWritable
   public void set_role(String role) {
     this.role = role;
   }
-  public codegen_job_descriptions with_role(String role) {
+  public job_descriptions with_role(String role) {
     this.role = role;
     return this;
   }
@@ -382,7 +382,7 @@ public class codegen_job_descriptions extends SqoopRecord  implements DBWritable
   public void set_job_portal(String job_portal) {
     this.job_portal = job_portal;
   }
-  public codegen_job_descriptions with_job_portal(String job_portal) {
+  public job_descriptions with_job_portal(String job_portal) {
     this.job_portal = job_portal;
     return this;
   }
@@ -393,7 +393,7 @@ public class codegen_job_descriptions extends SqoopRecord  implements DBWritable
   public void set_job_description(String job_description) {
     this.job_description = job_description;
   }
-  public codegen_job_descriptions with_job_description(String job_description) {
+  public job_descriptions with_job_description(String job_description) {
     this.job_description = job_description;
     return this;
   }
@@ -404,7 +404,7 @@ public class codegen_job_descriptions extends SqoopRecord  implements DBWritable
   public void set_benefits(String benefits) {
     this.benefits = benefits;
   }
-  public codegen_job_descriptions with_benefits(String benefits) {
+  public job_descriptions with_benefits(String benefits) {
     this.benefits = benefits;
     return this;
   }
@@ -415,7 +415,7 @@ public class codegen_job_descriptions extends SqoopRecord  implements DBWritable
   public void set_skills(String skills) {
     this.skills = skills;
   }
-  public codegen_job_descriptions with_skills(String skills) {
+  public job_descriptions with_skills(String skills) {
     this.skills = skills;
     return this;
   }
@@ -426,7 +426,7 @@ public class codegen_job_descriptions extends SqoopRecord  implements DBWritable
   public void set_responsibilities(String responsibilities) {
     this.responsibilities = responsibilities;
   }
-  public codegen_job_descriptions with_responsibilities(String responsibilities) {
+  public job_descriptions with_responsibilities(String responsibilities) {
     this.responsibilities = responsibilities;
     return this;
   }
@@ -437,7 +437,7 @@ public class codegen_job_descriptions extends SqoopRecord  implements DBWritable
   public void set_company_name(String company_name) {
     this.company_name = company_name;
   }
-  public codegen_job_descriptions with_company_name(String company_name) {
+  public job_descriptions with_company_name(String company_name) {
     this.company_name = company_name;
     return this;
   }
@@ -448,7 +448,7 @@ public class codegen_job_descriptions extends SqoopRecord  implements DBWritable
   public void set_company_profile(String company_profile) {
     this.company_profile = company_profile;
   }
-  public codegen_job_descriptions with_company_profile(String company_profile) {
+  public job_descriptions with_company_profile(String company_profile) {
     this.company_profile = company_profile;
     return this;
   }
@@ -456,10 +456,10 @@ public class codegen_job_descriptions extends SqoopRecord  implements DBWritable
     if (this == o) {
       return true;
     }
-    if (!(o instanceof codegen_job_descriptions)) {
+    if (!(o instanceof job_descriptions)) {
       return false;
     }
-    codegen_job_descriptions that = (codegen_job_descriptions) o;
+    job_descriptions that = (job_descriptions) o;
     boolean equal = true;
     equal = equal && (this.id == null ? that.id == null : this.id.equals(that.id));
     equal = equal && (this.job_id == null ? that.job_id == null : this.job_id.equals(that.job_id));
@@ -491,10 +491,10 @@ public class codegen_job_descriptions extends SqoopRecord  implements DBWritable
     if (this == o) {
       return true;
     }
-    if (!(o instanceof codegen_job_descriptions)) {
+    if (!(o instanceof job_descriptions)) {
       return false;
     }
-    codegen_job_descriptions that = (codegen_job_descriptions) o;
+    job_descriptions that = (job_descriptions) o;
     boolean equal = true;
     equal = equal && (this.id == null ? that.id == null : this.id.equals(that.id));
     equal = equal && (this.job_id == null ? that.job_id == null : this.job_id.equals(that.job_id));
@@ -1662,12 +1662,12 @@ this.readFields0(__dataIn);  }
     } catch (RuntimeException e) {    throw new RuntimeException("Can't parse input data: '" + __cur_str + "'", e);    }  }
 
   public Object clone() throws CloneNotSupportedException {
-    codegen_job_descriptions o = (codegen_job_descriptions) super.clone();
+    job_descriptions o = (job_descriptions) super.clone();
     o.job_posting_date = (o.job_posting_date != null) ? (java.sql.Date) o.job_posting_date.clone() : null;
     return o;
   }
 
-  public void clone0(codegen_job_descriptions o) throws CloneNotSupportedException {
+  public void clone0(job_descriptions o) throws CloneNotSupportedException {
     o.job_posting_date = (o.job_posting_date != null) ? (java.sql.Date) o.job_posting_date.clone() : null;
   }
 
