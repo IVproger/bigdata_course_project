@@ -1,125 +1,95 @@
 # Stage II - Data Storage/Preparation & EDA Report
 
 ## Overview
-This report details the implementation of Stage II of the big data pipeline project, which focused on data storage preparation and exploratory data analysis (EDA). The project involved creating a Hive table with partitioning and bucketing optimizations, and performing EDA on the job descriptions dataset using PySpark.
+This report details the implementation of Stage II of the big data pipeline project, which focused on data storage preparation and exploratory data analysis (EDA). The project involved creating a Hive table using AVRO format with partitioning and bucketing optimizations, and performing EDA on the job descriptions dataset using Spark SQL, storing results in PostgreSQL, and exporting them to local CSV files.
 
 ## Dataset Description
-The dataset consists of job descriptions from various companies, containing detailed information about job postings. This is the same dataset used in Stage I, which was imported into HDFS using Sqoop with Parquet format and Snappy compression.
+The dataset consists of job descriptions from various companies, containing detailed information about job postings. This is the same dataset used in Stage I, which was imported into HDFS using Sqoop and stored as AVRO files.
 
 ## Implementation Steps
 
-### 1. Hive Database and Table Creation
-- Created a Hive database `team14_projectdb` with a single table:
-  - `job_descriptions`: External table with partitioning by country and bucketing by job_id
+### 1. Hive Database and Table Creation (`sql/db.hql`)
+- Created a Hive database `team14_projectdb` located at `project/hive/warehouse`.
+- Created an initial external Hive table `job_descriptions` pointing to the AVRO data imported in Stage 1.
+- Created the primary analysis table `job_descriptions_part` as an external, partitioned, and bucketed table:
+  - **Partitioned by:** `work_type` (STRING)
+  - **Bucketed by:** `preference` (STRING) into 3 buckets.
+  - **Storage Format:** AVRO with SNAPPY compression.
+  - **Location:** `project/hive/warehouse/job_descriptions_part`
+- Used appropriate data types, including `DECIMAL(9,6)` for latitude/longitude and `DATE` for `job_posting_date` (converted from Unix timestamp in milliseconds).
+- Ensured Hive settings `hive.exec.dynamic.partition=true`, `hive.exec.dynamic.partition.mode=nonstrict`, and `hive.enforce.bucketing = true` were enabled.
 
-- Database Schema:
-  - Used appropriate data types for each field (INT, BIGINT, STRING, DECIMAL, DATE)
-  - Implemented partitioning by country for better query performance on country-specific analysis
-  - Implemented bucketing by job_id for better query performance on job-specific operations
-  - Used Parquet file format with Snappy compression for efficient storage and retrieval
+### 2. Data Loading
+- Populated the `job_descriptions_part` table using an `INSERT INTO ... SELECT ...` statement from the initial `job_descriptions` table.
+- This insert operation dynamically created partitions based on the `work_type` column.
+- The original `job_descriptions` table was then dropped.
 
-### 2. Hive Optimizations
+### 3. Exploratory Data Analysis (EDA) (`sql/q1.hql` - `sql/q5.hql` & `scripts/run_hive_queries.py`)
+- Five key analyses were performed on the `job_descriptions_part` table using Spark SQL, executed via the `scripts/run_hive_queries.py` script.
 
-#### Partitioning
-- Implemented partitioning on the `country` column in the `job_descriptions` table
-- Benefits:
-  - Improved query performance for country-specific analysis
-  - Reduced data scanning by only reading relevant partitions
-  - Better organization of data by geographical location
+1.  **Job Postings by Country (`q1.hql`)**
+    - Analyzed the distribution of job postings by country.
+    - Limited to the top 10 countries by job count.
+2.  **Job Postings by Work Type (`q2.hql`)**
+    - Analyzed the distribution of job postings by work type (e.g., Contract, Full-time).
+    - Included percentage calculation for each work type.
+3.  **Job Postings by Company Size (`q3.hql`)**
+    - Analyzed the distribution of job postings by company size.
+    - Created size ranges (1-50, 51-200, 201-1000, 1001-5000, 5000+) using a CASE statement.
+4.  **Job Postings by Job Title (`q4.hql`)**
+    - Identified the most common job titles.
+    - Limited to the top 20 job titles by count.
+5.  **Job Postings by Skills (`q5.hql`)**
+    - Extracted and analyzed the most frequent skills mentioned in the `skills` column.
+    - Used `regexp_replace`, `split`, and `explode` functions to clean and count skills.
+    - Limited to the top 30 skills by count.
 
-#### Bucketing
-- Implemented bucketing on the `job_id` column in the `job_descriptions` table
-- Created 10 buckets for even distribution of data
-- Benefits:
-  - Improved query performance for job-specific operations
-  - Better data organization for join operations
-  - Reduced data scanning for queries filtering on job_id
+### 4. Result Storage and Export (`scripts/run_hive_queries.py`)
+- **PostgreSQL Storage:** The results of each EDA query (`q1`-`q5`) were written to corresponding tables (`q1_results`, `q2_results`, etc.) in the PostgreSQL database `team14_projectdb` on `hadoop-04.uni.innopolis.ru`.
+  - This was achieved using Spark's JDBC data source capabilities.
+- **CSV Export:** The data from each PostgreSQL results table was then read back into a Spark DataFrame, collected to the driver node using `.collect()`, and written to a local CSV file (`output/q1.csv`, `output/q2.csv`, etc.) using Python's standard `csv` library.
+  - This approach was chosen because the EDA results are expected to be small enough to handle on the driver node, and it avoids complexities with managing HDFS part-files for local export.
 
-### 3. Data Loading
-- Used dynamic partitioning to load data into the table
-- Enabled non-strict mode for dynamic partitioning to allow all partitions to be dynamic
-
-### 4. Exploratory Data Analysis (EDA)
-Performed five key analyses on the job descriptions dataset using PySpark:
-
-1. **Job Postings by Country**
-   - Analyzed the distribution of job postings by country
-   - Limited to top 10 countries for clarity
-   - Visualization: Bar chart showing job count by country
-
-2. **Job Postings by Work Type**
-   - Analyzed the distribution of job postings by work type (e.g., full-time, part-time, remote)
-   - Included percentage calculation for each work type
-   - Visualization: Bar chart showing job count and percentage by work type
-
-3. **Job Postings by Company Size**
-   - Analyzed the distribution of job postings by company size
-   - Created size ranges (1-50, 51-200, 201-1000, 1001-5000, 5000+)
-   - Visualization: Bar chart showing job count by company size range
-
-4. **Job Postings by Job Title**
-   - Identified the most common job titles
-   - Limited to top 20 job titles for clarity
-   - Visualization: Horizontal bar chart showing job count by job title
-
-5. **Job Postings by Skills**
-   - Extracted and analyzed skills from the skills column
-   - Used regex and string functions to clean and split skills
-   - Limited to top 30 skills for clarity
-   - Visualization: Bar chart showing job count by skill
-
-### 5. Automation
-- Created a shell script (`scripts/stage2.sh`) to automate the entire process:
-  - Creating Hive database and table
-  - Running EDA queries
-  - Exporting results to CSV files
-- Created a Python script (`scripts/run_hive_queries.py`) to run Hive queries using PySpark
-- Implemented proper error handling and logging
+### 5. Automation (`scripts/stage2.sh`)
+- A shell script (`scripts/stage2.sh`) was created to automate the EDA execution part of Stage 2.
+- The script sets the `YARN_CONF_DIR` environment variable.
+- It then uses `spark-submit` to execute the `scripts/run_hive_queries.py` script on the YARN cluster.
+- Note: The Hive table creation (`sql/db.hql`) is assumed to be done separately or in a preceding step, as `stage2.sh` focuses only on running the EDA queries.
 
 ## Technical Choices and Justification
 
-### Partitioning Strategy
-We chose to partition the data by country for the following reasons:
+### Partitioning Strategy (`work_type`)
+- Partitioning by `work_type` was chosen as it represents a fundamental characteristic of job postings and is likely to be used in filtering for analysis (e.g., analyzing only Full-time roles).
+- It provides a moderate number of partitions, improving query performance for analyses filtering by work type.
 
-1. **Query Performance**: Many analyses focus on geographical distribution, making country a natural partitioning key.
-2. **Data Distribution**: Countries have a reasonable number of distinct values, avoiding too many small partitions.
-3. **Analysis Focus**: Our first EDA query focuses on country-based analysis, benefiting from this partitioning.
+### Bucketing Strategy (`preference`)
+- Bucketing by `preference` (e.g., Gender preference) into 3 buckets was implemented as required by the project description to demonstrate bucketing.
+- While `preference` might not be the most optimal key for performance in all scenarios, it fulfills the requirement and can help distribute data somewhat evenly for potential join or aggregation operations involving this column.
 
-### Bucketing Strategy
-We chose to bucket the data by job_id for the following reasons:
+### File Format (AVRO)
+- AVRO was used as the storage format for the Hive tables, consistent with the output from Stage 1.
+- AVRO provides schema evolution support and good integration within the Hadoop ecosystem.
+- SNAPPY compression was used for a balance between compression ratio and speed.
 
-1. **Query Performance**: Job_id is a unique identifier, ensuring even distribution across buckets.
-2. **Join Optimization**: If we need to join with other tables using job_id, bucketing will improve join performance.
-3. **Data Organization**: Job_id-based bucketing provides a natural organization for job-specific operations.
+### EDA Execution (Spark SQL)
+- Spark SQL was chosen for executing the HiveQL EDA queries via the `scripts/run_hive_queries.py` script.
+- **Performance:** Spark generally offers better performance than Hive MapReduce, especially for iterative queries or more complex logic (though our queries were relatively simple HiveQL).
+- **Integration:** Spark SQL seamlessly reads Hive tables and metadata.
+- **Flexibility:** It allowed us to easily integrate the query execution with PostgreSQL interaction (JDBC) and local CSV export (Python `csv`) within a single script.
 
-### File Format and Compression
-We continued to use Parquet with Snappy compression for the following reasons:
-
-1. **Columnar Storage**: Parquet's columnar storage is ideal for analytical queries, which is the primary use case for our EDA.
-2. **Compression Efficiency**: Parquet's columnar nature allows for more efficient compression, especially for text fields.
-3. **Query Performance**: For our analytical workload, Parquet's columnar format provides better query performance.
-
-### PySpark Implementation
-We chose to use PySpark for the following reasons:
-
-1. **Integration**: PySpark provides seamless integration with Hive, allowing us to use both SQL and DataFrame APIs.
-2. **Performance**: PySpark's in-memory processing capabilities provide better performance for complex analytical queries.
-3. **Flexibility**: PySpark allows us to mix SQL queries with Python code for more complex data processing.
-4. **Scalability**: PySpark can handle large datasets efficiently, making it suitable for big data processing.
+### Result Storage (PostgreSQL & Local CSV)
+- **PostgreSQL:** Storing EDA results in PostgreSQL was chosen as specified in the task requirements for handling intermediate, smaller result sets.
+  - It allows easy access for tools like Apache Superset for visualization.
+- **Local CSV:** Exporting the final results to local CSV files provides a simple, portable format for sharing or further local analysis.
+  - Collecting data to the driver and using Python's `csv` module simplified the export process compared to managing HDFS files for local use.
 
 ## Results and Verification
-- Successfully created and populated the Hive table
-- Verified data integrity through sample queries
-- Generated five CSV files with EDA results:
-  - `q1.csv`: Job postings by country
-  - `q2.csv`: Job postings by work type with percentages
-  - `q3.csv`: Job postings by company size range
-  - `q4.csv`: Top 20 job titles by count
-  - `q5.csv`: Top 30 skills by demand
-- Created visualizations for each analysis (to be added to the dashboard in Stage 4)
-- Implemented proper error handling and idempotent operations
+- Successfully created the partitioned and bucketed Hive table `job_descriptions_part`.
+- Verified data integrity and structure through sample Hive queries and `DESCRIBE` statements.
+- Successfully executed the 5 EDA queries using `scripts/run_hive_queries.py`.
+- Verified the creation and population of PostgreSQL tables `q1_results` through `q5_results`.
+- Verified the generation of local CSV files `output/q1.csv` through `output/q5.csv` containing the query results with headers.
+- The `scripts/stage2.sh` script successfully automates the execution of the EDA process.
 
 ## Conclusion
-The implementation of Stage II successfully established the data warehouse layer of our big data pipeline. We created an optimized Hive table with partitioning by country and bucketing by job_id to improve query performance. We performed comprehensive EDA on the job descriptions dataset using PySpark, extracting valuable insights about job postings across different dimensions.
-
-The combination of partitioning, bucketing, and Parquet with Snappy compression provides an optimal balance between storage efficiency and query performance, particularly suited for our analytical workload. The use of PySpark for data processing and analysis provides better performance and flexibility compared to traditional Hive queries. The EDA results will be valuable for understanding the job market and will be incorporated into the dashboard in Stage 4.
+Stage II successfully transitioned from the initial data ingestion to creating an optimized data warehouse structure in Hive and performing exploratory data analysis. The `job_descriptions_part` table, partitioned by `work_type` and bucketed by `preference` using the AVRO format, serves as the foundation for analysis. The EDA process, automated via `scripts/stage2.sh` and `scripts/run_hive_queries.py`, leverages Spark SQL to execute HiveQL queries, stores the results efficiently in PostgreSQL for potential visualization in tools like Superset, and exports them to local CSV files for accessibility. This stage provides valuable insights into the job market data and sets the stage for further analysis and dashboard creation.

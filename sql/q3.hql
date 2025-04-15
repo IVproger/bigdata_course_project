@@ -1,22 +1,4 @@
-USE team14_projectdb;
-
--- Drop the results table if it exists
-DROP TABLE IF EXISTS q3_results;
-
--- Create a table to store the results
-CREATE EXTERNAL TABLE q3_results(
-    company_size_range STRING,
-    job_count BIGINT
-)
-ROW FORMAT DELIMITED
-FIELDS TERMINATED BY ','
-LOCATION 'project/hive/warehouse/q3';
-
--- Set to not display table names with column names
-SET hive.resultset.use.unique.column.names = false;
-
--- Insert the results of the query
-INSERT INTO q3_results
+-- This query categorizes companies by size and counts jobs in each category.
 SELECT 
     CASE 
         WHEN company_size <= 50 THEN '1-50'
@@ -26,7 +8,7 @@ SELECT
         ELSE '5000+'
     END AS company_size_range,
     COUNT(*) AS job_count
-FROM job_descriptions
+FROM job_descriptions_part
 WHERE company_size > 0
 GROUP BY 
     CASE 
@@ -44,12 +26,3 @@ ORDER BY
         WHEN '1001-5000' THEN 4
         WHEN '5000+' THEN 5
     END;
-
--- Display the results
-SELECT * FROM q3_results;
-
--- Export the results to a file
-INSERT OVERWRITE DIRECTORY 'project/output/q3' 
-ROW FORMAT DELIMITED FIELDS 
-TERMINATED BY ',' 
-SELECT * FROM q3_results; 
