@@ -36,5 +36,19 @@ spark-submit \
 
 echo "EDA analysis script finished."
 
+# Run pylint validation
+echo "Running pylint validation..."
+if ! command -v pylint &> /dev/null; then
+    echo "Installing pylint..."
+    pip install pylint
+fi
+
+# Run pylint with specific configuration
+echo "Running pylint on Python scripts..."
+pylint --rcfile=.pylintrc scripts/run_hive_queries.py || {
+    echo "Warning: pylint found some issues. Please review the output above."
+    # Continue execution even if pylint finds issues
+}
+
 echo "Stage 2 completed successfully!"
 echo "Note: Datasets and charts need to be created manually in Apache Superset using the PostgreSQL tables (q1_results, q2_results, etc.)."
