@@ -1,14 +1,27 @@
 -- Analyze job distribution and average salary ranges by country and work type
+
 SELECT 
     country,
     work_type,
     COUNT(*) as job_count,
     AVG(
         CASE 
-            WHEN salary_range RLIKE '\\d+-\\d+' 
-            THEN (
-		CAST(SPLIT(REGEXP_REPLACE(salary_range, '[^0-9-]', ''), '-')[0] AS INT) +
-		CAST(SPLIT(REGEXP_REPLACE(salary_range, '[^0-9-]', ''), '-')[1] AS INT)
+            WHEN salary_range RLIKE '\\$?\\d+(K|k)?-\\$?\\d+(K|k)?' THEN (
+                CAST(
+                    REGEXP_EXTRACT(salary_range, '\\$?(\\d+)(K|k)?-', 1) AS INT
+                ) * 
+                CASE 
+                    WHEN REGEXP_EXTRACT(salary_range, '\\$?(\\d+)(K|k)?-', 2) IN ('K', 'k') THEN 1000
+                    ELSE 1
+                END
+                +
+                CAST(
+                    REGEXP_EXTRACT(salary_range, '-\\$?(\\d+)(K|k)?', 1) AS INT
+                ) * 
+                CASE 
+                    WHEN REGEXP_EXTRACT(salary_range, '-\\$?(\\d+)(K|k)?', 2) IN ('K', 'k') THEN 1000
+                    ELSE 1
+                END
             ) / 2
             ELSE NULL
         END
