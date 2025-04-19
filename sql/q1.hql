@@ -5,9 +5,11 @@ SELECT
     COUNT(*) as job_count,
     AVG(
         CASE 
-            WHEN salary_range ~ '(\d+)-(\d+)' 
-            THEN (CAST(SPLIT_PART(REGEXP_REPLACE(salary_range, '[^0-9-]', ''), '-', 1) AS INT) + 
-                  CAST(SPLIT_PART(REGEXP_REPLACE(salary_range, '[^0-9-]', ''), '-', 2) AS INT)) / 2
+            WHEN salary_range RLIKE '\\d+-\\d+' 
+            THEN (
+		CAST(SPLIT(REGEXP_REPLACE(salary_range, '[^0-9-]', ''), '-')[0] AS INT) +
+		CAST(SPLIT(REGEXP_REPLACE(salary_range, '[^0-9-]', ''), '-')[1] AS INT)
+            ) / 2
             ELSE NULL
         END
     ) as avg_salary
