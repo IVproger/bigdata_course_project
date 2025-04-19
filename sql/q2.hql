@@ -1,28 +1,31 @@
--- Analyze most in-demand skills by work type and experience level
+-- Average salary by work type
 SELECT 
-    work_type,
-    experience,
-    skill,
-    COUNT(*) as demand_count,
-    ROUND(COUNT(*) * 100.0 / SUM(COUNT(*)) OVER(PARTITION BY work_type, experience), 2) as percentage
-FROM (
-    SELECT 
-        work_type,
-        experience,
-        TRIM(skill) as skill
-    FROM job_descriptions_part
-    LATERAL VIEW explode(split(regexp_replace(regexp_replace(skills, '\\[|\\]', ''), '\\'', ''), ',')) skills_exploded AS skill
-    WHERE skills IS NOT NULL 
-        AND work_type IS NOT NULL
-        AND experience IS NOT NULL
-) skills_data
-WHERE skill != ''
-GROUP BY work_type, experience, skill
-HAVING COUNT(*) > 5
-ORDER BY work_type, experience, demand_count DESC;
-
--- This query helps:
--- Identify which skills are most valuable for different work types
--- Understand skill requirements at different experience levels
--- Guide career development and training decisions
--- Show skill trends in the job market
+  work_type,
+  AVG(
+    CASE 
+      WHEN salary_range RLIKE '\\$?\\d+(K|k)?-\\$?\\d+(K|k)?' THEN (
+        CAST(
+          REGEXP_EXTRACT(salary_range, '\\$?(\\d+)(K|k)?-', 1) AS INT
+        ) * 
+        CASE 
+          WHEN REGEXP_EXTRACT(salary_range, '\\$?(\\d+)(K|k)?-', 2) IN ('K','k') THEN 1000 
+          ELSE 1 
+        END
+        +
+        CAST(
+          REGEXP_EXTRACT(salary_range, '-\\$?(\\d+)(K|k)?', 1) AS INT
+        ) * 
+        CASE 
+          WHEN REGEXP_EXTRACT(salary_range, '-\\$?(\\d+)(K|k)?', 2) IN ('K','k') THEN 1000 
+          ELSE 1 
+        END
+      ) / 2
+      ELSE NULL
+    END
+  ) AS avg_salary
+FROM job_descriptions_part
+WHERE work_type IS NOT NULL
+  AND salary_range IS NOT NULL
+GROUP BY work_type
+HAVING COUNT(*) > 10
+ORDER BY avg_salary DESC;

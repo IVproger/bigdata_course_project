@@ -140,7 +140,7 @@ def main():
         # --- Execute EDA Queries ---
         # No need to run db.hql as tables are assumed to exist
         print("Starting EDA query execution...")
-        for i in range(1, 6): # Assuming 5 queries: q1.hql to q5.hql
+        for i in range(1, 7): # Assuming 5 queries: q1.hql to q5.hql
             execute_eda_query(spark, i, postgres_jdbc_url, pg_properties)
 
         print("\nAll EDA queries processed successfully!")
