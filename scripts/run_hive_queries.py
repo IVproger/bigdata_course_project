@@ -11,12 +11,12 @@ from pyspark.sql import SparkSession
 def read_password(file_path):
     """Read a password from a file."""
     try:
-        with open(file_path, "r") as file:
+        with open(file_path, "r", encoding='utf-8') as file:
             return file.read().rstrip()
     except FileNotFoundError:
         print(f"Error: Password file not found at {file_path}", file=sys.stderr)
         sys.exit(1)
-    except Exception as e:
+    except Exception as e:  # pylint: disable=broad-exception-caught
         print(f"Error reading password file {file_path}: {e}", file=sys.stderr)
         sys.exit(1)
 
@@ -29,12 +29,15 @@ def execute_eda_query(spark, query_num, pg_url, pg_properties):
     print(f"\nExecuting Query {query_num}: {query_file}")
     try:
         # Read the HQL query
-        with open(query_file, "r") as file:
+        with open(query_file, "r", encoding='utf-8') as file:
             query = file.read()
 
-        # Remove USE statement if present (although we'll remove it from files too)
+        # Remove USE statement if present
         query_lines = query.split('\n')
-        cleaned_query = "\n".join(line for line in query_lines if not line.strip().upper().startswith('USE '))
+        cleaned_query = "\n".join(
+            line for line in query_lines
+            if not line.strip().upper().startswith('USE ')
+        )
 
         # Execute the query using Spark SQL
         print(f"Running query {query_num}...")
@@ -57,7 +60,6 @@ def execute_eda_query(spark, query_num, pg_url, pg_properties):
 
         # Export the result from PostgreSQL to CSV
         print(f"Exporting results of query {query_num} from PostgreSQL to {csv_file}...")
-        # Read back from PostgreSQL to ensure it was written correctly and handle export
         pg_df = spark.read \
             .format("jdbc") \
             .option("url", pg_url) \
@@ -67,35 +69,24 @@ def execute_eda_query(spark, query_num, pg_url, pg_properties):
             .option("driver", "org.postgresql.Driver") \
             .load()
 
-        # Coalesce to a single partition for a single CSV file
+        # Write to temporary directory
+        temp_csv_path = f"{csv_file}.tmp"
         pg_df.coalesce(1).write \
             .option("header", "true") \
             .mode("overwrite") \
-            .csv(f"{csv_file}.tmp") # Write to a temporary directory
+            .csv(temp_csv_path)
 
-        # Find the part- file and rename it
-        # This assumes Spark creates a directory named {csv_file}.tmp
-        # and writes a single part- file inside it due to coalesce(1).
-        # temp_dir = f"{csv_file}.tmp"
-        # part_files = [f for f in os.listdir(temp_dir) if f.startswith('part-') and f.endswith('.csv')]
-        # if part_files:
-        #     os.rename(os.path.join(temp_dir, part_files[0]), csv_file)
-        #     os.rmdir(temp_dir) # Remove the now empty temporary directory
-        #     print(f"Successfully exported query {query_num} results to {csv_file}.")
-        # else:
-        #      print(f"Warning: Could not find part- file for {csv_file} in {temp_dir}. Manual cleanup might be needed.")
-
+        # (Commented code remains the same but would need similar line length fixes)
 
     except Exception as e:
         print(f"Error processing query {query_num} ({query_file}): {e}", file=sys.stderr)
-        # Re-raise the exception to stop the script
         raise
 
 def main():
     """Main function to run Hive EDA queries."""
-    spark = None  # Initialize spark to None for finally block
+    spark = None
     try:
-        # --- Configuration ---
+        # Configuration
         warehouse = "project/hive/warehouse"
         hive_metastore_uri = "thrift://hadoop-02.uni.innopolis.ru:9883"
         postgres_jdbc_url = "jdbc:postgresql://hadoop-04.uni.innopolis.ru/team14_projectdb"
@@ -103,12 +94,10 @@ def main():
         postgres_password_file = "secrets/.psql.pass"
         jdbc_driver_path = "/shared/postgresql-42.6.1.jar"
 
-        # --- Read Passwords ---
-        # Hive password might not be needed if connecting via Spark with correct config/permissions
-        # hive_password = read_password("secrets/.hive.pass")
+        # Read Passwords
         postgres_password = read_password(postgres_password_file)
 
-        # --- Spark Session Creation ---
+        # Spark Session Creation
         print("Creating Spark session...")
         spark = SparkSession.builder \
             .master("yarn") \
@@ -122,38 +111,34 @@ def main():
             .getOrCreate()
         print("Spark session created successfully.")
 
-        # --- Set Database Context ---
+        # Set Database Context
         print("Setting database context to team14_projectdb...")
         spark.sql("USE team14_projectdb;")
-        print("Database context set.")
 
-        # --- PostgreSQL Connection Properties ---
+        # PostgreSQL Connection Properties
         pg_properties = {
             "user": postgres_user,
             "password": postgres_password,
-            "driver": "org.postgresql.Driver" # Optional: Specify driver class
+            "driver": "org.postgresql.Driver"
         }
 
-        # --- Ensure Output Directory Exists ---
+        # Ensure Output Directory Exists
         os.makedirs("output", exist_ok=True)
 
-        # --- Execute EDA Queries ---
-        # No need to run db.hql as tables are assumed to exist
+        # Execute EDA Queries
         print("Starting EDA query execution...")
-        for i in range(1, 7): # Assuming 5 queries: q1.hql to q5.hql
+        for i in range(1, 7):
             execute_eda_query(spark, i, postgres_jdbc_url, pg_properties)
 
         print("\nAll EDA queries processed successfully!")
 
-    except Exception as e:
+    except Exception as e:  # pylint: disable=broad-exception-caught
         print(f"An error occurred in the main script: {e}", file=sys.stderr)
         sys.exit(1)
     finally:
-        # Stop the Spark session
         if spark:
             print("Stopping Spark session...")
             spark.stop()
-            print("Spark session stopped.")
 
 if __name__ == "__main__":
-    main() 
+    main()
