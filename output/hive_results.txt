@@ -1,23 +1,23 @@
-0: jdbc:hive2://hadoop-03.uni.innopolis.ru:10> -- Drop the database if it exist s
-0: jdbc:hive2://hadoop-03.uni.innopolis.ru:10> DROP DATABASE IF EXISTS team14_p rojectdb CASCADE;
+0: jdbc:hive2://hadoop-03.uni.innopolis.ru:10> -- Drop the database if it exists
+0: jdbc:hive2://hadoop-03.uni.innopolis.ru:10> DROP DATABASE IF EXISTS team14_projectdb CASCADE;
 0: jdbc:hive2://hadoop-03.uni.innopolis.ru:10> 
-0: jdbc:hive2://hadoop-03.uni.innopolis.ru:10> -- Create a database and access  it
-0: jdbc:hive2://hadoop-03.uni.innopolis.ru:10> CREATE DATABASE team14_projectdb  LOCATION "project/hive/warehouse";
+0: jdbc:hive2://hadoop-03.uni.innopolis.ru:10> -- Create a database and access it
+0: jdbc:hive2://hadoop-03.uni.innopolis.ru:10> CREATE DATABASE team14_projectdb LOCATION "project/hive/warehouse";
 0: jdbc:hive2://hadoop-03.uni.innopolis.ru:10> USE team14_projectdb;
 0: jdbc:hive2://hadoop-03.uni.innopolis.ru:10> 
-0: jdbc:hive2://hadoop-03.uni.innopolis.ru:10> -- Create a single table with pa rtitioning and bucketing
-0: jdbc:hive2://hadoop-03.uni.innopolis.ru:10> CREATE EXTERNAL TABLE job_descri ptions 
+0: jdbc:hive2://hadoop-03.uni.innopolis.ru:10> -- Create a single table with partitioning and bucketing
+0: jdbc:hive2://hadoop-03.uni.innopolis.ru:10> CREATE EXTERNAL TABLE job_descriptions 
 . . . . . . . . . . . . . . . . . . . . . . .> STORED AS AVRO 
-. . . . . . . . . . . . . . . . . . . . . . .> LOCATION 'project/warehouse/job_ descriptions' 
-. . . . . . . . . . . . . . . . . . . . . . .> TBLPROPERTIES ('avro.schema.url' ='project/warehouse/avsc/job_descriptions.avsc');
+. . . . . . . . . . . . . . . . . . . . . . .> LOCATION 'project/warehouse/job_descriptions' 
+. . . . . . . . . . . . . . . . . . . . . . .> TBLPROPERTIES ('avro.schema.url'='project/warehouse/avsc/job_descriptions.avsc');
 0: jdbc:hive2://hadoop-03.uni.innopolis.ru:10> 
 0: jdbc:hive2://hadoop-03.uni.innopolis.ru:10> -- Enable dynamic partitioning
-0: jdbc:hive2://hadoop-03.uni.innopolis.ru:10> SET hive.exec.dynamic.partition= true;
-0: jdbc:hive2://hadoop-03.uni.innopolis.ru:10> SET hive.exec.dynamic.partition. mode=nonstrict;
+0: jdbc:hive2://hadoop-03.uni.innopolis.ru:10> SET hive.exec.dynamic.partition=true;
+0: jdbc:hive2://hadoop-03.uni.innopolis.ru:10> SET hive.exec.dynamic.partition.mode=nonstrict;
 0: jdbc:hive2://hadoop-03.uni.innopolis.ru:10> 
-0: jdbc:hive2://hadoop-03.uni.innopolis.ru:10> SET hive.enforce.bucketing = tru e;
+0: jdbc:hive2://hadoop-03.uni.innopolis.ru:10> SET hive.enforce.bucketing = true;
 0: jdbc:hive2://hadoop-03.uni.innopolis.ru:10> 
-0: jdbc:hive2://hadoop-03.uni.innopolis.ru:10> CREATE EXTERNAL TABLE job_descri ptions_part (
+0: jdbc:hive2://hadoop-03.uni.innopolis.ru:10> CREATE EXTERNAL TABLE job_descriptions_part (
 . . . . . . . . . . . . . . . . . . . . . . .>     id INT,
 . . . . . . . . . . . . . . . . . . . . . . .>     job_id BIGINT,
 . . . . . . . . . . . . . . . . . . . . . . .>     experience STRING,
@@ -42,13 +42,13 @@
 . . . . . . . . . . . . . . . . . . . . . . .>     company_name STRING,
 . . . . . . . . . . . . . . . . . . . . . . .>     company_profile STRING
 . . . . . . . . . . . . . . . . . . . . . . .> )
-. . . . . . . . . . . . . . . . . . . . . . .> PARTITIONED BY (work_type STRING )
-. . . . . . . . . . . . . . . . . . . . . . .> CLUSTERED BY (preference) INTO 3  BUCKETS
+. . . . . . . . . . . . . . . . . . . . . . .> PARTITIONED BY (work_type STRING)
+. . . . . . . . . . . . . . . . . . . . . . .> CLUSTERED BY (preference) INTO 3 BUCKETS
 . . . . . . . . . . . . . . . . . . . . . . .> STORED AS AVRO 
-. . . . . . . . . . . . . . . . . . . . . . .> LOCATION 'project/hive/warehouse /job_descriptions_part' 
-. . . . . . . . . . . . . . . . . . . . . . .> TBLPROPERTIES ('AVRO.COMPRESS'=' SNAPPY');
+. . . . . . . . . . . . . . . . . . . . . . .> LOCATION 'project/hive/warehouse/job_descriptions_part' 
+. . . . . . . . . . . . . . . . . . . . . . .> TBLPROPERTIES ('AVRO.COMPRESS'='SNAPPY');
 0: jdbc:hive2://hadoop-03.uni.innopolis.ru:10> 
-0: jdbc:hive2://hadoop-03.uni.innopolis.ru:10> INSERT INTO job_descriptions_par t PARTITION (work_type)
+0: jdbc:hive2://hadoop-03.uni.innopolis.ru:10> INSERT INTO job_descriptions_part PARTITION (work_type)
 . . . . . . . . . . . . . . . . . . . . . . .> SELECT
 . . . . . . . . . . . . . . . . . . . . . . .>     id,
 . . . . . . . . . . . . . . . . . . . . . . .>     job_id,
@@ -57,12 +57,12 @@
 . . . . . . . . . . . . . . . . . . . . . . .>     salary_range,
 . . . . . . . . . . . . . . . . . . . . . . .>     location,
 . . . . . . . . . . . . . . . . . . . . . . .>     country,
-. . . . . . . . . . . . . . . . . . . . . . .>     CAST(latitude AS DECIMAL(9,6 )) AS latitude,
-. . . . . . . . . . . . . . . . . . . . . . .>     CAST(longitude AS DECIMAL(9, 6)) AS longitude,
+. . . . . . . . . . . . . . . . . . . . . . .>     CAST(latitude AS DECIMAL(9,6)) AS latitude,
+. . . . . . . . . . . . . . . . . . . . . . .>     CAST(longitude AS DECIMAL(9,6)) AS longitude,
 . . . . . . . . . . . . . . . . . . . . . . .>     company_size,
 . . . . . . . . . . . . . . . . . . . . . . .>     CAST(
 . . . . . . . . . . . . . . . . . . . . . . .>         FROM_UNIXTIME(
-. . . . . . . . . . . . . . . . . . . . . . .>             CAST(job_posting_dat e / 1000 AS BIGINT)  -- Convert milliseconds to seconds as BIGINT
+. . . . . . . . . . . . . . . . . . . . . . .>             CAST(job_posting_date / 1000 AS BIGINT)  -- Convert milliseconds to seconds as BIGINT
 . . . . . . . . . . . . . . . . . . . . . . .>         ) AS DATE
 . . . . . . . . . . . . . . . . . . . . . . .>     ) AS job_posting_date,
 . . . . . . . . . . . . . . . . . . . . . . .>     contact_person,
@@ -77,20 +77,22 @@
 . . . . . . . . . . . . . . . . . . . . . . .>     responsibilities,
 . . . . . . . . . . . . . . . . . . . . . . .>     company_name,
 . . . . . . . . . . . . . . . . . . . . . . .>     company_profile,
-. . . . . . . . . . . . . . . . . . . . . . .>     work_type  -- Must be last ( partition column)
+. . . . . . . . . . . . . . . . . . . . . . .>     work_type  -- Must be last (partition column)
 . . . . . . . . . . . . . . . . . . . . . . .> FROM job_descriptions;
 0: jdbc:hive2://hadoop-03.uni.innopolis.ru:10> 
-0: jdbc:hive2://hadoop-03.uni.innopolis.ru:10> -- Verify the table was created  correctly
+0: jdbc:hive2://hadoop-03.uni.innopolis.ru:10> -- Delete the unpartitioned Hive TABLE job_descriptions
+0: jdbc:hive2://hadoop-03.uni.innopolis.ru:10> DROP TABLE job_descriptions;
+0: jdbc:hive2://hadoop-03.uni.innopolis.ru:10> 
+0: jdbc:hive2://hadoop-03.uni.innopolis.ru:10> -- Verify the table was created correctly
 0: jdbc:hive2://hadoop-03.uni.innopolis.ru:10> SHOW TABLES;
 +------------------------+
 |        tab_name        |
 +------------------------+
-| job_descriptions       |
 | job_descriptions_part  |
 +------------------------+
 0: jdbc:hive2://hadoop-03.uni.innopolis.ru:10> 
-0: jdbc:hive2://hadoop-03.uni.innopolis.ru:10> -- Check the partitions in the t able
-0: jdbc:hive2://hadoop-03.uni.innopolis.ru:10> SHOW PARTITIONS job_descriptions _part;
+0: jdbc:hive2://hadoop-03.uni.innopolis.ru:10> -- Check the partitions in the table
+0: jdbc:hive2://hadoop-03.uni.innopolis.ru:10> SHOW PARTITIONS job_descriptions_part;
 +----------------------+
 |      partition       |
 +----------------------+
@@ -101,14 +103,14 @@
 | work_type=Temporary  |
 +----------------------+
 0: jdbc:hive2://hadoop-03.uni.innopolis.ru:10> 
-0: jdbc:hive2://hadoop-03.uni.innopolis.ru:10> -- Check the bucketing in the ta ble 
+0: jdbc:hive2://hadoop-03.uni.innopolis.ru:10> -- Check the bucketing in the table 
 0: jdbc:hive2://hadoop-03.uni.innopolis.ru:10> SELECT 
 . . . . . . . . . . . . . . . . . . . . . . .>   preference,
 . . . . . . . . . . . . . . . . . . . . . . .>   INPUT__FILE__NAME AS file,
 . . . . . . . . . . . . . . . . . . . . . . .>   COUNT(*) AS count
 . . . . . . . . . . . . . . . . . . . . . . .> FROM job_descriptions_part
 . . . . . . . . . . . . . . . . . . . . . . .> WHERE work_type = 'Contract'
-. . . . . . . . . . . . . . . . . . . . . . .> GROUP BY preference, INPUT__FILE __NAME;
+. . . . . . . . . . . . . . . . . . . . . . .> GROUP BY preference, INPUT__FILE__NAME;
 +-------------+----------------------------------------------------+---------+
 | preference  |                        file                        |  count  |
 +-------------+----------------------------------------------------+---------+
@@ -118,15 +120,15 @@
 +-------------+----------------------------------------------------+---------+
 0: jdbc:hive2://hadoop-03.uni.innopolis.ru:10> 
 0: jdbc:hive2://hadoop-03.uni.innopolis.ru:10> -- Sample query to verify data
-0: jdbc:hive2://hadoop-03.uni.innopolis.ru:10> SELECT COUNT(*) FROM job_descrip tions_part;
+0: jdbc:hive2://hadoop-03.uni.innopolis.ru:10> SELECT COUNT(*) FROM job_descriptions_part;
 +----------+
 |   _c0    |
 +----------+
 | 1615940  |
 +----------+
 0: jdbc:hive2://hadoop-03.uni.innopolis.ru:10> 
-0: jdbc:hive2://hadoop-03.uni.innopolis.ru:10> -- Sample query to check data di stribution by work type
-0: jdbc:hive2://hadoop-03.uni.innopolis.ru:10> SELECT work_type, COUNT(*) as jo b_count 
+0: jdbc:hive2://hadoop-03.uni.innopolis.ru:10> -- Sample query to check data distribution by work type
+0: jdbc:hive2://hadoop-03.uni.innopolis.ru:10> SELECT work_type, COUNT(*) as job_count 
 . . . . . . . . . . . . . . . . . . . . . . .> FROM job_descriptions_part 
 . . . . . . . . . . . . . . . . . . . . . . .> GROUP BY work_type 
 . . . . . . . . . . . . . . . . . . . . . . .> ORDER BY job_count DESC; 
