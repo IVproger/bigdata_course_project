@@ -62,7 +62,7 @@
 . . . . . . . . . . . . . . . . . . . . . . .>     company_size,
 . . . . . . . . . . . . . . . . . . . . . . .>     CAST(
 . . . . . . . . . . . . . . . . . . . . . . .>         FROM_UNIXTIME(
-. . . . . . . . . . . . . . . . . . . . . . .>             CAST(job_posting_date / 1000 AS BIGINT)  -- Convert milliseconds to seconds as BIGINT
+. . . . . . . . . . . . . . . . . . . . . . .>             CAST(job_posting_date / 1000 AS BIGINT)  -- Convert milliseconds to seconds a s BIGINT
 . . . . . . . . . . . . . . . . . . . . . . .>         ) AS DATE
 . . . . . . . . . . . . . . . . . . . . . . .>     ) AS job_posting_date,
 . . . . . . . . . . . . . . . . . . . . . . .>     contact_person,
