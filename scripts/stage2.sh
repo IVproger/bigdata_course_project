@@ -30,7 +30,7 @@ echo "Executing Hive queries, storing results in PostgreSQL, and exporting to CS
 # Note: Adjust master, driver memory, executor memory/cores as needed for your cluster
 spark-submit \
     --master yarn \
-    --deploy-mode cluster \
+    --deploy-mode client \
     --jars /shared/postgresql-42.6.1.jar \
     scripts/run_hive_queries.py
 
