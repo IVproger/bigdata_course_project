@@ -1,9 +1,31 @@
--- Round latitude and longitude for meaningful clustering
+-- Average salary by country
 SELECT 
-  ROUND(latitude, 2) AS latitude,
-  ROUND(longitude, 2) AS longitude,
-  COUNT(*) AS job_count
-FROM jobs
-WHERE latitude IS NOT NULL AND longitude IS NOT NULL
-GROUP BY ROUND(latitude, 2), ROUND(longitude, 2)
-ORDER BY job_count DESC;
+  country,
+  AVG(
+    CASE 
+      WHEN salary_range RLIKE '\\$?\\d+(K|k)?-\\$?\\d+(K|k)?' THEN (
+        CAST(
+          REGEXP_EXTRACT(salary_range, '\\$?(\\d+)(K|k)?-', 1) AS INT
+        ) * 
+        CASE 
+          WHEN REGEXP_EXTRACT(salary_range, '\\$?(\\d+)(K|k)?-', 2) IN ('K','k') THEN 1000 
+          ELSE 1 
+        END
+        +
+        CAST(
+          REGEXP_EXTRACT(salary_range, '-\\$?(\\d+)(K|k)?', 1) AS INT
+        ) * 
+        CASE 
+          WHEN REGEXP_EXTRACT(salary_range, '-\\$?(\\d+)(K|k)?', 2) IN ('K','k') THEN 1000 
+          ELSE 1 
+        END
+      ) / 2
+      ELSE NULL
+    END
+  ) AS avg_salary
+FROM job_descriptions_part
+WHERE country IS NOT NULL
+  AND salary_range IS NOT NULL
+GROUP BY country
+HAVING COUNT(*) > 10
+ORDER BY avg_salary DESC;
