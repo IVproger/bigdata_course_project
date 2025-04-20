@@ -25,7 +25,7 @@ bash scripts/create_hive_tables.sh
 
 # Run the EDA PySpark script
 echo "Performing EDA analysis using job_descriptions_part HIVE table..."
-echo "Executing Hive queries, storing results in PostgreSQL, and exporting to CSV..."
+echo "Executing Hive queries, storing results in PostgreSQL, and exporting to CSV (via HDFS)..."
 
 # Note: Adjust master, driver memory, executor memory/cores as needed for your cluster
 spark-submit \
@@ -35,6 +35,28 @@ spark-submit \
     scripts/run_hive_queries.py
 
 echo "EDA analysis script finished."
+
+# Download results from HDFS to local CSV files
+echo "Downloading query results from HDFS to local output directory..."
+for i in {1..6}; do
+    hdfs_tmp_path="output/q${i}.csv.tmp"
+    local_csv="output/q${i}.csv"
+    echo "Processing results for q${i}..."
+    # Check if the HDFS temp directory exists
+    if hdfs dfs -test -d "$hdfs_tmp_path"; then
+        echo "Merging HDFS path $hdfs_tmp_path to local file $local_csv"
+        # Remove existing local file if it exists
+        rm -f "$local_csv"
+        # Merge HDFS part-files (created by Spark) into a single local CSV file
+        # This should preserve the header since Spark wrote it with .option("header", "true")
+        hdfs dfs -getmerge "$hdfs_tmp_path" "$local_csv"
+        echo "Removing temporary HDFS directory $hdfs_tmp_path"
+        hdfs dfs -rm -r "$hdfs_tmp_path"
+    else
+        echo "Warning: HDFS temporary directory $hdfs_tmp_path not found. Skipping download for q${i}."
+    fi
+done
+echo "Finished downloading results."
 
 # Run pylint validation
 echo "Running pylint validation..."
