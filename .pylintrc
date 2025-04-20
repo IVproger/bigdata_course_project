@@ -30,18 +30,7 @@ confidence=
 # --enable=similarities". If you want to run only the classes checker, but have
 # no Warning level messages displayed, use"--disable=all --enable=classes
 # --disable=W"
-disable=C0111,  # missing-docstring
-        C0103,  # invalid-name
-        R0903,  # too-few-public-methods
-        R0913,  # too-many-arguments
-        R0914,  # too-many-locals
-        W0703,  # broad-except
-        C0301,  # line-too-long
-        C0330,  # bad-continuation
-        W0621,  # redefined-outer-name
-        C0413,  # wrong-import-position
-        W0511,  # fixme
-        R0801,  # duplicate-code
+disable=C0111,C0103,R0903,R0913,R0914,W0703,C0301,C0330,W0621,C0413,W0511,R0801,W0718
 
 [REPORTS]
 # Set the output format. Available formats are text, parseable, colorized, json
