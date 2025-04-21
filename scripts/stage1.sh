@@ -19,6 +19,10 @@ source .venv/bin/activate
 echo "Collecting data..."
 bash scripts/data_collection.sh
 
+# Clear project database
+echo "Clear project database..."
+python3.11 scripts/clear_postgres_db.py 
+
 # Build project database
 echo "Building project database..."
 python3.11 scripts/build_projectdb.py

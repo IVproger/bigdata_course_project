@@ -58,13 +58,6 @@ for i in {1..6}; do
 done
 echo "Finished downloading results."
 
-# Run pylint validation
-echo "Running pylint validation..."
-if ! command -v pylint &> /dev/null; then
-    echo "Installing pylint..."
-    pip install pylint
-fi
-
 # Run pylint with specific configuration
 echo "Running pylint on Python scripts..."
 pylint --rcfile=.pylintrc scripts/run_hive_queries.py || {

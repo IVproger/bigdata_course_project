@@ -1,5 +1,3 @@
-DROP TABLE job_descriptions CASCADE;
-
 CREATE TABLE job_descriptions (
     id SERIAL PRIMARY KEY,
     job_id BIGINT UNIQUE NOT NULL,
