@@ -2,14 +2,14 @@
 0: jdbc:hive2://hadoop-03.uni.innopolis.ru:10> DROP DATABASE IF EXISTS team14_projectdb CASCADE;
 0: jdbc:hive2://hadoop-03.uni.innopolis.ru:10> 
 0: jdbc:hive2://hadoop-03.uni.innopolis.ru:10> -- Create a database and access it
-0: jdbc:hive2://hadoop-03.uni.innopolis.ru:10> CREATE DATABASE team14_projectdb LOCATION "project/hive/warehouse";
+0: jdbc:hive2://hadoop-03.uni.innopolis.ru:10> CREATE DATABASE team14_projectdb LOCATION "project/hive/ware house";
 0: jdbc:hive2://hadoop-03.uni.innopolis.ru:10> USE team14_projectdb;
 0: jdbc:hive2://hadoop-03.uni.innopolis.ru:10> 
 0: jdbc:hive2://hadoop-03.uni.innopolis.ru:10> -- Create a single table with partitioning and bucketing
 0: jdbc:hive2://hadoop-03.uni.innopolis.ru:10> CREATE EXTERNAL TABLE job_descriptions 
 . . . . . . . . . . . . . . . . . . . . . . .> STORED AS AVRO 
 . . . . . . . . . . . . . . . . . . . . . . .> LOCATION 'project/warehouse/job_descriptions' 
-. . . . . . . . . . . . . . . . . . . . . . .> TBLPROPERTIES ('avro.schema.url'='project/warehouse/avsc/job_descriptions.avsc');
+. . . . . . . . . . . . . . . . . . . . . . .> TBLPROPERTIES ('avro.schema.url'='project/warehouse/avsc/job _descriptions.avsc');
 0: jdbc:hive2://hadoop-03.uni.innopolis.ru:10> 
 0: jdbc:hive2://hadoop-03.uni.innopolis.ru:10> -- Enable dynamic partitioning
 0: jdbc:hive2://hadoop-03.uni.innopolis.ru:10> SET hive.exec.dynamic.partition=true;
@@ -62,7 +62,7 @@
 . . . . . . . . . . . . . . . . . . . . . . .>     company_size,
 . . . . . . . . . . . . . . . . . . . . . . .>     CAST(
 . . . . . . . . . . . . . . . . . . . . . . .>         FROM_UNIXTIME(
-. . . . . . . . . . . . . . . . . . . . . . .>             CAST(job_posting_date / 1000 AS BIGINT)  -- Convert milliseconds to seconds a s BIGINT
+. . . . . . . . . . . . . . . . . . . . . . .>             CAST(job_posting_date / 1000 AS BIGINT)  -- Conv ert milliseconds to seconds as BIGINT
 . . . . . . . . . . . . . . . . . . . . . . .>         ) AS DATE
 . . . . . . . . . . . . . . . . . . . . . . .>     ) AS job_posting_date,
 . . . . . . . . . . . . . . . . . . . . . . .>     contact_person,

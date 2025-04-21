@@ -76,8 +76,6 @@ def execute_eda_query(spark, query_num, pg_url, pg_properties):
             .mode("overwrite") \
             .csv(temp_csv_path)
 
-        # (Commented code remains the same but would need similar line length fixes)
-
     except Exception as e:
         print(f"Error processing query {query_num} ({query_file}): {e}", file=sys.stderr)
         raise
@@ -132,7 +130,7 @@ def main():
 
         print("\nAll EDA queries processed successfully!")
 
-    except Exception as e:  # pylint: disable=broad-exception-caught
+    except Exception as e: 
         print(f"An error occurred in the main script: {e}", file=sys.stderr)
         sys.exit(1)
     finally:
