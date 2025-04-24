@@ -1,31 +1,33 @@
 #!/bin/bash
-set -e  # Stop script on any error
 
-# 1. Create local data directory (if not exists)
-mkdir -p data
+echo "Running Stage 3: Predictive Data Analytics..."
 
-# 2. Clean HDFS directory
-echo "Cleaning HDFS /project/data..."
-hdfs dfs -rm -r project/data >/dev/null 2>&1 || true  # Ignore errors if directory doesn't exist
+# Ensure script stops if any command fails
+set -e
 
-# 3. Recreate HDFS directory structure
-echo "Recreating HDFS structure..."
-hdfs dfs -mkdir -p project/data/train
-hdfs dfs -mkdir -p project/data/test
+# Define Team Number and Script Path
+TEAM_NAME="team14"
+PYTHON_SCRIPT="scripts/stage3.py"
 
-# 4. Data preparation...
-# echo "Data preparation..."
-# spark-submit \
-#     --master yarn \
-#     --deploy-mode client \
-#     scripts/run_hive_queries.py
+# Set YARN configuration directory if needed (usually set in environment)
+# export YARN_CONF_DIR=/etc/hadoop/conf
 
+echo "Submitting Spark job: ${PYTHON_SCRIPT}..."
 
-# # 4. Copy files from HDFS to local (with merging)
-# echo "Downloading training data..."
-# hdfs dfs -getmerge project/data/train/*.json data/train.json
+# Submit the Spark ML script to YARN
+spark-submit \
+    --master yarn \
+    --deploy-mode client \
+    --name "${TEAM_NAME}_Stage3_ML" \
+    --conf spark.yarn.appMasterEnv.PYSPARK_PYTHON=./environment/bin/python \
+    --conf spark.executorEnv.PYSPARK_PYTHON=./environment/bin/python \
+    --archives .venv.tar.gz#environment \
+    "${PYTHON_SCRIPT}"
 
-# echo "Downloading test data..."
-# hdfs dfs -getmerge project/data/test/*.json data/test.json
+echo "Spark job completed."
 
-# echo "Operation completed successfully!"
+# Run pylint check on the Python script
+echo "Running pylint check on ${PYTHON_SCRIPT}..."
+pylint --fail-under=8.0 "${PYTHON_SCRIPT}"
+
+echo "Stage 3 completed successfully."
