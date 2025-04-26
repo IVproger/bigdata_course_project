@@ -7,6 +7,10 @@ from pprint import pprint
 
 from pyspark.sql import SparkSession
 from pyspark.sql import functions as F
+# Import necessary types for schema definition
+from pyspark.sql.types import StructType, StructField, DoubleType
+from pyspark.ml.linalg import VectorUDT # Import VectorUDT for schema
+
 from pyspark.ml import PipelineModel
 from pyspark.ml.regression import LinearRegression, GBTRegressor
 from pyspark.ml.evaluation import RegressionEvaluator
@@ -44,10 +48,19 @@ def main():
     train_data_path = "project/data/train"
     test_data_path = "project/data/test"
 
+    # Define the schema for the input JSON data
+    # This should match the output of data_predprocessing.py ('features' and 'label')
+    input_schema = StructType([
+        StructField("features", VectorUDT(), True), # Features are stored as vectors
+        StructField("label", DoubleType(), True)    # Label is a double (salary_avg)
+    ])
+
     print(f"Loading training data from HDFS: {train_data_path}")
-    train_data = spark.read.format("json").load(train_data_path)
+    # Apply the explicit schema when reading
+    train_data = spark.read.format("json").schema(input_schema).load(train_data_path)
     print(f"Loading test data from HDFS: {test_data_path}")
-    test_data = spark.read.format("json").load(test_data_path)
+    # Apply the explicit schema when reading
+    test_data = spark.read.format("json").schema(input_schema).load(test_data_path)
 
     # Cache data for better performance during iterative ML tasks
     train_data.cache()
