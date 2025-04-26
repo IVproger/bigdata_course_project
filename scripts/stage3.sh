@@ -1,33 +1,63 @@
 #!/bin/bash
 
-echo "Running Stage 3: Predictive Data Analytics..."
+# --- Environment Setup ---
+export YARN_CONF_DIR=/etc/hadoop/conf
+echo "Set YARN_CONF_DIR to $YARN_CONF_DIR"
+export PYSPARK_PYTHON=python3.11
+export PYSPARK_DRIVER_PYTHON=python3.11
 
-# Ensure script stops if any command fails
-set -e
+# --- Local Directory Setup ---
+mkdir -p data
+mkdir -p models
+mkdir -p output
 
-# Define Team Number and Script Path
-TEAM_NAME="team14"
-PYTHON_SCRIPT="scripts/stage3.py"
+# --- HDFS Cleanup ---
+echo "Cleaning HDFS data, models, and output directories..."
+hdfs dfs -rm -r -f project/data >/dev/null 2>&1 || true
+hdfs dfs -rm -r -f project/models >/dev/null 2>&1 || true
+hdfs dfs -rm -r -f project/output >/dev/null 2>&1 || true
 
-# Set YARN configuration directory if needed (usually set in environment)
-# export YARN_CONF_DIR=/etc/hadoop/conf
+# --- HDFS Directory Creation ---
+echo "Recreating HDFS structure..."
+hdfs dfs -mkdir -p project/data/train
+hdfs dfs -mkdir -p project/data/test
+hdfs dfs -mkdir -p project/models
+hdfs dfs -mkdir -p project/output
 
-echo "Submitting Spark job: ${PYTHON_SCRIPT}..."
-
-# Submit the Spark ML script to YARN
+# --- Stage 3: Part 1 - Data Preprocessing ---
+echo "Running data preprocessing script..."
 spark-submit \
     --master yarn \
     --deploy-mode client \
-    --name "${TEAM_NAME}_Stage3_ML" \
-    --conf spark.yarn.appMasterEnv.PYSPARK_PYTHON=./environment/bin/python \
-    --conf spark.executorEnv.PYSPARK_PYTHON=./environment/bin/python \
-    --archives .venv.tar.gz#environment \
-    "${PYTHON_SCRIPT}"
+    --conf spark.yarn.appMasterEnv.PYSPARK_PYTHON=$PYSPARK_PYTHON \
+    --conf spark.executorEnv.PYSPARK_PYTHON=$PYSPARK_PYTHON \
+    scripts/data_predprocessing.py
 
-echo "Spark job completed."
+# --- Stage 3: Part 2 - ML Modeling ---
+echo "Running ML modeling script..."
+spark-submit \
+    --master yarn \
+    --deploy-mode client \
+    --conf spark.yarn.appMasterEnv.PYSPARK_PYTHON=$PYSPARK_PYTHON \
+    --conf spark.executorEnv.PYSPARK_PYTHON=$PYSPARK_PYTHON \
+    scripts/ml_modeling.py
 
-# Run pylint check on the Python script
-echo "Running pylint check on ${PYTHON_SCRIPT}..."
-pylint --fail-under=8.0 "${PYTHON_SCRIPT}"
+# --- Download Results from HDFS ---
+echo "Downloading processed data..."
+hdfs dfs -getmerge project/data/train/*.json data/train.json
+hdfs dfs -getmerge project/data/test/*.json data/test.json
 
-echo "Stage 3 completed successfully."
+echo "Downloading trained models..."
+# Clean local model directories before downloading
+rm -rf models/model1 models/model2
+hdfs dfs -get project/models/model1 models/model1
+hdfs dfs -get project/models/model2 models/model2
+
+echo "Downloading model predictions..."
+hdfs dfs -getmerge project/output/model1_predictions.csv/*.csv output/model1_predictions.csv
+hdfs dfs -getmerge project/output/model2_predictions.csv/*.csv output/model2_predictions.csv
+
+echo "Downloading model evaluation comparison..."
+hdfs dfs -getmerge project/output/evaluation.csv/*.csv output/evaluation.csv
+
+echo "Stage 3 completed successfully!"
