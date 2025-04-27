@@ -26,6 +26,10 @@ hdfs dfs -mkdir -p project/output
 
 # --- Stage 3: Part 1 - Data Preprocessing ---
 echo "Running data preprocessing script..."
+# Add check to see if the script file exists before submitting
+# echo "Checking if preprocessing script exists:"
+# ls -l scripts/data_predprocessing.py
+
 spark-submit \
     --master yarn \
     --deploy-mode client \
@@ -35,6 +39,10 @@ spark-submit \
 
 # --- Stage 3: Part 2 - ML Modeling ---
 echo "Running ML modeling script..."
+# Add check to see if the modeling script exists before submitting
+# echo "Checking if modeling script exists:"
+# ls -l scripts/ml_modeling.py
+
 spark-submit \
     --master yarn \
     --deploy-mode client \
@@ -59,5 +67,10 @@ hdfs dfs -getmerge project/output/model2_predictions.csv/*.csv output/model2_pre
 
 echo "Downloading model evaluation comparison..."
 hdfs dfs -getmerge project/output/evaluation.csv/*.csv output/evaluation.csv
+
+# --- Pylint Check ---
+echo "Running pylint on Stage 3 Python scripts..."
+pylint --rcfile=.pylintrc scripts/data_predprocessing.py || echo "Pylint found issues in data_predprocessing.py (non-blocking)"
+pylint --rcfile=.pylintrc scripts/ml_modeling.py || echo "Pylint found issues in ml_modeling.py (non-blocking)"
 
 echo "Stage 3 completed successfully!"
