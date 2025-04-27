@@ -176,3 +176,4 @@ cython_debug/
 data/job_descriptions.csv
 /data
 /secrets
+.venv.tar.gz
