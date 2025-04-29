@@ -39,23 +39,5 @@ The entire process for this stage (excluding the manual Superset dashboard creat
 - Downloads the KL divergence results from HDFS to the local `output/` directory.
 - Includes a `pylint` check for the `calculate_kl.py` script.
 
-## Dashboard Integration (Manual Steps)
-The Hive tables created (`evaluation_results`, `model1_predictions`, `model2_predictions`, `kl_divergence`) are now ready to be used as data sources within Apache Superset.
-
-The following manual steps are required in Superset:
-1.  **Connect to Hive:** Ensure Superset has a database connection configured to the Hive metastore (`jdbc:hive2://hadoop-03.uni.innopolis.ru:10000/team14_projectdb`).
-2.  **Add Datasets:** Create new datasets in Superset based on the newly created Hive tables (`evaluation_results`, `model1_predictions`, `model2_predictions`, `kl_divergence`).
-3.  **Create Charts:** Build charts based on these datasets and the EDA datasets from Stage II (e.g., `q1_results` to `q6_results` in PostgreSQL).
-    - *Data Description:* Show table schemas (querying `information_schema` in PostgreSQL), record counts, sample data.
-    - *EDA Insights:* Recreate/add charts from Stage II (`q1.jpg` - `q6.jpg`) using the PostgreSQL tables (`q1_results` - `q6_results`). Add text descriptions/conclusions.
-    - *ML Modeling Results:* Create charts to visualize:
-        - Evaluation metrics (RMSE, R2) from `evaluation_results`.
-        - KL Divergence from `kl_divergence`.
-        - Distributions of actual vs. predicted salaries (histograms) from `model1_predictions` and `model2_predictions`.
-        - Scatter plots of actual vs. predicted salaries.
-        - Potentially, show sample predictions.
-4.  **Build Dashboard:** Assemble the charts and descriptive text elements into a cohesive dashboard using Superset's layout elements (Tabs, Rows, Columns, Headers, Text, Dividers).
-5.  **Publish Dashboard:** Make the dashboard publicly accessible.
-
 ## Conclusion
 Stage IV successfully prepared the ground for the final presentation layer. It created the necessary Hive table structures to expose Stage III's modeling results and calculated KL divergence as an additional model comparison metric. The automation script (`scripts/stage4.sh`) handles the prerequisite steps for dashboard creation. The final step involves manually building and publishing the dashboard in Apache Superset using the prepared Hive and PostgreSQL data sources. 
