@@ -44,7 +44,7 @@ if [ ! -f sql/stage4_hive_tables.hql ]; then
     exit 1
 fi
 
-beeline -u jdbc:hive2://hadoop-03.uni.innopolis.ru:10000/team14_projectdb \
+beeline -u jdbc:hive2://hadoop-03.uni.innopolis.ru:10001/team14_projectdb \
     -n team14 \
     -p "$hive_password" \
     -f sql/stage4_hive_tables.hql > output/stage4_hive_results.txt 2>&1
