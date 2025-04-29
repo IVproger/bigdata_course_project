@@ -68,6 +68,13 @@ hdfs dfs -getmerge project/output/model2_predictions.csv/*.csv output/model2_pre
 echo "Downloading model evaluation comparison..."
 hdfs dfs -getmerge project/output/evaluation.csv/*.csv output/evaluation.csv
 
+# --- ADDED: Download Tuning Results ---
+echo "Downloading hyperparameter tuning results..."
+rm -f output/lr_tuning_results.csv output/gbt_tuning_results.csv # Clean local files first
+hdfs dfs -getmerge project/output/lr_tuning_results.csv/*.csv output/lr_tuning_results.csv || echo "LR tuning results not found or failed to download."
+hdfs dfs -getmerge project/output/gbt_tuning_results.csv/*.csv output/gbt_tuning_results.csv || echo "GBT tuning results not found or failed to download."
+# --- END ADDED ---
+
 # --- Pylint Check ---
 echo "Running pylint on Stage 3 Python scripts..."
 pylint --rcfile=.pylintrc scripts/data_predprocessing.py || echo "Pylint found issues in data_predprocessing.py (non-blocking)"

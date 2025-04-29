@@ -8,6 +8,8 @@ DROP TABLE IF EXISTS evaluation_results;
 DROP TABLE IF EXISTS model1_predictions;
 DROP TABLE IF EXISTS model2_predictions;
 DROP TABLE IF EXISTS kl_divergence;
+DROP TABLE IF EXISTS lr_tuning_results;
+DROP TABLE IF EXISTS gbt_tuning_results;
 
 -- Create external table for model evaluation results
 CREATE EXTERNAL TABLE evaluation_results (
@@ -53,6 +55,32 @@ WITH SERDEPROPERTIES ('field.delim' = ',')
 STORED AS TEXTFILE
 LOCATION 'project/output/kl_divergence.csv'
 TBLPROPERTIES ('skip.header.line.count'='1'); -- Skip the header row
+
+-- ADDED: Table for Linear Regression Tuning Results
+CREATE EXTERNAL TABLE lr_tuning_results (
+    regParam DOUBLE,
+    elasticNetParam DOUBLE,
+    aggregationDepth INT, -- Assuming Spark saves this as INT
+    avgRMSE DOUBLE
+)
+ROW FORMAT DELIMITED
+FIELDS TERMINATED BY ','
+STORED AS TEXTFILE
+LOCATION 'project/output/lr_tuning_results.csv'
+TBLPROPERTIES ('skip.header.line.count'='1');
+
+-- ADDED: Table for GBT Regressor Tuning Results
+CREATE EXTERNAL TABLE gbt_tuning_results (
+    maxDepth INT, -- Assuming Spark saves this as INT
+    maxIter INT, -- Assuming Spark saves this as INT
+    stepSize DOUBLE,
+    avgRMSE DOUBLE
+)
+ROW FORMAT DELIMITED
+FIELDS TERMINATED BY ','
+STORED AS TEXTFILE
+LOCATION 'project/output/gbt_tuning_results.csv'
+TBLPROPERTIES ('skip.header.line.count'='1');
 
 -- Verify table creation
 SHOW TABLES; 
