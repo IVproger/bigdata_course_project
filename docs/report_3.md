@@ -27,8 +27,8 @@ For both models, the following steps were performed:
     - `ParamGridBuilder` was used to define a grid of hyperparameters to search for each model:
         - *Linear Regression:* `regParam`, `elasticNetParam`, `aggregationDepth`.
         - *GBT Regressor:* `maxDepth`, `maxIter`, `stepSize`.
-    - `TrainValidationSplit` was configured to tune the models. It was set to use 80% of the `train_data` for training the models within the grid search and 20% for validating their performance to select the best hyperparameters. `RMSE` was used as the evaluation metric for tuning.
-- **Training and Best Model Selection:** The `TrainValidationSplit` estimator was fitted to the `train_data`. The best model found during the validation process was selected (`model1` for Linear Regression, `model2` for GBT).
+    - `CrossValidator` was configured to tune the models using 3-fold cross-validation on the `train_data`. `RMSE` was used as the evaluation metric for selecting the best hyperparameters.
+- **Training and Best Model Selection:** The `CrossValidator` estimator was fitted to the `train_data`. The best model found during cross-validation was selected (`model1` for Linear Regression, `model2` for GBT).
 - **Prediction:** The best model (`model1`, `model2`) was used to make predictions on the held-out `test_data`.
 - **Evaluation:** The performance of the best model was evaluated on the `test_data` using both Root Mean Squared Error (`RMSE`) and R-squared (`R2`) metrics via `RegressionEvaluator`.
 
@@ -63,8 +63,13 @@ The results show very similar performance between the tuned Linear Regression an
 
 ## Technical Choices
 
-### Hyperparameter Tuning: TrainValidationSplit
-- `TrainValidationSplit` was chosen over `CrossValidator` (as requested) for hyperparameter tuning. It is computationally less expensive as it only requires one split of the data (e.g., 80/20) compared to K-Folds. While potentially less robust than cross-validation, it provides a faster way to tune hyperparameters, especially during development or with large datasets.
+### Hyperparameter Tuning: CrossValidator
+- `CrossValidator` with `numFolds=3` was used for hyperparameter tuning as required.
+- It performs K-fold cross-validation (here, 3 folds) by splitting the training data into K smaller sets.
+- For each hyperparameter combination, it trains on K-1 folds and validates on the remaining fold.
+- The performance metric (RMSE) is averaged across the folds for each parameter combination.
+- The parameters yielding the best average performance are chosen.
+- This approach provides a more robust estimate of model performance on unseen data compared to a single train-validation split, albeit at a higher computational cost.
 
 ### Evaluation Metrics: RMSE and R2
 - **RMSE (Root Mean Squared Error):** Provides an interpretable measure of the average magnitude of the prediction errors in the units of the target variable (salary). Lower is better.
@@ -75,4 +80,4 @@ The results show very similar performance between the tuned Linear Regression an
 - **GBTRegressor:** Selected as a more complex, potentially higher-performing model. Gradient Boosting builds trees sequentially, with each new tree trying to correct the errors of the previous ones, often leading to good predictive accuracy.
 
 ## Conclusion
-Stage III successfully implemented a predictive modeling pipeline using Spark ML. It loaded preprocessed data, trained and tuned both Linear Regression and GBT Regressor models using Train-Validation Split, evaluated their performance on a held-out test set, and compared the results. The best models, their predictions, and the evaluation comparison were saved to HDFS and subsequently downloaded locally. The entire process is automated via the `stage3.sh` script, including code quality checks with Pylint. While the models' predictive performance (indicated by low R2 values) suggests further feature engineering or model exploration might be needed for better salary prediction, the pipeline itself fulfills the requirements of this stage. 
+Stage III successfully implemented a predictive modeling pipeline using Spark ML. It loaded preprocessed data, trained and tuned both Linear Regression and GBT Regressor models using 3-fold Cross-Validation, evaluated their performance on a held-out test set, and compared the results. The best models, their predictions, and the evaluation comparison were saved to HDFS and subsequently downloaded locally. The entire process is automated via the `stage3.sh` script, including code quality checks with Pylint. While the models' predictive performance (indicated by low R2 values) suggests further feature engineering or model exploration might be needed for better salary prediction, the pipeline itself fulfills the requirements of this stage. 
