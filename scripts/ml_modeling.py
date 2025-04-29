@@ -103,6 +103,28 @@ def main():
     print("Best Linear Regression Params:")
     pprint(model1.extractParamMap())
 
+    # --- ADDED: Save LR Tuning Results --- #
+    print("Extracting and saving Linear Regression tuning results...")
+    lr_param_maps = lr_cv.getEstimatorParamMaps()
+    lr_avg_metrics = lr_cv_model.avgMetrics
+    lr_tuning_results = []
+    for params, metric in zip(lr_param_maps, lr_avg_metrics):
+        param_dict = {param.name: value for param, value in params.items()}
+        param_dict['avgRMSE'] = metric
+        lr_tuning_results.append(param_dict)
+
+    if lr_tuning_results:
+        lr_tuning_df = spark.createDataFrame(lr_tuning_results)
+        lr_tuning_path_hdfs = "project/output/lr_tuning_results.csv"
+        print(f"Saving LR tuning results to HDFS: {lr_tuning_path_hdfs}")
+        run_hdfs_command(f"hdfs dfs -rm -r -f {lr_tuning_path_hdfs}")
+        lr_tuning_df.coalesce(1).write.mode("overwrite").format("csv") \
+            .option("header", "true").save(lr_tuning_path_hdfs)
+        print("LR tuning results saved.")
+    else:
+        print("No LR tuning results to save.")
+    # --- END ADDED --- #
+
     # Save Model 1
     model1_path_hdfs = "project/models/model1"
     print(f"Saving Best Linear Regression model to HDFS: {model1_path_hdfs}")
@@ -163,6 +185,28 @@ def main():
     print("CrossValidator fitting finished. Best GBT model selected.")
     print("Best GBT Params:")
     pprint(model2.extractParamMap())
+
+    # --- ADDED: Save GBT Tuning Results --- #
+    print("Extracting and saving GBT tuning results...")
+    gbt_param_maps = gbt_cv.getEstimatorParamMaps()
+    gbt_avg_metrics = gbt_cv_model.avgMetrics
+    gbt_tuning_results = []
+    for params, metric in zip(gbt_param_maps, gbt_avg_metrics):
+        param_dict = {param.name: value for param, value in params.items()}
+        param_dict['avgRMSE'] = metric
+        gbt_tuning_results.append(param_dict)
+
+    if gbt_tuning_results:
+        gbt_tuning_df = spark.createDataFrame(gbt_tuning_results)
+        gbt_tuning_path_hdfs = "project/output/gbt_tuning_results.csv"
+        print(f"Saving GBT tuning results to HDFS: {gbt_tuning_path_hdfs}")
+        run_hdfs_command(f"hdfs dfs -rm -r -f {gbt_tuning_path_hdfs}")
+        gbt_tuning_df.coalesce(1).write.mode("overwrite").format("csv") \
+            .option("header", "true").save(gbt_tuning_path_hdfs)
+        print("GBT tuning results saved.")
+    else:
+        print("No GBT tuning results to save.")
+    # --- END ADDED --- #
 
     # Save Model 2
     model2_path_hdfs = "project/models/model2"
