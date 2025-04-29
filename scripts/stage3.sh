@@ -46,6 +46,8 @@ echo "Running ML modeling script..."
 spark-submit \
     --master yarn \
     --deploy-mode client \
+    --driver-memory 2g \
+    --executor-memory 4g \
     --conf spark.yarn.appMasterEnv.PYSPARK_PYTHON=$PYSPARK_PYTHON \
     --conf spark.executorEnv.PYSPARK_PYTHON=$PYSPARK_PYTHON \
     scripts/ml_modeling.py
