@@ -1,0 +1,442 @@
+--- Starting Feature Analysis Script ---
+Creating Spark session...
+Spark session created.
+Reading raw data from Hive: team14_projectdb.job_descriptions_part
+
+--- Applying Preprocessing Steps ---
+Processing Salary...
+Rows after salary filtering: 1615940 (removed 0)
+Processing Experience...
+Processing Company Profile...
+Rows after company profile JSON filtering: 1608618 (removed 7322)
+Processing Benefits...
+Processing Skills/Responsibilities...
+Processing Job Posting Date...
+Processing Geospatial Data...
+
+Final DataFrame for Analysis has 1608618 rows.
+
+--- Target Variable Analysis (salary_avg) ---
++-------+-----------------+
+|summary|       salary_avg|
++-------+-----------------+
+|  count|          1608618|
+|   mean|82491.07059600229|
+| stddev|7528.355376737211|
+|    min|          67500.0|
+|    max|          97500.0|
++-------+-----------------+
+
+Saving results to HDFS: project/data_insights/target_distribution.csv
+Successfully saved to HDFS.
+Saving results to PostgreSQL table: target_distribution
+Successfully saved to PostgreSQL.
+
+--- Correlation Analysis (Numerical, Cyclical, Binary vs Target) ---
+Correlation with Target (salary_avg):
+- benefits_count: nan
+- experience_min: 0.0018
+- day_sin: -0.0017
+- responsibilities_count: -0.0016
+- has_health_insurance: -0.0013
+- experience_avg: 0.0012
+- ecef_x: 0.0004
+- has_dental: nan
+- has_vision: nan
+- has_401k: nan
+- has_retirement: -0.0014
+- has_flexible: -0.0013
+- has_pto: -0.0010
+- has_paid_time_off: -0.0010
+- month_cos: -0.0005
+- is_public: -0.0004
+- skills_count: 0.0003
+- month_sin: -0.0003
+- job_posting_year: 0.0003
+- ecef_y: 0.0002
+- day_cos: -0.0001
+- experience_max: 0.0001
+- ecef_z: 0.0001
+- company_size: 0.0001
+- has_remote: nan
+- has_bonus: 0.0001
+- has_education: nan
+- has_training: nan
+- has_insurance: -0.0012
+- has_life_insurance: nan
+Saving results to HDFS: project/data_insights/feature_correlations.csv
+Successfully saved to HDFS.
+Saving results to PostgreSQL table: feature_correlations
+Successfully saved to PostgreSQL.
+
+--- Multicollinearity Check (Numerical Features) ---
+Correlation Matrix (Numerical Features):
+Features: ['company_size', 'benefits_count', 'skills_count', 'responsibilities_count', 'job_posting_year', 'experience_min', 'experience_max', 'experience_avg', 'ecef_x', 'ecef_y', 'ecef_z', 'is_public']
+[[ 1.00000000e+00             nan -1.85546079e-04 -2.38208223e-04
+   8.21236483e-04  3.49858764e-04 -8.69002656e-04 -4.88006130e-04
+  -6.07846929e-04 -1.03662682e-03  1.47818651e-04  5.96658243e-04]
+ [            nan  1.00000000e+00             nan             nan
+              nan             nan             nan             nan
+              nan             nan             nan             nan]
+ [-1.85546079e-04             nan  1.00000000e+00  1.43747478e-01
+  -9.23417627e-05  7.39839606e-04  3.78793988e-04  7.46151027e-04
+   2.21610087e-04 -2.52516384e-04  7.94321803e-04 -3.01530614e-04]
+ [-2.38208223e-04             nan  1.43747478e-01  1.00000000e+00
+   1.40723362e-04 -1.71308812e-04  1.48590841e-03  1.08964707e-03
+   6.66243196e-04 -7.65155343e-04 -1.22223504e-04  7.67672723e-04]
+ [ 8.21236483e-04             nan -9.23417627e-05  1.40723362e-04
+   1.00000000e+00  9.20827666e-04  6.63695464e-04  1.08290269e-03
+  -4.96995963e-04  7.90834548e-04  2.75117424e-04 -1.33782788e-03]
+ [ 3.49858764e-04             nan  7.39839606e-04 -1.71308812e-04
+   9.20827666e-04  1.00000000e+00 -9.78576339e-04  5.97003641e-01
+   5.16569680e-04 -9.16953877e-05 -5.08980852e-04  1.57099848e-03]
+ [-8.69002656e-04             nan  3.78793988e-04  1.48590841e-03
+   6.63695464e-04 -9.78576339e-04  1.00000000e+00  8.01653929e-01
+   1.34070288e-03 -3.92818731e-04  1.07446411e-03 -3.34828291e-04]
+ [-4.88006130e-04             nan  7.46151027e-04  1.08964707e-03
+   1.08290269e-03  5.97003641e-01  8.01653929e-01  1.00000000e+00
+   1.38436353e-03 -3.69948937e-04  5.57713920e-04  6.70512843e-04]
+ [-6.07846929e-04             nan  2.21610087e-04  6.66243196e-04
+  -4.96995963e-04  5.16569680e-04  1.34070288e-03  1.38436353e-03
+   1.00000000e+00 -5.37571886e-02  2.21702407e-01  5.39122018e-04]
+ [-1.03662682e-03             nan -2.52516384e-04 -7.65155343e-04
+   7.90834548e-04 -9.16953877e-05 -3.92818731e-04 -3.69948937e-04
+  -5.37571886e-02  1.00000000e+00  1.00635112e-01 -1.06153037e-03]
+ [ 1.47818651e-04             nan  7.94321803e-04 -1.22223504e-04
+   2.75117424e-04 -5.08980852e-04  1.07446411e-03  5.57713920e-04
+   2.21702407e-01  1.00635112e-01  1.00000000e+00 -3.02135941e-04]
+ [ 5.96658243e-04             nan -3.01530614e-04  7.67672723e-04
+  -1.33782788e-03  1.57099848e-03 -3.34828291e-04  6.70512843e-04
+   5.39122018e-04 -1.06153037e-03 -3.02135941e-04  1.00000000e+00]]
+Saving results to HDFS: project/data_insights/numerical_feature_multicollinearity.csv
+Successfully saved to HDFS.
+Saving results to PostgreSQL table: numerical_feature_multicollinearity
+Successfully saved to PostgreSQL.
+
+Highly Correlated Numerical Feature Pairs (|corr| > 0.8):
+- (experience_max, experience_avg): 0.8017
+
+--- Categorical Feature Analysis ---
+
+Analysis for Category: qualifications
+Top 10 Categories by Count for 'qualifications':
++--------------+------+
+|qualifications|count |
++--------------+------+
+|BBA           |161405|
+|BA            |161403|
+|BCA           |161010|
+|M.Tech        |160991|
+|PhD           |160926|
+|MBA           |160812|
+|B.Tech        |160710|
+|M.Com         |160625|
+|B.Com         |160583|
+|MCA           |160153|
++--------------+------+
+
+Saving results to HDFS: project/data_insights/categorical_counts_qualifications.csv
+Successfully saved to HDFS.
+Saving results to PostgreSQL table: categorical_counts_qualifications
+Successfully saved to PostgreSQL.
+Average salary_avg per qualifications (Top 10 by count):
++--------------+-----------------+------+
+|qualifications|avg_salary_avg   |count |
++--------------+-----------------+------+
+|BBA           |82489.29401195749|161405|
+|BA            |82523.20588836638|161403|
+|BCA           |82461.84087944849|161010|
+|M.Tech        |82507.53768844221|160991|
+|PhD           |82495.81795359358|160926|
+|MBA           |82500.73999452777|160812|
+|B.Tech        |82484.51247588824|160710|
+|M.Com         |82473.18287937743|160625|
+|B.Com         |82470.49189515701|160583|
+|MCA           |82503.98369059587|160153|
++--------------+-----------------+------+
+
+Saving results to HDFS: project/data_insights/categorical_avg_target_qualifications.csv
+Successfully saved to HDFS.
+Saving results to PostgreSQL table: categorical_avg_target_qualifications
+Successfully saved to PostgreSQL.
+
+Analysis for Category: work_type
+Top 10 Categories by Count for 'work_type':
++---------+------+
+|work_type|count |
++---------+------+
+|Part-Time|322576|
+|Temporary|322008|
+|Contract |321641|
+|Intern   |321634|
+|Full-Time|320759|
++---------+------+
+
+Saving results to HDFS: project/data_insights/categorical_counts_work_type.csv
+Successfully saved to HDFS.
+Saving results to PostgreSQL table: categorical_counts_work_type
+Successfully saved to PostgreSQL.
+Average salary_avg per work_type (Top 10 by count):
++---------+-----------------+------+
+|work_type|avg_salary_avg   |count |
++---------+-----------------+------+
+|Part-Time|82496.45974902039|322576|
+|Temporary|82498.80437753099|322008|
+|Contract |82485.05321149978|321641|
+|Intern   |82494.0615730924 |321634|
+|Full-Time|82480.92181357343|320759|
++---------+-----------------+------+
+
+Saving results to HDFS: project/data_insights/categorical_avg_target_work_type.csv
+Successfully saved to HDFS.
+Saving results to PostgreSQL table: categorical_avg_target_work_type
+Successfully saved to PostgreSQL.
+
+Analysis for Category: preference
+Top 10 Categories by Count for 'preference':
++----------+------+
+|preference|count |
++----------+------+
+|Male      |536779|
+|Both      |535972|
+|Female    |535867|
++----------+------+
+
+Saving results to HDFS: project/data_insights/categorical_counts_preference.csv
+Successfully saved to HDFS.
+Saving results to PostgreSQL table: categorical_counts_preference
+Successfully saved to PostgreSQL.
+Average salary_avg per preference (Top 10 by count):
++----------+-----------------+------+
+|preference|avg_salary_avg   |count |
++----------+-----------------+------+
+|Male      |82479.28477082748|536779|
+|Both      |82491.9193539961 |535972|
+|Female    |82502.02755534489|535867|
++----------+-----------------+------+
+
+Saving results to HDFS: project/data_insights/categorical_avg_target_preference.csv
+Successfully saved to HDFS.
+Saving results to PostgreSQL table: categorical_avg_target_preference
+Successfully saved to PostgreSQL.
+
+Analysis for Category: job_portal
+Top 10 Categories by Count for 'job_portal':
++-------------------+------+
+|job_portal         |count |
++-------------------+------+
+|FlexJobs           |129285|
+|Stack Overflow Jobs|128798|
+|Jobs2Careers       |128655|
+|Snagajob           |128499|
+|SimplyHired        |128498|
+|USAJOBS            |128493|
+|The Muse           |128448|
+|Idealist           |128369|
+|Internships.com    |128197|
+|Monster            |64776 |
++-------------------+------+
+only showing top 10 rows
+
+Saving results to HDFS: project/data_insights/categorical_counts_job_portal.csv
+Successfully saved to HDFS.
+Saving results to PostgreSQL table: categorical_counts_job_portal
+Successfully saved to PostgreSQL.
+Average salary_avg per job_portal (Top 10 by count):
++-------------------+-----------------+------+
+|job_portal         |avg_salary_avg   |count |
++-------------------+-----------------+------+
+|FlexJobs           |82518.4012066365 |129285|
+|Stack Overflow Jobs|82556.58084752869|128798|
+|Jobs2Careers       |82505.2776806187 |128655|
+|Snagajob           |82467.85188989798|128499|
+|SimplyHired        |82463.27958411803|128498|
+|USAJOBS            |82483.43489528612|128493|
+|The Muse           |82478.08062406577|128448|
+|Idealist           |82477.72047768542|128369|
+|Internships.com    |82473.03759058325|128197|
+|Monster            |82490.96887736199|64776 |
++-------------------+-----------------+------+
+only showing top 10 rows
+
+Saving results to HDFS: project/data_insights/categorical_avg_target_job_portal.csv
+Successfully saved to HDFS.
+Saving results to PostgreSQL table: categorical_avg_target_job_portal
+Successfully saved to PostgreSQL.
+
+Analysis for Category: sector
+Top 10 Categories by Count for 'sector':
++------------------+------+
+|sector            |count |
++------------------+------+
+|Financial Services|134106|
+|Energy            |100367|
+|Retail            |87633 |
+|Insurance         |73135 |
+|Automotive        |61862 |
+|Technology        |60336 |
+|Healthcare        |58331 |
+|Manufacturing     |43385 |
+|Real Estate       |40250 |
+|Telecommunications|39935 |
++------------------+------+
+only showing top 10 rows
+
+Saving results to HDFS: project/data_insights/categorical_counts_sector.csv
+Successfully saved to HDFS.
+Saving results to PostgreSQL table: categorical_counts_sector
+Successfully saved to PostgreSQL.
+Average salary_avg per sector (Top 10 by count):
++------------------+-----------------+------+
+|sector            |avg_salary_avg   |count |
++------------------+-----------------+------+
+|Financial Services|82483.69946161991|134106|
+|Energy            |82499.91032909224|100367|
+|Retail            |82484.16692341927|87633 |
+|Insurance         |82505.87953784098|73135 |
+|Automotive        |82467.80737771168|61862 |
+|Technology        |82457.47977989924|60336 |
+|Healthcare        |82479.86490888207|58331 |
+|Manufacturing     |82437.017402328  |43385 |
+|Real Estate       |82484.0745341615 |40250 |
+|Telecommunications|82434.180543383  |39935 |
++------------------+-----------------+------+
+only showing top 10 rows
+
+Saving results to HDFS: project/data_insights/categorical_avg_target_sector.csv
+Successfully saved to HDFS.
+Saving results to PostgreSQL table: categorical_avg_target_sector
+Successfully saved to PostgreSQL.
+
+Analysis for Category: industry
+Top 10 Categories by Count for 'industry':
++----------------------------------------+-----+
+|industry                                |count|
++----------------------------------------+-----+
+|Pharmaceuticals                         |52759|
+|Chemicals                               |48964|
+|Utilities: Gas and Electric             |41874|
+|Telecommunications                      |40031|
+|Specialty Retailers: Other              |34854|
+|Commercial Banks                        |34738|
+|Financial Services                      |32685|
+|Automotive                              |32608|
+|Insurance: Property and Casualty (Stock)|29176|
+|Mining, Crude-Oil Production            |27369|
++----------------------------------------+-----+
+only showing top 10 rows
+
+Saving results to HDFS: project/data_insights/categorical_counts_industry.csv
+Successfully saved to HDFS.
+Saving results to PostgreSQL table: categorical_counts_industry
+Successfully saved to PostgreSQL.
+Average salary_avg per industry (Top 10 by count):
++----------------------------------------+-----------------+-----+
+|industry                                |avg_salary_avg   |count|
++----------------------------------------+-----------------+-----+
+|Pharmaceuticals                         |82492.81639151614|52759|
+|Chemicals                               |82488.60387223266|48964|
+|Utilities: Gas and Electric             |82487.06834790084|41874|
+|Telecommunications                      |82439.25957383028|40031|
+|Specialty Retailers: Other              |82473.54679520284|34854|
+|Commercial Banks                        |82473.9910184812 |34738|
+|Financial Services                      |82492.41242160012|32685|
+|Automotive                              |82525.89855250245|32608|
+|Insurance: Property and Casualty (Stock)|82474.5510008226 |29176|
+|Mining, Crude-Oil Production            |82465.81899229054|27369|
++----------------------------------------+-----------------+-----+
+only showing top 10 rows
+
+Saving results to HDFS: project/data_insights/categorical_avg_target_industry.csv
+Successfully saved to HDFS.
+Saving results to PostgreSQL table: categorical_avg_target_industry
+Successfully saved to PostgreSQL.
+
+Analysis for Category: company_state
+Top 10 Categories by Count for 'company_state':
++-------------+------+
+|company_state|count |
++-------------+------+
+|N/A          |270845|
+|Texas        |98200 |
+|California   |94361 |
+|New York     |87750 |
+|Maharashtra  |70556 |
+|Illinois     |58631 |
+|NSW          |50918 |
+|Virginia     |43750 |
+|Ohio         |43444 |
+|Pennsylvania |41820 |
++-------------+------+
+only showing top 10 rows
+
+Saving results to HDFS: project/data_insights/categorical_counts_company_state.csv
+Successfully saved to HDFS.
+Saving results to PostgreSQL table: categorical_counts_company_state
+Successfully saved to PostgreSQL.
+Average salary_avg per company_state (Top 10 by count):
++-------------+-----------------+------+
+|company_state|avg_salary_avg   |count |
++-------------+-----------------+------+
+|N/A          |82460.6933855157 |270845|
+|Texas        |82479.7250509165 |98200 |
+|California   |82470.4962855417 |94361 |
+|New York     |82483.44159544159|87750 |
+|Maharashtra  |82533.69663813141|70556 |
+|Illinois     |82555.50817826747|58631 |
+|NSW          |82517.50854314781|50918 |
+|Virginia     |82516.01142857142|43750 |
+|Ohio         |82502.31332289844|43444 |
+|Pennsylvania |82504.25633668102|41820 |
++-------------+-----------------+------+
+only showing top 10 rows
+
+Saving results to HDFS: project/data_insights/categorical_avg_target_company_state.csv
+Successfully saved to HDFS.
+Saving results to PostgreSQL table: categorical_avg_target_company_state
+Successfully saved to PostgreSQL.
+
+Analysis for Category: ceo_gender
+Top 10 Categories by Count for 'ceo_gender':
++----------+-------+
+|ceo_gender|count  |
++----------+-------+
+|unknown   |1212040|
+|male      |365770 |
+|female    |30808  |
++----------+-------+
+
+Saving results to HDFS: project/data_insights/categorical_counts_ceo_gender.csv
+Successfully saved to HDFS.
+Saving results to PostgreSQL table: categorical_counts_ceo_gender
+Successfully saved to PostgreSQL.
+Average salary_avg per ceo_gender (Top 10 by count):
++----------+-----------------+-------+
+|ceo_gender|avg_salary_avg   |count  |
++----------+-----------------+-------+
+|unknown   |82490.58776938055|1212040|
+|male      |82496.11777893212|365770 |
+|female    |82450.14282004673|30808  |
++----------+-----------------+-------+
+
+Saving results to HDFS: project/data_insights/categorical_avg_target_ceo_gender.csv
+Successfully saved to HDFS.
+Saving results to PostgreSQL table: categorical_avg_target_ceo_gender
+Successfully saved to PostgreSQL.
+
+--- ML Applicability Assessment ---
+No features found with |correlation| > 0.1 with target. Linear relationships might be weak.
+Categorical analysis shows variations in average salary across different categories (see above).
+Overall Assessment: The data shows some predictive signals. Building an ML model is feasible, but improvements are likely needed.
+
+--- Potential Preprocessing Modifications ---
+1.  **Handle Missing Values:** Use imputation (mean, median, mode, 'Missing' category).
+2.  **Target Transformation:** Check skewness of `salary_avg`. Consider log transformation.
+3.  **Categorical Feature Encoding:** Group rare categories, consider Target Encoding (carefully).
+4.  **Text Feature Engineering:** Tune `CountVectorizer`, try n-grams, Word2Vec.
+5.  **Feature Scaling:** Apply `StandardScaler` or `MinMaxScaler`.
+6.  **Multicollinearity:** Remove redundant features, use PCA, or regularization.
+7.  **Feature Selection:** Use automated methods.
+8.  **Interaction Features:** Create interaction terms.
+
+Feature analysis script finished processing.

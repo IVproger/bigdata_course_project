@@ -1,0 +1,3 @@
+model_type,kl_divergence
+LinearRegression,17.260837744724697
+GBTRegressor,16.529015525535463
