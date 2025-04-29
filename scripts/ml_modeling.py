@@ -110,7 +110,8 @@ def main():
     lr_tuning_results = []
     for params, metric in zip(lr_param_maps, lr_avg_metrics):
         param_dict = {param.name: value for param, value in params.items()}
-        param_dict['avgRMSE'] = metric
+        # Cast NumPy float64 to Python float
+        param_dict['avgRMSE'] = float(metric)
         lr_tuning_results.append(param_dict)
 
     if lr_tuning_results:
@@ -193,7 +194,8 @@ def main():
     gbt_tuning_results = []
     for params, metric in zip(gbt_param_maps, gbt_avg_metrics):
         param_dict = {param.name: value for param, value in params.items()}
-        param_dict['avgRMSE'] = metric
+        # Cast NumPy float64 to Python float
+        param_dict['avgRMSE'] = float(metric)
         gbt_tuning_results.append(param_dict)
 
     if gbt_tuning_results:
