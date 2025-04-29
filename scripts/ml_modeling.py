@@ -166,8 +166,8 @@ def main():
     # Hyperparameter Tuning Setup
     print("Setting up ParamGridBuilder for GBT...")
     gbt_grid = ParamGridBuilder() \
-        .addGrid(gbt.maxDepth, [3, 5, 7]) \
-        .addGrid(gbt.maxIter, [10, 20]) \
+        .addGrid(gbt.maxDepth, [3, 5]) \
+        .addGrid(gbt.maxIter, [10]) \
         .addGrid(gbt.stepSize, [0.1, 0.05]) \
         .build()
 
