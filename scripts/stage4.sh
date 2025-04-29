@@ -66,6 +66,3 @@ hdfs dfs -getmerge project/output/kl_divergence.csv/*.csv output/kl_divergence.c
 # --- Pylint Check ---
 echo "Running pylint on Stage 4 Python scripts..."
 pylint --rcfile=.pylintrc scripts/calculate_kl.py || echo "Pylint found issues in calculate_kl.py (non-blocking)"
-
-echo "Stage 4 automated tasks completed successfully!"
-echo "Next steps: Use Apache Superset to connect to Hive tables (evaluation_results, model1_predictions, model2_predictions, kl_divergence) and build the dashboard."

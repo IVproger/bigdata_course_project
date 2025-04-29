@@ -14,8 +14,8 @@ from pyspark.ml.linalg import VectorUDT # Import VectorUDT for schema
 from pyspark.ml import PipelineModel
 from pyspark.ml.regression import LinearRegression, GBTRegressor
 from pyspark.ml.evaluation import RegressionEvaluator
-# Import TrainValidationSplit and remove CrossValidator if not needed
-from pyspark.ml.tuning import ParamGridBuilder, TrainValidationSplit
+# Import CrossValidator
+from pyspark.ml.tuning import ParamGridBuilder, CrossValidator
 
 # Function to run HDFS commands (used for cleanup and checking existence)
 def run_hdfs_command(command):
@@ -87,19 +87,19 @@ def main():
         .addGrid(lr.aggregationDepth, [2, 3]) \
         .build()
 
-    # Use TrainValidationSplit instead of CrossValidator
-    print("Setting up TrainValidationSplit for Linear Regression...")
-    lr_tvs = TrainValidationSplit(estimator=lr,
-                                estimatorParamMaps=lr_grid,
-                                evaluator=evaluator_rmse, # Use RMSE for tuning
-                                trainRatio=0.8, # 80% for training, 20% for validation
-                                parallelism=4, # Number of parallel jobs
-                                seed=42)
+    # Use CrossValidator
+    print("Setting up CrossValidator for Linear Regression...")
+    lr_cv = CrossValidator(estimator=lr,
+                         estimatorParamMaps=lr_grid,
+                         evaluator=evaluator_rmse, # Use RMSE for tuning
+                         numFolds=3, # Use 3 folds for cross-validation
+                         parallelism=4, # Number of parallel jobs
+                         seed=42)
 
-    print("Starting TrainValidationSplit fitting for Linear Regression...")
-    lr_tvs_model = lr_tvs.fit(train_data) # Fit on the main training data
-    model1 = lr_tvs_model.bestModel
-    print("TrainValidationSplit fitting finished. Best Linear Regression model selected.")
+    print("Starting CrossValidator fitting for Linear Regression...")
+    lr_cv_model = lr_cv.fit(train_data) # Fit on the main training data
+    model1 = lr_cv_model.bestModel
+    print("CrossValidator fitting finished. Best Linear Regression model selected.")
     print("Best Linear Regression Params:")
     pprint(model1.extractParamMap())
 
@@ -148,19 +148,19 @@ def main():
         .addGrid(gbt.stepSize, [0.1, 0.05]) \
         .build()
 
-    # Use TrainValidationSplit instead of CrossValidator
-    print("Setting up TrainValidationSplit for GBT...")
-    gbt_tvs = TrainValidationSplit(estimator=gbt,
-                                 estimatorParamMaps=gbt_grid,
-                                 evaluator=evaluator_rmse, # Use RMSE for tuning
-                                 trainRatio=0.8, # 80% for training, 20% for validation
-                                 parallelism=4,
-                                 seed=42)
+    # Use CrossValidator
+    print("Setting up CrossValidator for GBT...")
+    gbt_cv = CrossValidator(estimator=gbt,
+                          estimatorParamMaps=gbt_grid,
+                          evaluator=evaluator_rmse, # Use RMSE for tuning
+                          numFolds=3, # Use 3 folds for cross-validation
+                          parallelism=4,
+                          seed=42)
 
-    print("Starting TrainValidationSplit fitting for GBT...")
-    gbt_tvs_model = gbt_tvs.fit(train_data) # Fit on the main training data
-    model2 = gbt_tvs_model.bestModel
-    print("TrainValidationSplit fitting finished. Best GBT model selected.")
+    print("Starting CrossValidator fitting for GBT...")
+    gbt_cv_model = gbt_cv.fit(train_data) # Fit on the main training data
+    model2 = gbt_cv_model.bestModel
+    print("CrossValidator fitting finished. Best GBT model selected.")
     print("Best GBT Params:")
     pprint(model2.extractParamMap())
 
