@@ -5,6 +5,13 @@ DROP DATABASE IF EXISTS team14_projectdb CASCADE;
 CREATE DATABASE team14_projectdb LOCATION "project/hive/warehouse";
 USE team14_projectdb;
 
+-- Create table to store column metadata
+CREATE TABLE table_schema (
+    column_name STRING,
+    data_type STRING
+)
+STORED AS AVRO;
+
 -- Create a single table with partitioning and bucketing
 CREATE EXTERNAL TABLE job_descriptions 
 STORED AS AVRO 
@@ -79,6 +86,32 @@ SELECT
     company_profile,
     work_type  -- Must be last (partition column)
 FROM job_descriptions;
+
+INSERT INTO table_schema VALUES
+    ('id', 'INT'),
+    ('job_id', 'BIGINT'),
+    ('experience', 'STRING'),
+    ('qualifications', 'STRING'),
+    ('salary_range', 'STRING'),
+    ('location', 'STRING'),
+    ('country', 'STRING'),
+    ('latitude', 'DECIMAL(9,6)'),
+    ('longitude', 'DECIMAL(9,6)'),
+    ('company_size', 'INT'),
+    ('job_posting_date', 'DATE'),
+    ('contact_person', 'STRING'),
+    ('preference', 'STRING'),
+    ('contact', 'STRING'),
+    ('job_title', 'STRING'),
+    ('role', 'STRING'),
+    ('job_portal', 'STRING'),
+    ('job_description', 'STRING'),
+    ('benefits', 'STRING'),
+    ('skills', 'STRING'),
+    ('responsibilities', 'STRING'),
+    ('company_name', 'STRING'),
+    ('company_profile', 'STRING'),
+    ('work_type', 'STRING');
 
 -- Delete the unpartitioned Hive TABLE job_descriptions
 DROP TABLE job_descriptions;
