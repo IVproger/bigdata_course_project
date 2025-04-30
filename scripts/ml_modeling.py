@@ -7,31 +7,24 @@ from pprint import pprint
 
 from pyspark.sql import SparkSession
 from pyspark.sql import functions as F
-# Import necessary types for schema definition
 from pyspark.sql.types import StructType, StructField, DoubleType
 from pyspark.ml.linalg import VectorUDT # Import VectorUDT for schema
 
 from pyspark.ml import PipelineModel
 from pyspark.ml.regression import LinearRegression, GBTRegressor
 from pyspark.ml.evaluation import RegressionEvaluator
-# Import CrossValidator
 from pyspark.ml.tuning import ParamGridBuilder, CrossValidator
 
 # Function to run HDFS commands (used for cleanup and checking existence)
 def run_hdfs_command(command):
-    # In a real cluster environment, you might use subprocess or os.system
-    # For simplicity here, we'll just print the command.
-    # Replace with actual execution logic if needed.
     print(f"Executing HDFS command (simulation): {command}")
-    # Example using os.popen (uncomment and adapt if needed):
-    # return os.popen(command).read()
     return "" # Return empty string for simulation
 
 
 def main():
     # --- Spark Session Setup ---
-    team = 14 # Make sure this matches your team number
-    warehouse = "project/hive/warehouse" # Standard warehouse location
+    team = 14
+    warehouse = "project/hive/warehouse"
 
     spark = SparkSession.builder \
         .appName(f"Team {team} - Spark ML Modeling") \
