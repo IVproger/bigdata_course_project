@@ -112,27 +112,17 @@ if __name__ == "__main__":
     pred2_df.cache()
     print(f"Model 2 predictions count: {pred2_df.count()}")
 
-    # --- Convert label back to original scale ---
-    print("Converting labels back to original scale using expm1...")
-    pred1_df = pred1_df.withColumn("label_orig_scale", F.expm1(F.col("label")))
-                         .withColumn("prediction_orig_scale", F.col("prediction")) # Prediction is already original scale
-    pred2_df = pred2_df.withColumn("label_orig_scale", F.expm1(F.col("label")))
-                         .withColumn("prediction_orig_scale", F.col("prediction")) # Prediction is already original scale
-    # Re-cache after transformation
-    pred1_df.cache()
-    pred2_df.cache()
-
     # --- Determine Bin Range --- 
-    # Use the original scale labels/predictions for binning
-    min_max_label = pred1_df.agg(F.min("label_orig_scale"), F.max("label_orig_scale")).first()
-    min_label = min_max_label["min(label_orig_scale)"]
-    max_label = min_max_label["max(label_orig_scale)"]
+    # Use the original scale labels/predictions for binning (directly from CSV)
+    min_max_label = pred1_df.agg(F.min("label"), F.max("label")).first()
+    min_label = min_max_label["min(label)"]
+    max_label = min_max_label["max(label)"]
 
-    min_max_pred1 = pred1_df.agg(F.min("prediction_orig_scale"), F.max("prediction_orig_scale")).first()
-    min_max_pred2 = pred2_df.agg(F.min("prediction_orig_scale"), F.max("prediction_orig_scale")).first()
+    min_max_pred1 = pred1_df.agg(F.min("prediction"), F.max("prediction")).first()
+    min_max_pred2 = pred2_df.agg(F.min("prediction"), F.max("prediction")).first()
 
-    global_min = min(min_label, min_max_pred1["min(prediction_orig_scale)"], min_max_pred2["min(prediction_orig_scale)"])
-    global_max = max(max_label, min_max_pred1["max(prediction_orig_scale)"], min_max_pred2["max(prediction_orig_scale)"])
+    global_min = min(min_label, min_max_pred1["min(prediction)"], min_max_pred2["min(prediction)"])
+    global_max = max(max_label, min_max_pred1["max(prediction)"], min_max_pred2["max(prediction)"])
 
     # Add a small buffer to avoid edge issues
     global_min -= EPSILON
@@ -143,28 +133,28 @@ if __name__ == "__main__":
     # --- Calculate Distributions ---
     print("Calculating probability distributions...")
     # P (Actual Labels - Original Scale)
-    p_dist = get_probability_distribution(pred1_df, "label_orig_scale", global_min, global_max, NUM_BINS)
+    p_dist = get_probability_distribution(pred1_df, "label", global_min, global_max, NUM_BINS)
     p_dist.cache()
     # print("P (Actual Labels) Distribution:")
     # p_dist.show(5, truncate=False)
 
     # Q1 (Model 1 Predictions - Original Scale)
-    q1_dist = get_probability_distribution(pred1_df, "prediction_orig_scale", global_min, global_max, NUM_BINS)
+    q1_dist = get_probability_distribution(pred1_df, "prediction", global_min, global_max, NUM_BINS)
     q1_dist.cache()
     # print("Q1 (Model 1 Predictions) Distribution:")
     # q1_dist.show(5, truncate=False)
     
     # Q2 (Model 2 Predictions - Original Scale)
-    q2_dist = get_probability_distribution(pred2_df, "prediction_orig_scale", global_min, global_max, NUM_BINS)
+    q2_dist = get_probability_distribution(pred2_df, "prediction", global_min, global_max, NUM_BINS)
     q2_dist.cache()
     # print("Q2 (Model 2 Predictions) Distribution:")
     # q2_dist.show(5, truncate=False)
 
     # --- Calculate KL Divergence ---
     print("Calculating KL Divergence...")
-    # Pass the correct column names for the distributions
-    kl1 = calculate_kl(p_dist, q1_dist, p_col="label_orig_scale_prob", q_col="prediction_orig_scale_prob", bin_col="label_orig_scale_bin")
-    kl2 = calculate_kl(p_dist, q2_dist, p_col="label_orig_scale_prob", q_col="prediction_orig_scale_prob", bin_col="label_orig_scale_bin")
+    # Pass the correct column names for the distributions (using original column names now)
+    kl1 = calculate_kl(p_dist, q1_dist, p_col="label_prob", q_col="prediction_prob", bin_col="label_bin")
+    kl2 = calculate_kl(p_dist, q2_dist, p_col="label_prob", q_col="prediction_prob", bin_col="label_bin")
 
     print(f"KL Divergence (Model 1 vs Actual): {kl1}")
     print(f"KL Divergence (Model 2 vs Actual): {kl2}")
@@ -183,8 +173,6 @@ if __name__ == "__main__":
     print(f"Saving KL Divergence results to HDFS: {output_path_hdfs}")
     # Clean up previous results first using HDFS commands via spark (less direct but avoids os calls)
     try:
-        # This is a bit of a workaround to run HDFS commands via Spark
-        # It assumes the path structure; adjust if needed.
         dbutils = spark._jvm.org.apache.hadoop.fs.FileSystem.get(spark._jsc.hadoopConfiguration())
         dbutils.delete(spark._jvm.org.apache.hadoop.fs.Path(output_path_hdfs), True) 
         print(f"Successfully cleaned HDFS path: {output_path_hdfs}")

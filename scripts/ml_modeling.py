@@ -103,7 +103,6 @@ def main():
     print("Best Linear Regression Params:")
     pprint(model1.extractParamMap())
 
-    # --- ADDED: Save LR Tuning Results --- #
     print("Extracting and saving Linear Regression tuning results...")
     lr_param_maps = lr_cv.getEstimatorParamMaps()
     lr_avg_metrics = lr_cv_model.avgMetrics
@@ -124,7 +123,6 @@ def main():
         print("LR tuning results saved.")
     else:
         print("No LR tuning results to save.")
-    # --- END ADDED --- #
 
     # Save Model 1
     model1_path_hdfs = "project/models/model1"
@@ -143,16 +141,14 @@ def main():
     # Store log-scale results for comparison table
     results.append(("LinearRegression", str(model1), rmse1, r21))
 
-    # --- ADDED: Convert predictions back to original scale --- #
     print("Converting Model 1 predictions back to original scale using expm1...")
     predictions1_orig_scale = predictions1.withColumn("prediction", F.expm1(F.col("prediction")))
-    # --- END ADDED --- #
 
-    # Save Predictions 1 (original scale prediction, log scale label)
+    # Save Predictions 1 (NOW both label and prediction on original scale)
     predictions1_path_hdfs = "project/output/model1_predictions.csv"
     print(f"Saving Model 1 predictions to HDFS: {predictions1_path_hdfs}")
     run_hdfs_command(f"hdfs dfs -rm -r -f {predictions1_path_hdfs}") # Clean up previous predictions
-    predictions1_orig_scale.select("label", "prediction") \
+    predictions1_orig_scale.select(F.expm1(F.col("label")).alias("label"), "prediction") \
         .coalesce(1) \
         .write \
         .mode("overwrite") \
@@ -211,7 +207,6 @@ def main():
         print("GBT tuning results saved.")
     else:
         print("No GBT tuning results to save.")
-    # --- END ADDED --- #
 
     # Save Model 2
     model2_path_hdfs = "project/models/model2"
@@ -230,16 +225,14 @@ def main():
     # Store log-scale results for comparison table
     results.append(("GBTRegressor", str(model2), rmse2, r22))
 
-    # --- ADDED: Convert predictions back to original scale --- #
     print("Converting Model 2 predictions back to original scale using expm1...")
     predictions2_orig_scale = predictions2.withColumn("prediction", F.expm1(F.col("prediction")))
-    # --- END ADDED --- #
 
-    # Save Predictions 2 (original scale prediction, log scale label)
+    # Save Predictions 2 (NOW both label and prediction on original scale)
     predictions2_path_hdfs = "project/output/model2_predictions.csv"
     print(f"Saving Model 2 predictions to HDFS: {predictions2_path_hdfs}")
     run_hdfs_command(f"hdfs dfs -rm -r -f {predictions2_path_hdfs}") # Clean up previous predictions
-    predictions2_orig_scale.select("label", "prediction") \
+    predictions2_orig_scale.select(F.expm1(F.col("label")).alias("label"), "prediction") \
         .coalesce(1) \
         .write \
         .mode("overwrite") \
