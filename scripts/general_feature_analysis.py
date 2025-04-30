@@ -27,7 +27,7 @@ POSTGRES_JDBC_URL = f"jdbc:postgresql://hadoop-04.uni.innopolis.ru/team{TEAM_NUM
 POSTGRES_USER = f"team{TEAM_NUMBER}"
 POSTGRES_PASSWORD_FILE = "secrets/.psql.pass"
 JDBC_DRIVER_PATH = "/shared/postgresql-42.6.1.jar"
-LOG_FILENAME = "feature_analysis_output.txt" # Local log file
+LOG_FILENAME = "output/feature_analysis_output.txt" # Local log file
 
 # --- Utility Functions ---
 

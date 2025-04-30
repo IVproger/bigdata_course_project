@@ -27,7 +27,11 @@ bash scripts/create_hive_tables.sh
 echo "Performing EDA analysis using job_descriptions_part HIVE table..."
 echo "Executing Hive queries, storing results in PostgreSQL, and exporting to CSV (via HDFS)..."
 
+# Perform general EDA for stats collecting
+bash scripts/feature_analysis.sh 
+
 # Note: Adjust master, driver memory, executor memory/cores as needed for your cluster
+# Extract specific data insights 
 spark-submit \
     --master yarn \
     --deploy-mode client \
