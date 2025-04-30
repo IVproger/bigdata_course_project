@@ -137,18 +137,22 @@ def main():
     print("Predicting on test data using Model 1...")
     predictions1 = model1.transform(test_data)
 
-    print("Evaluating Model 1...")
+    print("Evaluating Model 1 (on log-scale)...")
     rmse1 = evaluator_rmse.evaluate(predictions1)
     r21 = evaluator_r2.evaluate(predictions1)
-    print(f"Model 1 - Test RMSE: {rmse1}")
-    print(f"Model 1 - Test R2: {r21}")
+    # Store log-scale results for comparison table
     results.append(("LinearRegression", str(model1), rmse1, r21))
 
-    # Save Predictions 1
+    # --- ADDED: Convert predictions back to original scale --- #
+    print("Converting Model 1 predictions back to original scale using expm1...")
+    predictions1_orig_scale = predictions1.withColumn("prediction", F.expm1(F.col("prediction")))
+    # --- END ADDED --- #
+
+    # Save Predictions 1 (original scale prediction, log scale label)
     predictions1_path_hdfs = "project/output/model1_predictions.csv"
     print(f"Saving Model 1 predictions to HDFS: {predictions1_path_hdfs}")
     run_hdfs_command(f"hdfs dfs -rm -r -f {predictions1_path_hdfs}") # Clean up previous predictions
-    predictions1.select("label", "prediction") \
+    predictions1_orig_scale.select("label", "prediction") \
         .coalesce(1) \
         .write \
         .mode("overwrite") \
@@ -187,7 +191,6 @@ def main():
     print("Best GBT Params:")
     pprint(model2.extractParamMap())
 
-    # --- ADDED: Save GBT Tuning Results --- #
     print("Extracting and saving GBT tuning results...")
     gbt_param_maps = gbt_cv.getEstimatorParamMaps()
     gbt_avg_metrics = gbt_cv_model.avgMetrics
@@ -221,18 +224,22 @@ def main():
     print("Predicting on test data using Model 2...")
     predictions2 = model2.transform(test_data)
 
-    print("Evaluating Model 2...")
+    print("Evaluating Model 2 (on log-scale)...")
     rmse2 = evaluator_rmse.evaluate(predictions2)
     r22 = evaluator_r2.evaluate(predictions2)
-    print(f"Model 2 - Test RMSE: {rmse2}")
-    print(f"Model 2 - Test R2: {r22}")
+    # Store log-scale results for comparison table
     results.append(("GBTRegressor", str(model2), rmse2, r22))
 
-    # Save Predictions 2
+    # --- ADDED: Convert predictions back to original scale --- #
+    print("Converting Model 2 predictions back to original scale using expm1...")
+    predictions2_orig_scale = predictions2.withColumn("prediction", F.expm1(F.col("prediction")))
+    # --- END ADDED --- #
+
+    # Save Predictions 2 (original scale prediction, log scale label)
     predictions2_path_hdfs = "project/output/model2_predictions.csv"
     print(f"Saving Model 2 predictions to HDFS: {predictions2_path_hdfs}")
     run_hdfs_command(f"hdfs dfs -rm -r -f {predictions2_path_hdfs}") # Clean up previous predictions
-    predictions2.select("label", "prediction") \
+    predictions2_orig_scale.select("label", "prediction") \
         .coalesce(1) \
         .write \
         .mode("overwrite") \

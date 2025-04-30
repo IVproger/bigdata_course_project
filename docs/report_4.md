@@ -17,17 +17,18 @@ To enable Apache Superset to visualize the results generated in Stage III (ML mo
 - **Execution:** The `sql/stage4_hive_tables.hql` script is executed using `beeline` within the `scripts/stage4.sh` automation script. The output is logged to `output/stage4_hive_results.txt`.
 
 ### 2. KL Divergence Calculation (`scripts/calculate_kl.py`)
-Kullback-Leibler (KL) divergence was calculated to measure the difference between the probability distribution of the predicted salaries and the probability distribution of the actual salaries in the test set.
+Kullback-Leibler (KL) divergence was calculated to measure the difference between the probability distribution of the predicted salaries and the probability distribution of the actual salaries in the test set, *both on the original salary scale*.
 
 - **Process:**
     1.  A PySpark script (`scripts/calculate_kl.py`) was developed.
-    2.  It reads the prediction CSV files (`model1_predictions.csv`, `model2_predictions.csv`) from HDFS.
-    3.  Determines a common range (min/max) encompassing both actual labels and predictions across both models.
-    4.  Discretizes the continuous salary values (labels and predictions) into 50 bins.
-    5.  Calculates the probability distribution for the actual labels (P) and the predicted labels for each model (Q1, Q2).
-A small epsilon (1e-10) is added to bin probabilities to prevent issues with zero values.
-    6.  Computes KL divergence \(D_{KL}(P || Q)\) for both Model 1 vs Actual and Model 2 vs Actual.
-    7.  Saves the resulting KL divergence values for each model type into a new CSV file (`kl_divergence.csv`) in HDFS (`project/output/kl_divergence.csv`).
+    2.  It reads the prediction CSV files (`model1_predictions.csv`, `model2_predictions.csv`) from HDFS. These files contain the log-transformed actual label (`label`) and the original-scale prediction (`prediction`).
+    3.  It converts the log-transformed actual labels back to the original scale using `F.expm1(F.col("label"))`.
+    4.  Determines a common range (min/max) encompassing both original-scale actual labels and original-scale predictions across both models.
+    5.  Discretizes the original-scale continuous salary values (actual and predicted) into 50 bins.
+    6.  Calculates the probability distribution for the original-scale actual labels (P) and the original-scale predicted labels for each model (Q1, Q2).
+    7.  A small epsilon (1e-10) is added to bin probabilities to prevent issues with zero values.
+    8.  Computes KL divergence \(D_{KL}(P || Q)\) for both Model 1 vs Actual and Model 2 vs Actual.
+    9.  Saves the resulting KL divergence values for each model type into a new CSV file (`kl_divergence.csv`) in HDFS (`project/output/kl_divergence.csv`).
 - **Execution:** The script is executed using `spark-submit` within `scripts/stage4.sh`.
 
 ### 3. Automation (`scripts/stage4.sh`)
