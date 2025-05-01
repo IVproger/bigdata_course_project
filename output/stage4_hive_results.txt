@@ -2,34 +2,33 @@ Connecting to jdbc:hive2://hadoop-03.uni.innopolis.ru:10001/team14_projectdb
 Connected to: Apache Hive (version 3.1.3)
 Driver: Hive JDBC (version 2.3.9)
 Transaction isolation: TRANSACTION_REPEATABLE_READ
-0: jdbc:hive2://hadoop-03.uni.innopolis.ru:10> -- HiveQL script to create external tables for Stage III results and KL diver 
-gence
+0: jdbc:hive2://hadoop-03.uni.innopolis.ru:10> -- HiveQL script to create external tables for Stage III results and KL divergence
 0: jdbc:hive2://hadoop-03.uni.innopolis.ru:10> 
 0: jdbc:hive2://hadoop-03.uni.innopolis.ru:10> -- Use the project database
 0: jdbc:hive2://hadoop-03.uni.innopolis.ru:10> USE team14_projectdb;
-INFO  : Compiling command(queryId=hive_20250501173831_93bd79b2-63f0-4227-ad94-d63f070aec93): USE team14_projectdb
+INFO  : Compiling command(queryId=hive_20250501222634_5bd31e4f-eb29-4153-b344-ac3e8d7638b1): USE team14_projectdb
 INFO  : Semantic Analysis Completed (retrial = false)
 INFO  : Returning Hive schema: Schema(fieldSchemas:null, properties:null)
-INFO  : EXPLAIN output for queryid hive_20250501173831_93bd79b2-63f0-4227-ad94-d63f070aec93 : STAGE DEPENDENCIES:
+INFO  : EXPLAIN output for queryid hive_20250501222634_5bd31e4f-eb29-4153-b344-ac3e8d7638b1 : STAGE DEPENDENCIES:
   Stage-0 is a root stage [DDL]
 
 STAGE PLANS:
   Stage: Stage-0
 
 
-INFO  : Completed compiling command(queryId=hive_20250501173831_93bd79b2-63f0-4227-ad94-d63f070aec93); Time taken: 0.056 seconds
-INFO  : Executing command(queryId=hive_20250501173831_93bd79b2-63f0-4227-ad94-d63f070aec93): USE team14_projectdb
+INFO  : Completed compiling command(queryId=hive_20250501222634_5bd31e4f-eb29-4153-b344-ac3e8d7638b1); Time taken: 0.051 seconds
+INFO  : Executing command(queryId=hive_20250501222634_5bd31e4f-eb29-4153-b344-ac3e8d7638b1): USE team14_projectdb
 INFO  : Starting task [Stage-0:DDL] in serial mode
-INFO  : Completed executing command(queryId=hive_20250501173831_93bd79b2-63f0-4227-ad94-d63f070aec93); Time taken: 0.008 seconds
+INFO  : Completed executing command(queryId=hive_20250501222634_5bd31e4f-eb29-4153-b344-ac3e8d7638b1); Time taken: 0.01 seconds
 INFO  : OK
-No rows affected (0.134 seconds)
+No rows affected (0.145 seconds)
 0: jdbc:hive2://hadoop-03.uni.innopolis.ru:10> 
 0: jdbc:hive2://hadoop-03.uni.innopolis.ru:10> -- Drop tables if they exist (for idempotency)
 0: jdbc:hive2://hadoop-03.uni.innopolis.ru:10> DROP TABLE IF EXISTS evaluation_results;
-INFO  : Compiling command(queryId=hive_20250501173831_0959adc6-b78b-43b9-973b-97fed4e9f8db): DROP TABLE IF EXISTS evaluation_results
+INFO  : Compiling command(queryId=hive_20250501222634_f6c3c34a-33ab-49a4-bfb5-365966635899): DROP TABLE IF EXISTS evaluation_results
 INFO  : Semantic Analysis Completed (retrial = false)
 INFO  : Returning Hive schema: Schema(fieldSchemas:null, properties:null)
-INFO  : EXPLAIN output for queryid hive_20250501173831_0959adc6-b78b-43b9-973b-97fed4e9f8db : STAGE DEPENDENCIES:
+INFO  : EXPLAIN output for queryid hive_20250501222634_f6c3c34a-33ab-49a4-bfb5-365966635899 : STAGE DEPENDENCIES:
   Stage-0 is a root stage [DDL]
 
 STAGE PLANS:
@@ -39,17 +38,17 @@ STAGE PLANS:
           table: evaluation_results
 
 
-INFO  : Completed compiling command(queryId=hive_20250501173831_0959adc6-b78b-43b9-973b-97fed4e9f8db); Time taken: 0.038 seconds
-INFO  : Executing command(queryId=hive_20250501173831_0959adc6-b78b-43b9-973b-97fed4e9f8db): DROP TABLE IF EXISTS evaluation_results
+INFO  : Completed compiling command(queryId=hive_20250501222634_f6c3c34a-33ab-49a4-bfb5-365966635899); Time taken: 0.044 seconds
+INFO  : Executing command(queryId=hive_20250501222634_f6c3c34a-33ab-49a4-bfb5-365966635899): DROP TABLE IF EXISTS evaluation_results
 INFO  : Starting task [Stage-0:DDL] in serial mode
-INFO  : Completed executing command(queryId=hive_20250501173831_0959adc6-b78b-43b9-973b-97fed4e9f8db); Time taken: 0.045 seconds
+INFO  : Completed executing command(queryId=hive_20250501222634_f6c3c34a-33ab-49a4-bfb5-365966635899); Time taken: 0.063 seconds
 INFO  : OK
-No rows affected (0.103 seconds)
+No rows affected (0.129 seconds)
 0: jdbc:hive2://hadoop-03.uni.innopolis.ru:10> DROP TABLE IF EXISTS model1_predictions;
-INFO  : Compiling command(queryId=hive_20250501173831_88c50db8-3811-4979-8fc3-8b55af15ca66): DROP TABLE IF EXISTS model1_predictions
+INFO  : Compiling command(queryId=hive_20250501222634_b7afd121-c34e-4768-8545-1c5ebc6ad792): DROP TABLE IF EXISTS model1_predictions
 INFO  : Semantic Analysis Completed (retrial = false)
 INFO  : Returning Hive schema: Schema(fieldSchemas:null, properties:null)
-INFO  : EXPLAIN output for queryid hive_20250501173831_88c50db8-3811-4979-8fc3-8b55af15ca66 : STAGE DEPENDENCIES:
+INFO  : EXPLAIN output for queryid hive_20250501222634_b7afd121-c34e-4768-8545-1c5ebc6ad792 : STAGE DEPENDENCIES:
   Stage-0 is a root stage [DDL]
 
 STAGE PLANS:
@@ -59,17 +58,17 @@ STAGE PLANS:
           table: model1_predictions
 
 
-INFO  : Completed compiling command(queryId=hive_20250501173831_88c50db8-3811-4979-8fc3-8b55af15ca66); Time taken: 0.033 seconds
-INFO  : Executing command(queryId=hive_20250501173831_88c50db8-3811-4979-8fc3-8b55af15ca66): DROP TABLE IF EXISTS model1_predictions
+INFO  : Completed compiling command(queryId=hive_20250501222634_b7afd121-c34e-4768-8545-1c5ebc6ad792); Time taken: 0.035 seconds
+INFO  : Executing command(queryId=hive_20250501222634_b7afd121-c34e-4768-8545-1c5ebc6ad792): DROP TABLE IF EXISTS model1_predictions
 INFO  : Starting task [Stage-0:DDL] in serial mode
-INFO  : Completed executing command(queryId=hive_20250501173831_88c50db8-3811-4979-8fc3-8b55af15ca66); Time taken: 0.041 seconds
+INFO  : Completed executing command(queryId=hive_20250501222634_b7afd121-c34e-4768-8545-1c5ebc6ad792); Time taken: 0.052 seconds
 INFO  : OK
-No rows affected (0.096 seconds)
+No rows affected (0.102 seconds)
 0: jdbc:hive2://hadoop-03.uni.innopolis.ru:10> DROP TABLE IF EXISTS model2_predictions;
-INFO  : Compiling command(queryId=hive_20250501173831_a3869419-8f3c-4783-9206-c37d76435116): DROP TABLE IF EXISTS model2_predictions
+INFO  : Compiling command(queryId=hive_20250501222634_7c4fe478-dd3f-4e45-8b6d-fa861bf63620): DROP TABLE IF EXISTS model2_predictions
 INFO  : Semantic Analysis Completed (retrial = false)
 INFO  : Returning Hive schema: Schema(fieldSchemas:null, properties:null)
-INFO  : EXPLAIN output for queryid hive_20250501173831_a3869419-8f3c-4783-9206-c37d76435116 : STAGE DEPENDENCIES:
+INFO  : EXPLAIN output for queryid hive_20250501222634_7c4fe478-dd3f-4e45-8b6d-fa861bf63620 : STAGE DEPENDENCIES:
   Stage-0 is a root stage [DDL]
 
 STAGE PLANS:
@@ -79,17 +78,17 @@ STAGE PLANS:
           table: model2_predictions
 
 
-INFO  : Completed compiling command(queryId=hive_20250501173831_a3869419-8f3c-4783-9206-c37d76435116); Time taken: 0.039 seconds
-INFO  : Executing command(queryId=hive_20250501173831_a3869419-8f3c-4783-9206-c37d76435116): DROP TABLE IF EXISTS model2_predictions
+INFO  : Completed compiling command(queryId=hive_20250501222634_7c4fe478-dd3f-4e45-8b6d-fa861bf63620); Time taken: 0.035 seconds
+INFO  : Executing command(queryId=hive_20250501222634_7c4fe478-dd3f-4e45-8b6d-fa861bf63620): DROP TABLE IF EXISTS model2_predictions
 INFO  : Starting task [Stage-0:DDL] in serial mode
-INFO  : Completed executing command(queryId=hive_20250501173831_a3869419-8f3c-4783-9206-c37d76435116); Time taken: 0.044 seconds
+INFO  : Completed executing command(queryId=hive_20250501222634_7c4fe478-dd3f-4e45-8b6d-fa861bf63620); Time taken: 0.052 seconds
 INFO  : OK
-No rows affected (0.101 seconds)
+No rows affected (0.112 seconds)
 0: jdbc:hive2://hadoop-03.uni.innopolis.ru:10> DROP TABLE IF EXISTS kl_divergence;
-INFO  : Compiling command(queryId=hive_20250501173832_e45602b8-8cce-4635-b7ad-c08718926f46): DROP TABLE IF EXISTS kl_divergence
+INFO  : Compiling command(queryId=hive_20250501222634_94c61c34-d2d4-4e73-884d-f02b33b7f7a2): DROP TABLE IF EXISTS kl_divergence
 INFO  : Semantic Analysis Completed (retrial = false)
 INFO  : Returning Hive schema: Schema(fieldSchemas:null, properties:null)
-INFO  : EXPLAIN output for queryid hive_20250501173832_e45602b8-8cce-4635-b7ad-c08718926f46 : STAGE DEPENDENCIES:
+INFO  : EXPLAIN output for queryid hive_20250501222634_94c61c34-d2d4-4e73-884d-f02b33b7f7a2 : STAGE DEPENDENCIES:
   Stage-0 is a root stage [DDL]
 
 STAGE PLANS:
@@ -99,17 +98,17 @@ STAGE PLANS:
           table: kl_divergence
 
 
-INFO  : Completed compiling command(queryId=hive_20250501173832_e45602b8-8cce-4635-b7ad-c08718926f46); Time taken: 0.036 seconds
-INFO  : Executing command(queryId=hive_20250501173832_e45602b8-8cce-4635-b7ad-c08718926f46): DROP TABLE IF EXISTS kl_divergence
+INFO  : Completed compiling command(queryId=hive_20250501222634_94c61c34-d2d4-4e73-884d-f02b33b7f7a2); Time taken: 0.039 seconds
+INFO  : Executing command(queryId=hive_20250501222634_94c61c34-d2d4-4e73-884d-f02b33b7f7a2): DROP TABLE IF EXISTS kl_divergence
 INFO  : Starting task [Stage-0:DDL] in serial mode
-INFO  : Completed executing command(queryId=hive_20250501173832_e45602b8-8cce-4635-b7ad-c08718926f46); Time taken: 0.041 seconds
+INFO  : Completed executing command(queryId=hive_20250501222634_94c61c34-d2d4-4e73-884d-f02b33b7f7a2); Time taken: 0.05 seconds
 INFO  : OK
-No rows affected (0.098 seconds)
+No rows affected (0.104 seconds)
 0: jdbc:hive2://hadoop-03.uni.innopolis.ru:10> DROP TABLE IF EXISTS lr_tuning_results;
-INFO  : Compiling command(queryId=hive_20250501173832_52509958-0822-4324-bbe5-04f7d2e2e51c): DROP TABLE IF EXISTS lr_tuning_results
+INFO  : Compiling command(queryId=hive_20250501222634_9ce3ea37-65fb-460a-97c6-908ec250c694): DROP TABLE IF EXISTS lr_tuning_results
 INFO  : Semantic Analysis Completed (retrial = false)
 INFO  : Returning Hive schema: Schema(fieldSchemas:null, properties:null)
-INFO  : EXPLAIN output for queryid hive_20250501173832_52509958-0822-4324-bbe5-04f7d2e2e51c : STAGE DEPENDENCIES:
+INFO  : EXPLAIN output for queryid hive_20250501222634_9ce3ea37-65fb-460a-97c6-908ec250c694 : STAGE DEPENDENCIES:
   Stage-0 is a root stage [DDL]
 
 STAGE PLANS:
@@ -119,17 +118,17 @@ STAGE PLANS:
           table: lr_tuning_results
 
 
-INFO  : Completed compiling command(queryId=hive_20250501173832_52509958-0822-4324-bbe5-04f7d2e2e51c); Time taken: 0.035 seconds
-INFO  : Executing command(queryId=hive_20250501173832_52509958-0822-4324-bbe5-04f7d2e2e51c): DROP TABLE IF EXISTS lr_tuning_results
+INFO  : Completed compiling command(queryId=hive_20250501222634_9ce3ea37-65fb-460a-97c6-908ec250c694); Time taken: 0.036 seconds
+INFO  : Executing command(queryId=hive_20250501222634_9ce3ea37-65fb-460a-97c6-908ec250c694): DROP TABLE IF EXISTS lr_tuning_results
 INFO  : Starting task [Stage-0:DDL] in serial mode
-INFO  : Completed executing command(queryId=hive_20250501173832_52509958-0822-4324-bbe5-04f7d2e2e51c); Time taken: 0.042 seconds
+INFO  : Completed executing command(queryId=hive_20250501222634_9ce3ea37-65fb-460a-97c6-908ec250c694); Time taken: 0.049 seconds
 INFO  : OK
-No rows affected (0.095 seconds)
+No rows affected (0.101 seconds)
 0: jdbc:hive2://hadoop-03.uni.innopolis.ru:10> DROP TABLE IF EXISTS gbt_tuning_results;
-INFO  : Compiling command(queryId=hive_20250501173832_4ada104f-9ab2-4509-a364-8e892e24cbef): DROP TABLE IF EXISTS gbt_tuning_results
+INFO  : Compiling command(queryId=hive_20250501222634_360f0835-142f-4f60-8c51-c9ede7e0a2ab): DROP TABLE IF EXISTS gbt_tuning_results
 INFO  : Semantic Analysis Completed (retrial = false)
 INFO  : Returning Hive schema: Schema(fieldSchemas:null, properties:null)
-INFO  : EXPLAIN output for queryid hive_20250501173832_4ada104f-9ab2-4509-a364-8e892e24cbef : STAGE DEPENDENCIES:
+INFO  : EXPLAIN output for queryid hive_20250501222634_360f0835-142f-4f60-8c51-c9ede7e0a2ab : STAGE DEPENDENCIES:
   Stage-0 is a root stage [DDL]
 
 STAGE PLANS:
@@ -139,12 +138,12 @@ STAGE PLANS:
           table: gbt_tuning_results
 
 
-INFO  : Completed compiling command(queryId=hive_20250501173832_4ada104f-9ab2-4509-a364-8e892e24cbef); Time taken: 0.034 seconds
-INFO  : Executing command(queryId=hive_20250501173832_4ada104f-9ab2-4509-a364-8e892e24cbef): DROP TABLE IF EXISTS gbt_tuning_results
+INFO  : Completed compiling command(queryId=hive_20250501222634_360f0835-142f-4f60-8c51-c9ede7e0a2ab); Time taken: 0.036 seconds
+INFO  : Executing command(queryId=hive_20250501222634_360f0835-142f-4f60-8c51-c9ede7e0a2ab): DROP TABLE IF EXISTS gbt_tuning_results
 INFO  : Starting task [Stage-0:DDL] in serial mode
-INFO  : Completed executing command(queryId=hive_20250501173832_4ada104f-9ab2-4509-a364-8e892e24cbef); Time taken: 0.038 seconds
+INFO  : Completed executing command(queryId=hive_20250501222634_360f0835-142f-4f60-8c51-c9ede7e0a2ab); Time taken: 0.049 seconds
 INFO  : OK
-No rows affected (0.088 seconds)
+No rows affected (0.1 seconds)
 0: jdbc:hive2://hadoop-03.uni.innopolis.ru:10> 
 0: jdbc:hive2://hadoop-03.uni.innopolis.ru:10> -- Create external table for model evaluation results
 0: jdbc:hive2://hadoop-03.uni.innopolis.ru:10> CREATE EXTERNAL TABLE evaluation_results (
@@ -157,7 +156,7 @@ No rows affected (0.088 seconds)
 . . . . . . . . . . . . . . . . . . . . . . .> STORED AS TEXTFILE
 . . . . . . . . . . . . . . . . . . . . . . .> LOCATION 'project/output/evaluation.csv'
 . . . . . . . . . . . . . . . . . . . . . . .> TBLPROPERTIES ('skip.header.line.count'='1'); -- Skip the header row
-INFO  : Compiling command(queryId=hive_20250501173832_15c94591-2368-49d4-a61b-b6d4a59ad54e): CREATE EXTERNAL TABLE evaluation_results (
+INFO  : Compiling command(queryId=hive_20250501222635_7c5205e1-5128-41db-a582-ca7c469239b2): CREATE EXTERNAL TABLE evaluation_results (
 Model_Type STRING,
 RMSE DOUBLE,
 R2 DOUBLE
@@ -169,7 +168,7 @@ LOCATION 'project/output/evaluation.csv'
 TBLPROPERTIES ('skip.header.line.count'='1')
 INFO  : Semantic Analysis Completed (retrial = false)
 INFO  : Returning Hive schema: Schema(fieldSchemas:null, properties:null)
-INFO  : EXPLAIN output for queryid hive_20250501173832_15c94591-2368-49d4-a61b-b6d4a59ad54e : STAGE DEPENDENCIES:
+INFO  : EXPLAIN output for queryid hive_20250501222635_7c5205e1-5128-41db-a582-ca7c469239b2 : STAGE DEPENDENCIES:
   Stage-0 is a root stage [DDL]
 
 STAGE PLANS:
@@ -189,8 +188,8 @@ STAGE PLANS:
           isExternal: true
 
 
-INFO  : Completed compiling command(queryId=hive_20250501173832_15c94591-2368-49d4-a61b-b6d4a59ad54e); Time taken: 0.047 seconds
-INFO  : Executing command(queryId=hive_20250501173832_15c94591-2368-49d4-a61b-b6d4a59ad54e): CREATE EXTERNAL TABLE evaluation_results (
+INFO  : Completed compiling command(queryId=hive_20250501222635_7c5205e1-5128-41db-a582-ca7c469239b2); Time taken: 0.029 seconds
+INFO  : Executing command(queryId=hive_20250501222635_7c5205e1-5128-41db-a582-ca7c469239b2): CREATE EXTERNAL TABLE evaluation_results (
 Model_Type STRING,
 RMSE DOUBLE,
 R2 DOUBLE
@@ -201,124 +200,383 @@ STORED AS TEXTFILE
 LOCATION 'project/output/evaluation.csv'
 TBLPROPERTIES ('skip.header.line.count'='1')
 INFO  : Starting task [Stage-0:DDL] in serial mode
-INFO  : Completed executing command(queryId=hive_20250501173832_15c94591-2368-49d4-a61b-b6d4a59ad54e); Time taken: 0.053 seconds
+INFO  : Completed executing command(queryId=hive_20250501222635_7c5205e1-5128-41db-a582-ca7c469239b2); Time taken: 0.023 seconds
 INFO  : OK
-No rows affected (0.157 seconds)
+No rows affected (0.08 seconds)
 0: jdbc:hive2://hadoop-03.uni.innopolis.ru:10> 
-0: jdbc:hive2://hadoop-03.uni.innopolis.ru:10> -- Create external table for Model 1 (Linear Regression) predictions
+0: jdbc:hive2://hadoop-03.uni.innopolis.ru:10> -- UPDATED: Create external table for Model 1 (Linear Regression) enriched predictions
 0: jdbc:hive2://hadoop-03.uni.innopolis.ru:10> CREATE EXTERNAL TABLE model1_predictions (
-. . . . . . . . . . . . . . . . . . . . . . .>     label DOUBLE,
-. . . . . . . . . . . . . . . . . . . . . . .>     prediction DOUBLE
+. . . . . . . . . . . . . . . . . . . . . . .>     job_id STRING, -- Assuming BIGINT originally, cast to STRING in Spark output
+. . . . . . . . . . . . . . . . . . . . . . .>     job_title STRING,
+. . . . . . . . . . . . . . . . . . . . . . .>     company_name STRING,
+. . . . . . . . . . . . . . . . . . . . . . .>     company_profile STRING, -- Contains JSON-like structure
+. . . . . . . . . . . . . . . . . . . . . . .>     job_description STRING,
+. . . . . . . . . . . . . . . . . . . . . . .>     requirements STRING,
+. . . . . . . . . . . . . . . . . . . . . . .>     benefits STRING,
+. . . . . . . . . . . . . . . . . . . . . . .>     telecommuting BOOLEAN,
+. . . . . . . . . . . . . . . . . . . . . . .>     has_company_logo BOOLEAN,
+. . . . . . . . . . . . . . . . . . . . . . .>     has_questions BOOLEAN,
+. . . . . . . . . . . . . . . . . . . . . . .>     employment_type STRING,
+. . . . . . . . . . . . . . . . . . . . . . .>     required_experience STRING,
+. . . . . . . . . . . . . . . . . . . . . . .>     required_education STRING,
+. . . . . . . . . . . . . . . . . . . . . . .>     industry STRING,
+. . . . . . . . . . . . . . . . . . . . . . .>     `function` STRING,
+. . . . . . . . . . . . . . . . . . . . . . .>     fraudulent BOOLEAN,
+. . . . . . . . . . . . . . . . . . . . . . .>     country STRING,
+. . . . . . . . . . . . . . . . . . . . . . .>     city STRING,
+. . . . . . . . . . . . . . . . . . . . . . .>     zip_code STRING,
+. . . . . . . . . . . . . . . . . . . . . . .>     department STRING,
+. . . . . . . . . . . . . . . . . . . . . . .>     salary_range STRING,
+. . . . . . . . . . . . . . . . . . . . . . .>     company_size STRING, -- e.g., "10000+ employees"
+. . . . . . . . . . . . . . . . . . . . . . .>     job_board STRING,
+. . . . . . . . . . . . . . . . . . . . . . .>     geo STRING,
+. . . . . . . . . . . . . . . . . . . . . . .>     job_posting_date DATE,
+. . . . . . . . . . . . . . . . . . . . . . .>     last_processed_time STRING, -- Assuming this is a timestamp string
+. . . . . . . . . . . . . . . . . . . . . . .>     employment_status STRING,
+. . . . . . . . . . . . . . . . . . . . . . .>     experience STRING,
+. . . . . . . . . . . . . . . . . . . . . . .>     job_functions STRING,
+. . . . . . . . . . . . . . . . . . . . . . .>     job_industries STRING,
+. . . . . . . . . . . . . . . . . . . . . . .>     locations STRING,
+. . . . . . . . . . . . . . . . . . . . . . .>     salary_currency STRING,
+. . . . . . . . . . . . . . . . . . . . . . .>     salary_period STRING,
+. . . . . . . . . . . . . . . . . . . . . . .>     skills STRING,
+. . . . . . . . . . . . . . . . . . . . . . .>     work_type STRING, -- Partition key in original table
+. . . . . . . . . . . . . . . . . . . . . . .>     preference STRING, -- Bucketing key in original table
+. . . . . . . . . . . . . . . . . . . . . . .>     latitude DECIMAL(9,6),
+. . . . . . . . . . . . . . . . . . . . . . .>     longitude DECIMAL(9,6),
+. . . . . . . . . . . . . . . . . . . . . . .>     -- Added prediction columns
+. . . . . . . . . . . . . . . . . . . . . . .>     original_salary DOUBLE,
+. . . . . . . . . . . . . . . . . . . . . . .>     predicted_salary DOUBLE
 . . . . . . . . . . . . . . . . . . . . . . .> )
-. . . . . . . . . . . . . . . . . . . . . . .> ROW FORMAT SERDE 'org.apache.hadoop.hive.serde2.lazy.LazySimpleSerDe'
-. . . . . . . . . . . . . . . . . . . . . . .> WITH SERDEPROPERTIES ('field.delim' = ',')
+. . . . . . . . . . . . . . . . . . . . . . .> -- Use OpenCSVSerde to handle commas within quoted fields correctly
+. . . . . . . . . . . . . . . . . . . . . . .> ROW FORMAT SERDE 'org.apache.hadoop.hive.serde2.OpenCSVSerde'
+. . . . . . . . . . . . . . . . . . . . . . .> WITH SERDEPROPERTIES (
+. . . . . . . . . . . . . . . . . . . . . . .>     'separatorChar' = ',', -- Explicitly state the separator
+. . . . . . . . . . . . . . . . . . . . . . .>     'quoteChar'     = '"', -- Specify the quote character used by Spark
+. . . . . . . . . . . . . . . . . . . . . . .>     'escapeChar'    = '\\'  -- Specify the escape character used by Spark (often backslas h)
+. . . . . . . . . . . . . . . . . . . . . . .> )
 . . . . . . . . . . . . . . . . . . . . . . .> STORED AS TEXTFILE
 . . . . . . . . . . . . . . . . . . . . . . .> LOCATION 'project/output/model1_predictions.csv'
 . . . . . . . . . . . . . . . . . . . . . . .> TBLPROPERTIES ('skip.header.line.count'='1'); -- Skip the header row
-INFO  : Compiling command(queryId=hive_20250501173832_4bbe9675-7add-46ad-88b8-b5e8234ec014): CREATE EXTERNAL TABLE model1_predictions (
-label DOUBLE,
-prediction DOUBLE
+INFO  : Compiling command(queryId=hive_20250501222635_e812a62b-f898-4093-b738-700a7c476448): CREATE EXTERNAL TABLE model1_predictions (
+job_id STRING,
+job_title STRING,
+company_name STRING,
+company_profile STRING,
+job_description STRING,
+requirements STRING,
+benefits STRING,
+telecommuting BOOLEAN,
+has_company_logo BOOLEAN,
+has_questions BOOLEAN,
+employment_type STRING,
+required_experience STRING,
+required_education STRING,
+industry STRING,
+`function` STRING,
+fraudulent BOOLEAN,
+country STRING,
+city STRING,
+zip_code STRING,
+department STRING,
+salary_range STRING,
+company_size STRING,
+job_board STRING,
+geo STRING,
+job_posting_date DATE,
+last_processed_time STRING,
+employment_status STRING,
+experience STRING,
+job_functions STRING,
+job_industries STRING,
+locations STRING,
+salary_currency STRING,
+salary_period STRING,
+skills STRING,
+work_type STRING,
+preference STRING,
+latitude DECIMAL(9,6),
+longitude DECIMAL(9,6),
+original_salary DOUBLE,
+predicted_salary DOUBLE
 )
-ROW FORMAT SERDE 'org.apache.hadoop.hive.serde2.lazy.LazySimpleSerDe'
-WITH SERDEPROPERTIES ('field.delim' = ',')
+ROW FORMAT SERDE 'org.apache.hadoop.hive.serde2.OpenCSVSerde'
+WITH SERDEPROPERTIES (
+'separatorChar' = ',',
+'quoteChar'     = '"',
+'escapeChar'    = '\\'  -- Specify the escape character used by Spark (often backslash)
+)
 STORED AS TEXTFILE
 LOCATION 'project/output/model1_predictions.csv'
 TBLPROPERTIES ('skip.header.line.count'='1')
 INFO  : Semantic Analysis Completed (retrial = false)
 INFO  : Returning Hive schema: Schema(fieldSchemas:null, properties:null)
-INFO  : EXPLAIN output for queryid hive_20250501173832_4bbe9675-7add-46ad-88b8-b5e8234ec014 : STAGE DEPENDENCIES:
+INFO  : EXPLAIN output for queryid hive_20250501222635_e812a62b-f898-4093-b738-700a7c476448 : STAGE DEPENDENCIES:
   Stage-0 is a root stage [DDL]
 
 STAGE PLANS:
   Stage: Stage-0
       Create Table Operator:
         Create Table
-          columns: label double, prediction double
+          columns: job_id string, job_title string, company_name string, company_profile string, job_description string, requirements string, benefits string, telecommuting boolean, has_company_logo boolean, has_questions boolean, employment_type string, required_experience string, required_education string, industry string, function string, fraudulent boolean, country string, city string, zip_code string, department string, salary_range string, company_size string, job_board string, geo string, job_posting_date date, last_processed_time string, employment_status string, experience string, job_functions string, job_industries string, locations string, salary_currency string, salary_period string, skills string, work_type string, preference string, latitude decimal(9,6), longitude decimal(9,6), original_salary double, predicted_salary double
           input format: org.apache.hadoop.mapred.TextInputFormat
           location: project/output/model1_predictions.csv
           output format: org.apache.hadoop.hive.ql.io.IgnoreKeyTextOutputFormat
-          serde name: org.apache.hadoop.hive.serde2.lazy.LazySimpleSerDe
+          serde name: org.apache.hadoop.hive.serde2.OpenCSVSerde
           serde properties:
-            field.delim ,
+            escapeChar \
+            quoteChar "
+            separatorChar ,
           name: team14_projectdb.model1_predictions
           table properties:
             skip.header.line.count 1
           isExternal: true
 
 
-INFO  : Completed compiling command(queryId=hive_20250501173832_4bbe9675-7add-46ad-88b8-b5e8234ec014); Time taken: 0.027 seconds
-INFO  : Executing command(queryId=hive_20250501173832_4bbe9675-7add-46ad-88b8-b5e8234ec014): CREATE EXTERNAL TABLE model1_predictions (
-label DOUBLE,
-prediction DOUBLE
+INFO  : Completed compiling command(queryId=hive_20250501222635_e812a62b-f898-4093-b738-700a7c476448); Time taken: 0.029 seconds
+INFO  : Executing command(queryId=hive_20250501222635_e812a62b-f898-4093-b738-700a7c476448): CREATE EXTERNAL TABLE model1_predictions (
+job_id STRING,
+job_title STRING,
+company_name STRING,
+company_profile STRING,
+job_description STRING,
+requirements STRING,
+benefits STRING,
+telecommuting BOOLEAN,
+has_company_logo BOOLEAN,
+has_questions BOOLEAN,
+employment_type STRING,
+required_experience STRING,
+required_education STRING,
+industry STRING,
+`function` STRING,
+fraudulent BOOLEAN,
+country STRING,
+city STRING,
+zip_code STRING,
+department STRING,
+salary_range STRING,
+company_size STRING,
+job_board STRING,
+geo STRING,
+job_posting_date DATE,
+last_processed_time STRING,
+employment_status STRING,
+experience STRING,
+job_functions STRING,
+job_industries STRING,
+locations STRING,
+salary_currency STRING,
+salary_period STRING,
+skills STRING,
+work_type STRING,
+preference STRING,
+latitude DECIMAL(9,6),
+longitude DECIMAL(9,6),
+original_salary DOUBLE,
+predicted_salary DOUBLE
 )
-ROW FORMAT SERDE 'org.apache.hadoop.hive.serde2.lazy.LazySimpleSerDe'
-WITH SERDEPROPERTIES ('field.delim' = ',')
+ROW FORMAT SERDE 'org.apache.hadoop.hive.serde2.OpenCSVSerde'
+WITH SERDEPROPERTIES (
+'separatorChar' = ',',
+'quoteChar'     = '"',
+'escapeChar'    = '\\'  -- Specify the escape character used by Spark (often backslash)
+)
 STORED AS TEXTFILE
 LOCATION 'project/output/model1_predictions.csv'
 TBLPROPERTIES ('skip.header.line.count'='1')
 INFO  : Starting task [Stage-0:DDL] in serial mode
-INFO  : Completed executing command(queryId=hive_20250501173832_4bbe9675-7add-46ad-88b8-b5e8234ec014); Time taken: 0.018 seconds
+INFO  : Completed executing command(queryId=hive_20250501222635_e812a62b-f898-4093-b738-700a7c476448); Time taken: 0.042 seconds
 INFO  : OK
-No rows affected (0.07 seconds)
+No rows affected (0.103 seconds)
 0: jdbc:hive2://hadoop-03.uni.innopolis.ru:10> 
-0: jdbc:hive2://hadoop-03.uni.innopolis.ru:10> -- Create external table for Model 2 (GBT Regressor) predictions
+0: jdbc:hive2://hadoop-03.uni.innopolis.ru:10> -- UPDATED: Create external table for Model 2 (GBT Regressor) enriched predictions
 0: jdbc:hive2://hadoop-03.uni.innopolis.ru:10> CREATE EXTERNAL TABLE model2_predictions (
-. . . . . . . . . . . . . . . . . . . . . . .>     label DOUBLE,
-. . . . . . . . . . . . . . . . . . . . . . .>     prediction DOUBLE
+. . . . . . . . . . . . . . . . . . . . . . .>     job_id STRING, -- Assuming BIGINT originally, cast to STRING in Spark output
+. . . . . . . . . . . . . . . . . . . . . . .>     job_title STRING,
+. . . . . . . . . . . . . . . . . . . . . . .>     company_name STRING,
+. . . . . . . . . . . . . . . . . . . . . . .>     company_profile STRING, -- Contains JSON-like structure
+. . . . . . . . . . . . . . . . . . . . . . .>     job_description STRING,
+. . . . . . . . . . . . . . . . . . . . . . .>     requirements STRING,
+. . . . . . . . . . . . . . . . . . . . . . .>     benefits STRING,
+. . . . . . . . . . . . . . . . . . . . . . .>     telecommuting BOOLEAN,
+. . . . . . . . . . . . . . . . . . . . . . .>     has_company_logo BOOLEAN,
+. . . . . . . . . . . . . . . . . . . . . . .>     has_questions BOOLEAN,
+. . . . . . . . . . . . . . . . . . . . . . .>     employment_type STRING,
+. . . . . . . . . . . . . . . . . . . . . . .>     required_experience STRING,
+. . . . . . . . . . . . . . . . . . . . . . .>     required_education STRING,
+. . . . . . . . . . . . . . . . . . . . . . .>     industry STRING,
+. . . . . . . . . . . . . . . . . . . . . . .>     `function` STRING,
+. . . . . . . . . . . . . . . . . . . . . . .>     fraudulent BOOLEAN,
+. . . . . . . . . . . . . . . . . . . . . . .>     country STRING,
+. . . . . . . . . . . . . . . . . . . . . . .>     city STRING,
+. . . . . . . . . . . . . . . . . . . . . . .>     zip_code STRING,
+. . . . . . . . . . . . . . . . . . . . . . .>     department STRING,
+. . . . . . . . . . . . . . . . . . . . . . .>     salary_range STRING,
+. . . . . . . . . . . . . . . . . . . . . . .>     company_size STRING, -- e.g., "10000+ employees"
+. . . . . . . . . . . . . . . . . . . . . . .>     job_board STRING,
+. . . . . . . . . . . . . . . . . . . . . . .>     geo STRING,
+. . . . . . . . . . . . . . . . . . . . . . .>     job_posting_date DATE,
+. . . . . . . . . . . . . . . . . . . . . . .>     last_processed_time STRING, -- Assuming this is a timestamp string
+. . . . . . . . . . . . . . . . . . . . . . .>     employment_status STRING,
+. . . . . . . . . . . . . . . . . . . . . . .>     experience STRING,
+. . . . . . . . . . . . . . . . . . . . . . .>     job_functions STRING,
+. . . . . . . . . . . . . . . . . . . . . . .>     job_industries STRING,
+. . . . . . . . . . . . . . . . . . . . . . .>     locations STRING,
+. . . . . . . . . . . . . . . . . . . . . . .>     salary_currency STRING,
+. . . . . . . . . . . . . . . . . . . . . . .>     salary_period STRING,
+. . . . . . . . . . . . . . . . . . . . . . .>     skills STRING,
+. . . . . . . . . . . . . . . . . . . . . . .>     work_type STRING, -- Partition key in original table
+. . . . . . . . . . . . . . . . . . . . . . .>     preference STRING, -- Bucketing key in original table
+. . . . . . . . . . . . . . . . . . . . . . .>     latitude DECIMAL(9,6),
+. . . . . . . . . . . . . . . . . . . . . . .>     longitude DECIMAL(9,6),
+. . . . . . . . . . . . . . . . . . . . . . .>     -- Added prediction columns
+. . . . . . . . . . . . . . . . . . . . . . .>     original_salary DOUBLE,
+. . . . . . . . . . . . . . . . . . . . . . .>     predicted_salary DOUBLE
 . . . . . . . . . . . . . . . . . . . . . . .> )
-. . . . . . . . . . . . . . . . . . . . . . .> ROW FORMAT SERDE 'org.apache.hadoop.hive.serde2.lazy.LazySimpleSerDe'
-. . . . . . . . . . . . . . . . . . . . . . .> WITH SERDEPROPERTIES ('field.delim' = ',')
+. . . . . . . . . . . . . . . . . . . . . . .> -- Use OpenCSVSerde to handle commas within quoted fields correctly
+. . . . . . . . . . . . . . . . . . . . . . .> ROW FORMAT SERDE 'org.apache.hadoop.hive.serde2.OpenCSVSerde'
+. . . . . . . . . . . . . . . . . . . . . . .> WITH SERDEPROPERTIES (
+. . . . . . . . . . . . . . . . . . . . . . .>     'separatorChar' = ',', -- Explicitly state the separator
+. . . . . . . . . . . . . . . . . . . . . . .>     'quoteChar'     = '"', -- Specify the quote character used by Spark
+. . . . . . . . . . . . . . . . . . . . . . .>     'escapeChar'    = '\\'  -- Specify the escape character used by Spark (often backslas h)
+. . . . . . . . . . . . . . . . . . . . . . .> )
 . . . . . . . . . . . . . . . . . . . . . . .> STORED AS TEXTFILE
 . . . . . . . . . . . . . . . . . . . . . . .> LOCATION 'project/output/model2_predictions.csv'
 . . . . . . . . . . . . . . . . . . . . . . .> TBLPROPERTIES ('skip.header.line.count'='1'); -- Skip the header row
-INFO  : Compiling command(queryId=hive_20250501173832_dd14dbb1-1c1c-4ce0-9cf0-d660176f1b6e): CREATE EXTERNAL TABLE model2_predictions (
-label DOUBLE,
-prediction DOUBLE
+INFO  : Compiling command(queryId=hive_20250501222635_b5a18dfe-32bd-4e2f-b707-ff6fc0d311aa): CREATE EXTERNAL TABLE model2_predictions (
+job_id STRING,
+job_title STRING,
+company_name STRING,
+company_profile STRING,
+job_description STRING,
+requirements STRING,
+benefits STRING,
+telecommuting BOOLEAN,
+has_company_logo BOOLEAN,
+has_questions BOOLEAN,
+employment_type STRING,
+required_experience STRING,
+required_education STRING,
+industry STRING,
+`function` STRING,
+fraudulent BOOLEAN,
+country STRING,
+city STRING,
+zip_code STRING,
+department STRING,
+salary_range STRING,
+company_size STRING,
+job_board STRING,
+geo STRING,
+job_posting_date DATE,
+last_processed_time STRING,
+employment_status STRING,
+experience STRING,
+job_functions STRING,
+job_industries STRING,
+locations STRING,
+salary_currency STRING,
+salary_period STRING,
+skills STRING,
+work_type STRING,
+preference STRING,
+latitude DECIMAL(9,6),
+longitude DECIMAL(9,6),
+original_salary DOUBLE,
+predicted_salary DOUBLE
 )
-ROW FORMAT SERDE 'org.apache.hadoop.hive.serde2.lazy.LazySimpleSerDe'
-WITH SERDEPROPERTIES ('field.delim' = ',')
+ROW FORMAT SERDE 'org.apache.hadoop.hive.serde2.OpenCSVSerde'
+WITH SERDEPROPERTIES (
+'separatorChar' = ',',
+'quoteChar'     = '"',
+'escapeChar'    = '\\'  -- Specify the escape character used by Spark (often backslash)
+)
 STORED AS TEXTFILE
 LOCATION 'project/output/model2_predictions.csv'
 TBLPROPERTIES ('skip.header.line.count'='1')
 INFO  : Semantic Analysis Completed (retrial = false)
 INFO  : Returning Hive schema: Schema(fieldSchemas:null, properties:null)
-INFO  : EXPLAIN output for queryid hive_20250501173832_dd14dbb1-1c1c-4ce0-9cf0-d660176f1b6e : STAGE DEPENDENCIES:
+INFO  : EXPLAIN output for queryid hive_20250501222635_b5a18dfe-32bd-4e2f-b707-ff6fc0d311aa : STAGE DEPENDENCIES:
   Stage-0 is a root stage [DDL]
 
 STAGE PLANS:
   Stage: Stage-0
       Create Table Operator:
         Create Table
-          columns: label double, prediction double
+          columns: job_id string, job_title string, company_name string, company_profile string, job_description string, requirements string, benefits string, telecommuting boolean, has_company_logo boolean, has_questions boolean, employment_type string, required_experience string, required_education string, industry string, function string, fraudulent boolean, country string, city string, zip_code string, department string, salary_range string, company_size string, job_board string, geo string, job_posting_date date, last_processed_time string, employment_status string, experience string, job_functions string, job_industries string, locations string, salary_currency string, salary_period string, skills string, work_type string, preference string, latitude decimal(9,6), longitude decimal(9,6), original_salary double, predicted_salary double
           input format: org.apache.hadoop.mapred.TextInputFormat
           location: project/output/model2_predictions.csv
           output format: org.apache.hadoop.hive.ql.io.IgnoreKeyTextOutputFormat
-          serde name: org.apache.hadoop.hive.serde2.lazy.LazySimpleSerDe
+          serde name: org.apache.hadoop.hive.serde2.OpenCSVSerde
           serde properties:
-            field.delim ,
+            escapeChar \
+            quoteChar "
+            separatorChar ,
           name: team14_projectdb.model2_predictions
           table properties:
             skip.header.line.count 1
           isExternal: true
 
 
-INFO  : Completed compiling command(queryId=hive_20250501173832_dd14dbb1-1c1c-4ce0-9cf0-d660176f1b6e); Time taken: 0.028 seconds
-INFO  : Executing command(queryId=hive_20250501173832_dd14dbb1-1c1c-4ce0-9cf0-d660176f1b6e): CREATE EXTERNAL TABLE model2_predictions (
-label DOUBLE,
-prediction DOUBLE
+INFO  : Completed compiling command(queryId=hive_20250501222635_b5a18dfe-32bd-4e2f-b707-ff6fc0d311aa); Time taken: 0.032 seconds
+INFO  : Executing command(queryId=hive_20250501222635_b5a18dfe-32bd-4e2f-b707-ff6fc0d311aa): CREATE EXTERNAL TABLE model2_predictions (
+job_id STRING,
+job_title STRING,
+company_name STRING,
+company_profile STRING,
+job_description STRING,
+requirements STRING,
+benefits STRING,
+telecommuting BOOLEAN,
+has_company_logo BOOLEAN,
+has_questions BOOLEAN,
+employment_type STRING,
+required_experience STRING,
+required_education STRING,
+industry STRING,
+`function` STRING,
+fraudulent BOOLEAN,
+country STRING,
+city STRING,
+zip_code STRING,
+department STRING,
+salary_range STRING,
+company_size STRING,
+job_board STRING,
+geo STRING,
+job_posting_date DATE,
+last_processed_time STRING,
+employment_status STRING,
+experience STRING,
+job_functions STRING,
+job_industries STRING,
+locations STRING,
+salary_currency STRING,
+salary_period STRING,
+skills STRING,
+work_type STRING,
+preference STRING,
+latitude DECIMAL(9,6),
+longitude DECIMAL(9,6),
+original_salary DOUBLE,
+predicted_salary DOUBLE
 )
-ROW FORMAT SERDE 'org.apache.hadoop.hive.serde2.lazy.LazySimpleSerDe'
-WITH SERDEPROPERTIES ('field.delim' = ',')
+ROW FORMAT SERDE 'org.apache.hadoop.hive.serde2.OpenCSVSerde'
+WITH SERDEPROPERTIES (
+'separatorChar' = ',',
+'quoteChar'     = '"',
+'escapeChar'    = '\\'  -- Specify the escape character used by Spark (often backslash)
+)
 STORED AS TEXTFILE
 LOCATION 'project/output/model2_predictions.csv'
 TBLPROPERTIES ('skip.header.line.count'='1')
 INFO  : Starting task [Stage-0:DDL] in serial mode
-INFO  : Completed executing command(queryId=hive_20250501173832_dd14dbb1-1c1c-4ce0-9cf0-d660176f1b6e); Time taken: 0.03 seconds
+INFO  : Completed executing command(queryId=hive_20250501222635_b5a18dfe-32bd-4e2f-b707-ff6fc0d311aa); Time taken: 0.031 seconds
 INFO  : OK
-No rows affected (0.09 seconds)
+No rows affected (0.093 seconds)
 0: jdbc:hive2://hadoop-03.uni.innopolis.ru:10> 
-0: jdbc:hive2://hadoop-03.uni.innopolis.ru:10> -- Create external table for KL Divergence results (to be created by PySpark  
-script)
+0: jdbc:hive2://hadoop-03.uni.innopolis.ru:10> -- Create external table for KL Divergence results (to be created by PySpark script)
 0: jdbc:hive2://hadoop-03.uni.innopolis.ru:10> CREATE EXTERNAL TABLE kl_divergence (
 . . . . . . . . . . . . . . . . . . . . . . .>     model_type STRING,
 . . . . . . . . . . . . . . . . . . . . . . .>     kl_divergence DOUBLE
@@ -328,7 +586,7 @@ script)
 . . . . . . . . . . . . . . . . . . . . . . .> STORED AS TEXTFILE
 . . . . . . . . . . . . . . . . . . . . . . .> LOCATION 'project/output/kl_divergence.csv'
 . . . . . . . . . . . . . . . . . . . . . . .> TBLPROPERTIES ('skip.header.line.count'='1'); -- Skip the header row
-INFO  : Compiling command(queryId=hive_20250501173832_90ebb729-deb4-4e98-9406-5cfc8a9b5bc6): CREATE EXTERNAL TABLE kl_divergence (
+INFO  : Compiling command(queryId=hive_20250501222635_78a2732e-2c46-4bfe-a8dc-41f4a0e3f279): CREATE EXTERNAL TABLE kl_divergence (
 model_type STRING,
 kl_divergence DOUBLE
 )
@@ -339,7 +597,7 @@ LOCATION 'project/output/kl_divergence.csv'
 TBLPROPERTIES ('skip.header.line.count'='1')
 INFO  : Semantic Analysis Completed (retrial = false)
 INFO  : Returning Hive schema: Schema(fieldSchemas:null, properties:null)
-INFO  : EXPLAIN output for queryid hive_20250501173832_90ebb729-deb4-4e98-9406-5cfc8a9b5bc6 : STAGE DEPENDENCIES:
+INFO  : EXPLAIN output for queryid hive_20250501222635_78a2732e-2c46-4bfe-a8dc-41f4a0e3f279 : STAGE DEPENDENCIES:
   Stage-0 is a root stage [DDL]
 
 STAGE PLANS:
@@ -359,8 +617,8 @@ STAGE PLANS:
           isExternal: true
 
 
-INFO  : Completed compiling command(queryId=hive_20250501173832_90ebb729-deb4-4e98-9406-5cfc8a9b5bc6); Time taken: 0.029 seconds
-INFO  : Executing command(queryId=hive_20250501173832_90ebb729-deb4-4e98-9406-5cfc8a9b5bc6): CREATE EXTERNAL TABLE kl_divergence (
+INFO  : Completed compiling command(queryId=hive_20250501222635_78a2732e-2c46-4bfe-a8dc-41f4a0e3f279); Time taken: 0.029 seconds
+INFO  : Executing command(queryId=hive_20250501222635_78a2732e-2c46-4bfe-a8dc-41f4a0e3f279): CREATE EXTERNAL TABLE kl_divergence (
 model_type STRING,
 kl_divergence DOUBLE
 )
@@ -370,27 +628,27 @@ STORED AS TEXTFILE
 LOCATION 'project/output/kl_divergence.csv'
 TBLPROPERTIES ('skip.header.line.count'='1')
 INFO  : Starting task [Stage-0:DDL] in serial mode
-INFO  : Completed executing command(queryId=hive_20250501173832_90ebb729-deb4-4e98-9406-5cfc8a9b5bc6); Time taken: 0.021 seconds
+INFO  : Completed executing command(queryId=hive_20250501222635_78a2732e-2c46-4bfe-a8dc-41f4a0e3f279); Time taken: 0.024 seconds
 INFO  : OK
-No rows affected (0.077 seconds)
+No rows affected (0.08 seconds)
 0: jdbc:hive2://hadoop-03.uni.innopolis.ru:10> 
 0: jdbc:hive2://hadoop-03.uni.innopolis.ru:10> -- ADDED: Table for Linear Regression Tuning Results
 0: jdbc:hive2://hadoop-03.uni.innopolis.ru:10> CREATE EXTERNAL TABLE lr_tuning_results (
-. . . . . . . . . . . . . . . . . . . . . . .>     regParam DOUBLE,
-. . . . . . . . . . . . . . . . . . . . . . .>     elasticNetParam DOUBLE,
 . . . . . . . . . . . . . . . . . . . . . . .>     aggregationDepth INT, -- Assuming Spark saves this as INT
-. . . . . . . . . . . . . . . . . . . . . . .>     avgRMSE DOUBLE
+. . . . . . . . . . . . . . . . . . . . . . .>     avgRMSE DOUBLE,
+. . . . . . . . . . . . . . . . . . . . . . .>     elasticNetParam DOUBLE,
+. . . . . . . . . . . . . . . . . . . . . . .>     regParam DOUBLE
 . . . . . . . . . . . . . . . . . . . . . . .> )
 . . . . . . . . . . . . . . . . . . . . . . .> ROW FORMAT DELIMITED
 . . . . . . . . . . . . . . . . . . . . . . .> FIELDS TERMINATED BY ','
 . . . . . . . . . . . . . . . . . . . . . . .> STORED AS TEXTFILE
 . . . . . . . . . . . . . . . . . . . . . . .> LOCATION 'project/output/lr_tuning_results.csv'
 . . . . . . . . . . . . . . . . . . . . . . .> TBLPROPERTIES ('skip.header.line.count'='1');
-INFO  : Compiling command(queryId=hive_20250501173833_ac779797-d0f5-499a-a1a2-da622082e000): CREATE EXTERNAL TABLE lr_tuning_results (
-regParam DOUBLE,
-elasticNetParam DOUBLE,
+INFO  : Compiling command(queryId=hive_20250501222636_71633895-39bf-455e-ae3f-18ae6ca5bbcb): CREATE EXTERNAL TABLE lr_tuning_results (
 aggregationDepth INT,
-avgRMSE DOUBLE
+avgRMSE DOUBLE,
+elasticNetParam DOUBLE,
+regParam DOUBLE
 )
 ROW FORMAT DELIMITED
 FIELDS TERMINATED BY ','
@@ -399,14 +657,14 @@ LOCATION 'project/output/lr_tuning_results.csv'
 TBLPROPERTIES ('skip.header.line.count'='1')
 INFO  : Semantic Analysis Completed (retrial = false)
 INFO  : Returning Hive schema: Schema(fieldSchemas:null, properties:null)
-INFO  : EXPLAIN output for queryid hive_20250501173833_ac779797-d0f5-499a-a1a2-da622082e000 : STAGE DEPENDENCIES:
+INFO  : EXPLAIN output for queryid hive_20250501222636_71633895-39bf-455e-ae3f-18ae6ca5bbcb : STAGE DEPENDENCIES:
   Stage-0 is a root stage [DDL]
 
 STAGE PLANS:
   Stage: Stage-0
       Create Table Operator:
         Create Table
-          columns: regparam double, elasticnetparam double, aggregationdepth int, avgrmse double
+          columns: aggregationdepth int, avgrmse double, elasticnetparam double, regparam double
           field delimiter: ,
           input format: org.apache.hadoop.mapred.TextInputFormat
           location: project/output/lr_tuning_results.csv
@@ -418,12 +676,12 @@ STAGE PLANS:
           isExternal: true
 
 
-INFO  : Completed compiling command(queryId=hive_20250501173833_ac779797-d0f5-499a-a1a2-da622082e000); Time taken: 0.032 seconds
-INFO  : Executing command(queryId=hive_20250501173833_ac779797-d0f5-499a-a1a2-da622082e000): CREATE EXTERNAL TABLE lr_tuning_results (
-regParam DOUBLE,
-elasticNetParam DOUBLE,
+INFO  : Completed compiling command(queryId=hive_20250501222636_71633895-39bf-455e-ae3f-18ae6ca5bbcb); Time taken: 0.031 seconds
+INFO  : Executing command(queryId=hive_20250501222636_71633895-39bf-455e-ae3f-18ae6ca5bbcb): CREATE EXTERNAL TABLE lr_tuning_results (
 aggregationDepth INT,
-avgRMSE DOUBLE
+avgRMSE DOUBLE,
+elasticNetParam DOUBLE,
+regParam DOUBLE
 )
 ROW FORMAT DELIMITED
 FIELDS TERMINATED BY ','
@@ -431,27 +689,27 @@ STORED AS TEXTFILE
 LOCATION 'project/output/lr_tuning_results.csv'
 TBLPROPERTIES ('skip.header.line.count'='1')
 INFO  : Starting task [Stage-0:DDL] in serial mode
-INFO  : Completed executing command(queryId=hive_20250501173833_ac779797-d0f5-499a-a1a2-da622082e000); Time taken: 0.03 seconds
+INFO  : Completed executing command(queryId=hive_20250501222636_71633895-39bf-455e-ae3f-18ae6ca5bbcb); Time taken: 0.028 seconds
 INFO  : OK
-No rows affected (0.089 seconds)
+No rows affected (0.085 seconds)
 0: jdbc:hive2://hadoop-03.uni.innopolis.ru:10> 
 0: jdbc:hive2://hadoop-03.uni.innopolis.ru:10> -- ADDED: Table for GBT Regressor Tuning Results
 0: jdbc:hive2://hadoop-03.uni.innopolis.ru:10> CREATE EXTERNAL TABLE gbt_tuning_results (
+. . . . . . . . . . . . . . . . . . . . . . .>     avgRMSE DOUBLE,
 . . . . . . . . . . . . . . . . . . . . . . .>     maxDepth INT, -- Assuming Spark saves this as INT
 . . . . . . . . . . . . . . . . . . . . . . .>     maxIter INT, -- Assuming Spark saves this as INT
-. . . . . . . . . . . . . . . . . . . . . . .>     stepSize DOUBLE,
-. . . . . . . . . . . . . . . . . . . . . . .>     avgRMSE DOUBLE
+. . . . . . . . . . . . . . . . . . . . . . .>     stepSize DOUBLE
 . . . . . . . . . . . . . . . . . . . . . . .> )
 . . . . . . . . . . . . . . . . . . . . . . .> ROW FORMAT DELIMITED
 . . . . . . . . . . . . . . . . . . . . . . .> FIELDS TERMINATED BY ','
 . . . . . . . . . . . . . . . . . . . . . . .> STORED AS TEXTFILE
 . . . . . . . . . . . . . . . . . . . . . . .> LOCATION 'project/output/gbt_tuning_results.csv'
 . . . . . . . . . . . . . . . . . . . . . . .> TBLPROPERTIES ('skip.header.line.count'='1');
-INFO  : Compiling command(queryId=hive_20250501173833_b8884e59-2630-469a-a5fa-da095f773a0f): CREATE EXTERNAL TABLE gbt_tuning_results (
+INFO  : Compiling command(queryId=hive_20250501222636_55d5976f-54ae-4f9a-ad5e-f1f7c774d704): CREATE EXTERNAL TABLE gbt_tuning_results (
+avgRMSE DOUBLE,
 maxDepth INT,
 maxIter INT,
-stepSize DOUBLE,
-avgRMSE DOUBLE
+stepSize DOUBLE
 )
 ROW FORMAT DELIMITED
 FIELDS TERMINATED BY ','
@@ -460,14 +718,14 @@ LOCATION 'project/output/gbt_tuning_results.csv'
 TBLPROPERTIES ('skip.header.line.count'='1')
 INFO  : Semantic Analysis Completed (retrial = false)
 INFO  : Returning Hive schema: Schema(fieldSchemas:null, properties:null)
-INFO  : EXPLAIN output for queryid hive_20250501173833_b8884e59-2630-469a-a5fa-da095f773a0f : STAGE DEPENDENCIES:
+INFO  : EXPLAIN output for queryid hive_20250501222636_55d5976f-54ae-4f9a-ad5e-f1f7c774d704 : STAGE DEPENDENCIES:
   Stage-0 is a root stage [DDL]
 
 STAGE PLANS:
   Stage: Stage-0
       Create Table Operator:
         Create Table
-          columns: maxdepth int, maxiter int, stepsize double, avgrmse double
+          columns: avgrmse double, maxdepth int, maxiter int, stepsize double
           field delimiter: ,
           input format: org.apache.hadoop.mapred.TextInputFormat
           location: project/output/gbt_tuning_results.csv
@@ -479,12 +737,12 @@ STAGE PLANS:
           isExternal: true
 
 
-INFO  : Completed compiling command(queryId=hive_20250501173833_b8884e59-2630-469a-a5fa-da095f773a0f); Time taken: 0.03 seconds
-INFO  : Executing command(queryId=hive_20250501173833_b8884e59-2630-469a-a5fa-da095f773a0f): CREATE EXTERNAL TABLE gbt_tuning_results (
+INFO  : Completed compiling command(queryId=hive_20250501222636_55d5976f-54ae-4f9a-ad5e-f1f7c774d704); Time taken: 0.03 seconds
+INFO  : Executing command(queryId=hive_20250501222636_55d5976f-54ae-4f9a-ad5e-f1f7c774d704): CREATE EXTERNAL TABLE gbt_tuning_results (
+avgRMSE DOUBLE,
 maxDepth INT,
 maxIter INT,
-stepSize DOUBLE,
-avgRMSE DOUBLE
+stepSize DOUBLE
 )
 ROW FORMAT DELIMITED
 FIELDS TERMINATED BY ','
@@ -492,16 +750,16 @@ STORED AS TEXTFILE
 LOCATION 'project/output/gbt_tuning_results.csv'
 TBLPROPERTIES ('skip.header.line.count'='1')
 INFO  : Starting task [Stage-0:DDL] in serial mode
-INFO  : Completed executing command(queryId=hive_20250501173833_b8884e59-2630-469a-a5fa-da095f773a0f); Time taken: 0.022 seconds
+INFO  : Completed executing command(queryId=hive_20250501222636_55d5976f-54ae-4f9a-ad5e-f1f7c774d704); Time taken: 0.018 seconds
 INFO  : OK
-No rows affected (0.078 seconds)
+No rows affected (0.077 seconds)
 0: jdbc:hive2://hadoop-03.uni.innopolis.ru:10> 
 0: jdbc:hive2://hadoop-03.uni.innopolis.ru:10> -- Verify table creation
 0: jdbc:hive2://hadoop-03.uni.innopolis.ru:10> SHOW TABLES; 
-INFO  : Compiling command(queryId=hive_20250501173833_be9fce70-e911-40b8-93f6-39069773b142): SHOW TABLES
+INFO  : Compiling command(queryId=hive_20250501222636_a5e8662d-7cc3-4f56-ab88-ac063a25ba1f): SHOW TABLES
 INFO  : Semantic Analysis Completed (retrial = false)
 INFO  : Returning Hive schema: Schema(fieldSchemas:[FieldSchema(name:tab_name, type:string, comment:from deserializer)], properties:null)
-INFO  : EXPLAIN output for queryid hive_20250501173833_be9fce70-e911-40b8-93f6-39069773b142 : STAGE DEPENDENCIES:
+INFO  : EXPLAIN output for queryid hive_20250501222636_a5e8662d-7cc3-4f56-ab88-ac063a25ba1f : STAGE DEPENDENCIES:
   Stage-0 is a root stage [DDL]
   Stage-1 depends on stages: Stage-0 [FETCH]
 
@@ -510,7 +768,7 @@ STAGE PLANS:
       Show Table Operator:
         Show Tables
           database name: team14_projectdb
-          result file: file:/tmp/hive/e9d16022-54c1-4082-92da-70a01fb02f98/hive_2025-05-01_17-38-33_276_8429443452993818105-587/-local-10000
+          result file: file:/tmp/hive/59d727d9-5838-49bd-ba4e-a887961643a2/hive_2025-05-01_22-26-36_397_7429282800090964733-704/-local-10000
 
   Stage: Stage-1
     Fetch Operator
@@ -519,10 +777,10 @@ STAGE PLANS:
         ListSink
 
 
-INFO  : Completed compiling command(queryId=hive_20250501173833_be9fce70-e911-40b8-93f6-39069773b142); Time taken: 0.019 seconds
-INFO  : Executing command(queryId=hive_20250501173833_be9fce70-e911-40b8-93f6-39069773b142): SHOW TABLES
+INFO  : Completed compiling command(queryId=hive_20250501222636_a5e8662d-7cc3-4f56-ab88-ac063a25ba1f); Time taken: 0.016 seconds
+INFO  : Executing command(queryId=hive_20250501222636_a5e8662d-7cc3-4f56-ab88-ac063a25ba1f): SHOW TABLES
 INFO  : Starting task [Stage-0:DDL] in serial mode
-INFO  : Completed executing command(queryId=hive_20250501173833_be9fce70-e911-40b8-93f6-39069773b142); Time taken: 0.005 seconds
+INFO  : Completed executing command(queryId=hive_20250501222636_a5e8662d-7cc3-4f56-ab88-ac063a25ba1f); Time taken: 0.006 seconds
 INFO  : OK
 +------------------------+
 |        tab_name        |
@@ -536,5 +794,5 @@ INFO  : OK
 | model2_predictions     |
 | table_schema           |
 +------------------------+
-8 rows selected (0.07 seconds)
+8 rows selected (0.065 seconds)
 0: jdbc:hive2://hadoop-03.uni.innopolis.ru:10> Closing: 0: jdbc:hive2://hadoop-03.uni.innopolis.ru:10001/team14_projectdb

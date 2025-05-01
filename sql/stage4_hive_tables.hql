@@ -23,24 +23,112 @@ STORED AS TEXTFILE
 LOCATION 'project/output/evaluation.csv'
 TBLPROPERTIES ('skip.header.line.count'='1'); -- Skip the header row
 
--- Create external table for Model 1 (Linear Regression) predictions
+-- UPDATED: Create external table for Model 1 (Linear Regression) enriched predictions
 CREATE EXTERNAL TABLE model1_predictions (
-    label DOUBLE,
-    prediction DOUBLE
+    job_id STRING, -- Assuming BIGINT originally, cast to STRING in Spark output
+    job_title STRING,
+    company_name STRING,
+    company_profile STRING, -- Contains JSON-like structure
+    job_description STRING,
+    requirements STRING,
+    benefits STRING,
+    telecommuting BOOLEAN,
+    has_company_logo BOOLEAN,
+    has_questions BOOLEAN,
+    employment_type STRING,
+    required_experience STRING,
+    required_education STRING,
+    industry STRING,
+    `function` STRING,
+    fraudulent BOOLEAN,
+    country STRING,
+    city STRING,
+    zip_code STRING,
+    department STRING,
+    salary_range STRING,
+    company_size STRING, -- e.g., "10000+ employees"
+    job_board STRING,
+    geo STRING,
+    job_posting_date DATE,
+    last_processed_time STRING, -- Assuming this is a timestamp string
+    employment_status STRING,
+    experience STRING,
+    job_functions STRING,
+    job_industries STRING,
+    locations STRING,
+    salary_currency STRING,
+    salary_period STRING,
+    skills STRING,
+    work_type STRING, -- Partition key in original table
+    preference STRING, -- Bucketing key in original table
+    latitude DECIMAL(9,6),
+    longitude DECIMAL(9,6),
+    -- Added prediction columns
+    original_salary DOUBLE,
+    predicted_salary DOUBLE
 )
-ROW FORMAT SERDE 'org.apache.hadoop.hive.serde2.lazy.LazySimpleSerDe'
-WITH SERDEPROPERTIES ('field.delim' = ',')
+-- Use OpenCSVSerde to handle commas within quoted fields correctly
+ROW FORMAT SERDE 'org.apache.hadoop.hive.serde2.OpenCSVSerde'
+WITH SERDEPROPERTIES (
+    'separatorChar' = ',', -- Explicitly state the separator
+    'quoteChar'     = '"', -- Specify the quote character used by Spark
+    'escapeChar'    = '\\'  -- Specify the escape character used by Spark (often backslash)
+)
 STORED AS TEXTFILE
 LOCATION 'project/output/model1_predictions.csv'
 TBLPROPERTIES ('skip.header.line.count'='1'); -- Skip the header row
 
--- Create external table for Model 2 (GBT Regressor) predictions
+-- UPDATED: Create external table for Model 2 (GBT Regressor) enriched predictions
 CREATE EXTERNAL TABLE model2_predictions (
-    label DOUBLE,
-    prediction DOUBLE
+    job_id STRING, -- Assuming BIGINT originally, cast to STRING in Spark output
+    job_title STRING,
+    company_name STRING,
+    company_profile STRING, -- Contains JSON-like structure
+    job_description STRING,
+    requirements STRING,
+    benefits STRING,
+    telecommuting BOOLEAN,
+    has_company_logo BOOLEAN,
+    has_questions BOOLEAN,
+    employment_type STRING,
+    required_experience STRING,
+    required_education STRING,
+    industry STRING,
+    `function` STRING,
+    fraudulent BOOLEAN,
+    country STRING,
+    city STRING,
+    zip_code STRING,
+    department STRING,
+    salary_range STRING,
+    company_size STRING, -- e.g., "10000+ employees"
+    job_board STRING,
+    geo STRING,
+    job_posting_date DATE,
+    last_processed_time STRING, -- Assuming this is a timestamp string
+    employment_status STRING,
+    experience STRING,
+    job_functions STRING,
+    job_industries STRING,
+    locations STRING,
+    salary_currency STRING,
+    salary_period STRING,
+    skills STRING,
+    work_type STRING, -- Partition key in original table
+    preference STRING, -- Bucketing key in original table
+    latitude DECIMAL(9,6),
+    longitude DECIMAL(9,6),
+    -- Added prediction columns
+    original_salary DOUBLE,
+    predicted_salary DOUBLE
 )
-ROW FORMAT SERDE 'org.apache.hadoop.hive.serde2.lazy.LazySimpleSerDe'
-WITH SERDEPROPERTIES ('field.delim' = ',')
+-- Use OpenCSVSerde to handle commas within quoted fields correctly
+ROW FORMAT SERDE 'org.apache.hadoop.hive.serde2.OpenCSVSerde'
+WITH SERDEPROPERTIES (
+    'separatorChar' = ',', -- Explicitly state the separator
+    'quoteChar'     = '"', -- Specify the quote character used by Spark
+    'escapeChar'    = '\\'  -- Specify the escape character used by Spark (often backslash)
+)
 STORED AS TEXTFILE
 LOCATION 'project/output/model2_predictions.csv'
 TBLPROPERTIES ('skip.header.line.count'='1'); -- Skip the header row
