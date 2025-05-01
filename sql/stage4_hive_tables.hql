@@ -67,8 +67,13 @@ CREATE EXTERNAL TABLE model1_predictions (
     original_salary DOUBLE,
     predicted_salary DOUBLE
 )
-ROW FORMAT SERDE 'org.apache.hadoop.hive.serde2.lazy.LazySimpleSerDe'
-WITH SERDEPROPERTIES ('field.delim' = ',', 'serialization.null.format' = '') -- Handle potential nulls
+-- Use OpenCSVSerde to handle commas within quoted fields correctly
+ROW FORMAT SERDE 'org.apache.hadoop.hive.serde2.OpenCSVSerde'
+WITH SERDEPROPERTIES (
+    'separatorChar' = ',', -- Explicitly state the separator
+    'quoteChar'     = '"', -- Specify the quote character used by Spark
+    'escapeChar'    = '\\'  -- Specify the escape character used by Spark (often backslash)
+)
 STORED AS TEXTFILE
 LOCATION 'project/output/model1_predictions.csv'
 TBLPROPERTIES ('skip.header.line.count'='1'); -- Skip the header row
@@ -117,8 +122,13 @@ CREATE EXTERNAL TABLE model2_predictions (
     original_salary DOUBLE,
     predicted_salary DOUBLE
 )
-ROW FORMAT SERDE 'org.apache.hadoop.hive.serde2.lazy.LazySimpleSerDe'
-WITH SERDEPROPERTIES ('field.delim' = ',', 'serialization.null.format' = '') -- Handle potential nulls
+-- Use OpenCSVSerde to handle commas within quoted fields correctly
+ROW FORMAT SERDE 'org.apache.hadoop.hive.serde2.OpenCSVSerde'
+WITH SERDEPROPERTIES (
+    'separatorChar' = ',', -- Explicitly state the separator
+    'quoteChar'     = '"', -- Specify the quote character used by Spark
+    'escapeChar'    = '\\'  -- Specify the escape character used by Spark (often backslash)
+)
 STORED AS TEXTFILE
 LOCATION 'project/output/model2_predictions.csv'
 TBLPROPERTIES ('skip.header.line.count'='1'); -- Skip the header row
