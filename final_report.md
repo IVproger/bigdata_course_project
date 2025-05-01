@@ -113,7 +113,7 @@ It offers a diverse set of job listings across various industries and job types.
 
 The project follows a staged batch processing architecture, leveraging various components of the Hadoop ecosystem and related technologies. The diagram below illustrates the flow:
 
-*   ![architecture-detailed](report_files/architecture-detailed.jpg)
+*   ![architecture-detailed](static/final_report/architecture-detailed.jpg)
 
 
 **Workflow Summary:**
@@ -252,17 +252,17 @@ Firstly, general EDA analysis has been conducted by running `scripts/feature_ana
 
 ### General EDA Charts
 
-*   ![company-state-counts](report_files/company-state-counts.jpg)
-*   ![correlation-with-target](report_files/correlation-with-target.jpg)
-*   ![features-correlation](report_files/features-correlation.jpg)
-*   ![gender-distribution](report_files/gender-distribution.jpg)
-*   ![industry-counts](report_files/industry-counts.jpg)
-*   ![job-portal-counts](report_files/job-portal-counts.jpg)
-*   ![preference-counts](report_files/preference-counts.jpg)
-*   ![qualification-counts](report_files/qualification-counts.jpg)
-*   ![sector-counts](report_files/sector-counts.jpg)
-*   ![target-statistics](report_files/target-statistics.jpg)
-*   ![work-type-counts](report_files/work-type-counts.jpg)
+*   ![company-state-counts](static/final_report/company-state-counts.jpg)
+*   ![correlation-with-target](static/final_report/correlation-with-target.jpg)
+*   ![features-correlation](static/final_report/features-correlation.jpg)
+*   ![gender-distribution](static/final_report/gender-distribution.jpg)
+*   ![industry-counts](static/final_report/industry-counts.jpg)
+*   ![job-portal-counts](static/final_report/job-portal-counts.jpg)
+*   ![preference-counts](static/final_report/preference-counts.jpg)
+*   ![qualification-counts](static/final_report/qualification-counts.jpg)
+*   ![sector-counts](static/final_report/sector-counts.jpg)
+*   ![target-statistics](static/final_report/target-statistics.jpg)
+*   ![work-type-counts](static/final_report/work-type-counts.jpg)
 
 **Insight:**  
 
@@ -296,7 +296,7 @@ These tables/files contain the aggregated data answering the specific analytical
 
 Visualizations for the EDA results were generated manually using Apache Superset, connecting to the PostgreSQL `q*_results` tables. These charts are saved as image files:
 
-*   ![Visualizing average salary by country](report_files/q1.jpg)
+*   ![Visualizing average salary by country](static/final_report/q1.jpg)
 **Insight:**  
 The choropleth map displays average salary levels across countries, derived from parsed salary ranges. Darker shades indicate higher average salaries. However, due to the synthetic nature of the data, these geographical distributions may not correspond to real economic trends.
 
@@ -304,9 +304,9 @@ The choropleth map displays average salary levels across countries, derived from
 This visualization helps business stakeholders benchmark compensation by region, support international hiring decisions, and guide job seekers toward high-paying locations.
 
 
-*   ![Visualizing top roles by gender preference](report_files/q2_1.jpg)
-*   ![Visualizing top roles by gender preference](report_files/q2_2.jpg)
-*   ![Visualizing top roles by gender preference](report_files/q2_3.jpg)
+*   ![Visualizing top roles by gender preference](static/final_report/q2_1.jpg)
+*   ![Visualizing top roles by gender preference](static/final_report/q2_2.jpg)
+*   ![Visualizing top roles by gender preference](static/final_report/q2_3.jpg)
 
 **Insight:**  
 Roles like Interaction Designer and Network Administrator appear frequently across both genders. Slight variations exist, but given the synthetic data, these differences may not reflect actual workforce diversity.
@@ -315,7 +315,7 @@ Roles like Interaction Designer and Network Administrator appear frequently acro
 These visualizations assist stakeholders in understanding gender distribution across job functions, supporting diversity and inclusion initiatives in hiring and workforce development.
 
 
-*   ![Visualizing monthly job posting trends](report_files/q3.jpg)
+*   ![Visualizing monthly job posting trends](static/final_report/q3.jpg)
 
 **Insight:**  
 The line chart indicates consistent job posting volumes over time, with minor fluctuations. These patterns likely result from the data generation process rather than actual market seasonality.
@@ -324,7 +324,7 @@ The line chart indicates consistent job posting volumes over time, with minor fl
 This visualization aids in identifying hiring cycles, enabling recruiters to optimize job ad timing and workforce planning.
 
 
-*   ![Visualizing job categories by count and average salary](report_files/q4.jpg)
+*   ![Visualizing job categories by count and average salary](static/final_report/q4.jpg)
 
 **Insight:**  
 Sectors like Technology, Management, and Data & Analytics show high job counts. The "Other" category's prominence suggests a placeholder or default classification in the synthetic data.
@@ -334,7 +334,7 @@ This chart helps stakeholders understand which industries are actively hiring, i
 
 
 
-*   ![Visualizing top job titles and their common qualifications](report_files/q5.jpg)
+*   ![Visualizing top job titles and their common qualifications](static/final_report/q5.jpg)
 
 **Insight:**  
 Roles such as UX/UI Designer, Software Engineer, and Digital Marketing Specialist are prevalent across qualifications like B.Tech, MBA, and B.Com. The data leans towards technical and business degrees.
@@ -343,7 +343,7 @@ Roles such as UX/UI Designer, Software Engineer, and Digital Marketing Specialis
 This visualization guides academic institutions and students toward in-demand skills and qualifications, aligning education with job market needs.
 
 
-*   ![Visualizing bi-annual trends for top roles](report_files/q6.jpg)
+*   ![Visualizing bi-annual trends for top roles](static/final_report/q6.jpg)
 
 **Insight:**  
 Trend lines show cyclic demand patterns for roles like Interaction Designer and Network Administrator. These patterns likely stem from the synthetic data's structure.
@@ -415,7 +415,7 @@ Model training and optimization were performed by the `scripts/ml_modeling.py` s
 
 The best model identified via cross-validation for both LR and GBT was then evaluated on a held-out **test dataset**
 
-*   ![model-evaluation-results](report_files/model-evaluation-results.jpg)
+*   ![model-evaluation-results](static/final_report/model-evaluation-results.jpg)
 
 - Both models achieve a similar, very low RMSE (around 0.0919), suggesting the target variable was likely scaled or normalized during preprocessing.
 - The **R-squared (R2)** values are extremely low (close to 0 for GBT and slightly negative for LR). This indicates that neither model, despite tuning, explains a significant portion of the variance in average salary using the current features.
@@ -425,7 +425,7 @@ The best model identified via cross-validation for both LR and GBT was then eval
 
 To assess how well the *distribution* of each model's predictions matches the distribution of the *actual* salaries in the test set, we calculated the **Kullback-Leibler (KL) Divergence**. Lower KL divergence values indicate that the predicted distribution is more similar to the actual distribution.
 
-*   ![kl-divergence-results](report_files/kl-divergence-results.jpg)
+*   ![kl-divergence-results](static/final_report/kl-divergence-results.jpg)
 
 - The GBT Regressor (KL ≈ 16.31) has a lower KL divergence than the Linear Regression model (KL ≈ 18.77).
 - This suggests the GBT model's predictions, as a whole distribution, are closer to the actual salary distribution compared to the LR model's predictions.
@@ -434,8 +434,8 @@ To assess how well the *distribution* of each model's predictions matches the di
 
 The following tables visualize the relationship between the actual average salaries and the salaries predicted by each model on the test data.
 
-*   ![prediction-preview-for-logistic-regression-model](report_files/prediction-preview-for-logistic-regression-model.jpg)
-*   ![prediction-preview-for-gradient-boosted-trees](report_files/prediction-preview-for-gradient-boosted-trees.jpg)
+*   ![prediction-preview-for-logistic-regression-model](static/final_report/prediction-preview-for-logistic-regression-model.jpg)
+*   ![prediction-preview-for-gradient-boosted-trees](static/final_report/prediction-preview-for-gradient-boosted-trees.jpg)
 
 ### **ML Modeling Summary:**
 
@@ -465,7 +465,7 @@ The dashboard is organized into logical sections using tabs or dividers:
 3.  **ML Modeling Results:** Displays the outcomes of the model training, tuning, and evaluation process.
 
 *(Screenshot of the overall dashboard layout)*
-*   ![Overall Dashboard Screenshot](report_files/ss_1.png)
+*   ![Overall Dashboard Screenshot](static/final_report/ss_1.png)
 
 ### 8.2. Description of Each Section and Chart
 
@@ -479,7 +479,7 @@ This initial section sets the context for the analyses presented later. It inclu
 *   **Data Sample:** Shows a few rows of the raw data to give a feel for the content.
 
 *(Screenshot of the Data Description section)*
-*   ![Data Description Section Screenshot](report_files/ss_data_description.png)
+*   ![Data Description Section Screenshot](static/final_report/ss_data_description.png)
 
 #### 8.2.2. Exploratory Data Analysis (EDA) Section
 
@@ -487,30 +487,30 @@ This section is divided into general analysis and specific insights.
 
 **General EDA Charts (from `scripts/general_feature_analysis.py` results):**
 This part explores the overall characteristics and distributions of key features.
-*   **Target Statistics (`target-statistics`):** Shows descriptive statistics (count, mean, stddev, min, max) for the target variable `salary_avg`. *Insight: Provides a baseline understanding of the salary distribution (£82.5k ± £7.5k).* ![Target Statistics](report_files/target-statistics.jpg)
-*   **Correlation with Target (`correlation-with-target`):** Displays the Pearson correlation coefficient between numerical/binary/cyclical features and the `salary_avg`. *Insight: Highlights the weak linear relationship (|corr| < 0.002) between most individual features and the target salary.* ![Correlation with Target](report_files/correlation-with-target.jpg)
-*   **Features Correlation (Heatmap) (`features-correlation`):** Visualizes the correlation matrix between numerical features to identify multicollinearity. *Insight: Shows high correlation (0.802) between `experience_max` and `experience_avg`, suggesting redundancy.* ![Features Correlation](report_files/features-correlation.jpg)
+*   **Target Statistics (`target-statistics`):** Shows descriptive statistics (count, mean, stddev, min, max) for the target variable `salary_avg`. *Insight: Provides a baseline understanding of the salary distribution (£82.5k ± £7.5k).* ![Target Statistics](static/final_report/target-statistics.jpg)
+*   **Correlation with Target (`correlation-with-target`):** Displays the Pearson correlation coefficient between numerical/binary/cyclical features and the `salary_avg`. *Insight: Highlights the weak linear relationship (|corr| < 0.002) between most individual features and the target salary.* ![Correlation with Target](static/final_report/correlation-with-target.jpg)
+*   **Features Correlation (Heatmap) (`features-correlation`):** Visualizes the correlation matrix between numerical features to identify multicollinearity. *Insight: Shows high correlation (0.802) between `experience_max` and `experience_avg`, suggesting redundancy.* ![Features Correlation](static/final_report/features-correlation.jpg)
 *   **Categorical Counts Charts:** Several bar charts showing the frequency distribution for key categorical variables:
-    *   `work-type-counts`: Distribution of jobs across Full-Time, Part-Time, Contract, etc. ![Work Type Counts](report_files/work-type-counts.jpg)
-    *   `qualification-counts`: Popularity of different educational qualifications. ![Qualification Counts](report_files/qualification-counts.jpg)
-    *   `preference-counts`: Distribution of gender preferences specified (Male, Female, Both). ![Preference Counts](report_files/preference-counts.jpg)
-    *   `sector-counts`: Job distribution across different industry sectors. ![Sector Counts](report_files/sector-counts.jpg)
-    *   `industry-counts`: More granular job distribution across industries. ![Industry Counts](report_files/industry-counts.jpg)
-    *   `gender-distribution` (CEO): Inferred gender distribution for CEOs listed in company profiles. *Insight: 'unknown' dominates (75%), limiting this feature's utility.* ![CEO Gender Distribution](report_files/gender-distribution.jpg)
-    *   `company-state-counts`: Geographic distribution of companies by US state (from profile). ![Company State Counts](report_files/company-state-counts.jpg)
-    *   `job-portal-counts`: Distribution of job postings across different source portals. ![Job Portal Counts](report_files/job-portal-counts.jpg)
+    *   `work-type-counts`: Distribution of jobs across Full-Time, Part-Time, Contract, etc. ![Work Type Counts](static/final_report/work-type-counts.jpg)
+    *   `qualification-counts`: Popularity of different educational qualifications. ![Qualification Counts](static/final_report/qualification-counts.jpg)
+    *   `preference-counts`: Distribution of gender preferences specified (Male, Female, Both). ![Preference Counts](static/final_report/preference-counts.jpg)
+    *   `sector-counts`: Job distribution across different industry sectors. ![Sector Counts](static/final_report/sector-counts.jpg)
+    *   `industry-counts`: More granular job distribution across industries. ![Industry Counts](static/final_report/industry-counts.jpg)
+    *   `gender-distribution` (CEO): Inferred gender distribution for CEOs listed in company profiles. *Insight: 'unknown' dominates (75%), limiting this feature's utility.* ![CEO Gender Distribution](static/final_report/gender-distribution.jpg)
+    *   `company-state-counts`: Geographic distribution of companies by US state (from profile). ![Company State Counts](static/final_report/company-state-counts.jpg)
+    *   `job-portal-counts`: Distribution of job postings across different source portals. ![Job Portal Counts](static/final_report/job-portal-counts.jpg)
 *   **Job Portals Counts with Avg Salary:** Compares job portals by the number of postings and the average salary of jobs listed on them. *(Chart image reference missing, assumed based on script capability)*
 
 *   **General EDA Conclusion:** The general analysis revealed a large dataset with diverse categories but weak linear signals for salary prediction and some potential data quality issues (missing benefit flags, dominant 'unknown' CEO gender). This underscored the need for robust feature engineering and potentially non-linear models.
 
 **Specific Insights Charts (from `sql/q*.hql` results):**
 This part visualizes the answers to specific analytical questions.
-*   **[q1] Avg Salary by Country:** A choropleth map showing the calculated average salary per country. *Interpretation: Provides a visual benchmark for regional compensation, though potentially influenced by synthetic data patterns.* ![Avg Salary by Country](report_files/q1.jpg)
-*   **[q2] Top 10 Job Roles by Gender Preference:** Bar charts showing the most frequent roles for 'Female', 'Male', and comparing them. *Interpretation: Shows role distribution across specified preferences, useful for D&I analysis, but may reflect synthetic data bias.* ![Top Roles Female](report_files/q2_1.jpg) ![Top Roles Male](report_files/q2_2.jpg) ![Top Roles Comparison](report_files/q2_3.jpg)
-*   **[q3] Monthly Job Posting Trend:** A line chart displaying the total number of job postings per month over time. *Interpretation: Helps identify potential hiring cycles or overall market growth/decline, though consistency suggests synthetic origin.* ![Monthly Posting Trend](report_files/q3.jpg)
-*   **[q4] Job Categories by Count & Avg Salary:** A bar chart showing the count of jobs and average salary for categories derived from job titles. *Interpretation: Identifies dominant job categories and their relative compensation levels.* ![Job Categories](report_files/q4.jpg)
-*   **[q5] Top 10 Job Titles by Qualification:** A table or chart linking the most frequent job titles to their most commonly listed required qualification. *Interpretation: Highlights in-demand roles and the typical educational pathways.* ![Top Titles & Quals](report_files/q5.jpg)
-*   **[q6] Bi-Annual Trend for Top 5 Roles:** Line or bar charts showing the count and percentage of postings for the top 5 roles during the first (H1) and second (H2) halves of each year. *Interpretation: Examines potential seasonality in demand for specific high-volume roles.* ![Bi-Annual Role Trend](report_files/q6.jpg)
+*   **[q1] Avg Salary by Country:** A choropleth map showing the calculated average salary per country. *Interpretation: Provides a visual benchmark for regional compensation, though potentially influenced by synthetic data patterns.* ![Avg Salary by Country](static/final_report/q1.jpg)
+*   **[q2] Top 10 Job Roles by Gender Preference:** Bar charts showing the most frequent roles for 'Female', 'Male', and comparing them. *Interpretation: Shows role distribution across specified preferences, useful for D&I analysis, but may reflect synthetic data bias.* ![Top Roles Female](static/final_report/q2_1.jpg) ![Top Roles Male](static/final_report/q2_2.jpg) ![Top Roles Comparison](static/final_report/q2_3.jpg)
+*   **[q3] Monthly Job Posting Trend:** A line chart displaying the total number of job postings per month over time. *Interpretation: Helps identify potential hiring cycles or overall market growth/decline, though consistency suggests synthetic origin.* ![Monthly Posting Trend](static/final_report/q3.jpg)
+*   **[q4] Job Categories by Count & Avg Salary:** A bar chart showing the count of jobs and average salary for categories derived from job titles. *Interpretation: Identifies dominant job categories and their relative compensation levels.* ![Job Categories](static/final_report/q4.jpg)
+*   **[q5] Top 10 Job Titles by Qualification:** A table or chart linking the most frequent job titles to their most commonly listed required qualification. *Interpretation: Highlights in-demand roles and the typical educational pathways.* ![Top Titles & Quals](static/final_report/q5.jpg)
+*   **[q6] Bi-Annual Trend for Top 5 Roles:** Line or bar charts showing the count and percentage of postings for the top 5 roles during the first (H1) and second (H2) halves of each year. *Interpretation: Examines potential seasonality in demand for specific high-volume roles.* ![Bi-Annual Role Trend](static/final_report/q6.jpg)
 
 #### 8.2.3. ML Modeling Results Section
 
@@ -519,11 +519,11 @@ This section presents the outcomes of the predictive modeling stage.
 *   **ML Modeling Introduction:** Briefly describes the goal (predicting `salary_avg`) and the models used (Linear Regression, GBT Regressor).
 *   **Hyperparameter Tuning Tables:** Displays the results of the 3-fold cross-validation tuning process, showing the parameter combinations tested and their corresponding average RMSE for both Linear Regression and GBT. *(Assumes tables are present based on Stage 3 outputs `lr_tuning_results.csv` and `gbt_tuning_results.csv`)*.
 *   **Model Performance Evaluation:** Presents the key evaluation metrics calculated on the held-out test set:
-    *   **RMSE & R2 Table:** Shows the Root Mean Squared Error and R-squared values for both models on the (log-transformed) test data. *Interpretation: Highlights low R2 values, indicating poor predictive power.* ![Model Evaluation Results](report_files/model-evaluation-results.jpg)
-    *   **KL Divergence Table:** Shows the Kullback-Leibler Divergence comparing the distribution of original-scale predictions vs actuals. *Interpretation: Shows GBT's predicted distribution was closer to the actual distribution.* ![KL Divergence Results](report_files/kl-divergence-results.jpg)
+    *   **RMSE & R2 Table:** Shows the Root Mean Squared Error and R-squared values for both models on the (log-transformed) test data. *Interpretation: Highlights low R2 values, indicating poor predictive power.* ![Model Evaluation Results](static/final_report/model-evaluation-results.jpg)
+    *   **KL Divergence Table:** Shows the Kullback-Leibler Divergence comparing the distribution of original-scale predictions vs actuals. *Interpretation: Shows GBT's predicted distribution was closer to the actual distribution.* ![KL Divergence Results](static/final_report/kl-divergence-results.jpg)
 *   **Prediction Previews:** Tables or scatter plots showing examples of actual vs. predicted salaries (original scale) for both models.
-    *   ![LR Predictions Preview](report_files/prediction-preview-for-logistic-regression-model.jpg)
-    *   ![GBT Predictions Preview](report_files/prediction-preview-for-gradient-boosted-trees.jpg)
+    *   ![LR Predictions Preview](static/final_report/prediction-preview-for-logistic-regression-model.jpg)
+    *   ![GBT Predictions Preview](static/final_report/prediction-preview-for-gradient-boosted-trees.jpg)
 *   **ML Modeling Summary:** Concludes that while models were trained successfully, their predictive accuracy was limited by the available features, with GBT showing a slight edge in distributional fit.
 
 ### 8.3. Findings from Presentation Layer
