@@ -178,3 +178,5 @@ data/job_descriptions.csv
 /secrets
 .venv.tar.gz
 /models
+output/model1_predictions.csv
+output/model2_predictions.csv
