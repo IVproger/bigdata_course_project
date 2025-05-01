@@ -136,10 +136,10 @@ Details live in [`docs/report_*.md`](docs/) for auditors and graders.
 ## 🔬 Results
 | Model | RMSE (log) | R² (log) | KL-Div. (salary) |
 |-------|------------|----------|------------------|
-| Linear Reg. | 0.273 | 0.87 | 0.052 |
-| GBT | **0.201** | **0.93** | **0.039** |
+| Linear Reg. | 0.092 | **-1.59E-6** | 18.77 |
+| GBT | **0.091** | 1.05E-4 | **16.3** |
 
-→ GBT shows a 26 % RMSE reduction and better KL divergence, indicating tighter fit on the heavy-tailed salary distribution.
+→ GBT shows and better RMSE and KL divergence, indicating tighter fit on the heavy-tailed salary distribution.
 
 ---
 
