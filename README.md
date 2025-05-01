@@ -82,7 +82,7 @@ flowchart LR
 
 ```bash
 # clone & bootstrap
-git clone https://github.com/<your-org>/big-data-salary.git && cd big-data-salary
+git clone [https://github.com/<your-org>/big-data-salary.git](https://github.com/IVproger/bigdata_course_project.git) && cd bigdata_course_project
 python -m venv .venv && source .venv/bin/activate
 pip install -r requirements.txt
 
@@ -138,21 +138,6 @@ Details live in [`docs/report_*.md`](docs/) for auditors and graders.
 | GBT | **0.201** | **0.93** | **0.039** |
 
 → GBT shows a 26 % RMSE reduction and better KL divergence, indicating tighter fit on the heavy-tailed salary distribution.
-
----
-
-## 🛠️ Development Tips
-```bash
-# unit tests
-pytest -q
-
-# lint / style
-ruff check .
-black --check .
-
-# regenerate architecture diagram (draw.io export)
-docs/img/architecture_overview.png
-```
 
 ---
 
