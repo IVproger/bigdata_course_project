@@ -2,33 +2,33 @@ Connecting to jdbc:hive2://hadoop-03.uni.innopolis.ru:10001/team14_projectdb
 Connected to: Apache Hive (version 3.1.3)
 Driver: Hive JDBC (version 2.3.9)
 Transaction isolation: TRANSACTION_REPEATABLE_READ
-0: jdbc:hive2://hadoop-03.uni.innopolis.ru:10> -- HiveQL script to create external tables for Stage III results and KL divergence
+0: jdbc:hive2://hadoop-03.uni.innopolis.ru:10> -- HiveQL script to create extern al tables for Stage III results and KL divergence
 0: jdbc:hive2://hadoop-03.uni.innopolis.ru:10> 
 0: jdbc:hive2://hadoop-03.uni.innopolis.ru:10> -- Use the project database
 0: jdbc:hive2://hadoop-03.uni.innopolis.ru:10> USE team14_projectdb;
-INFO  : Compiling command(queryId=hive_20250501140209_7307340d-a310-47ec-8a79-9d56a84596a6): USE team14_projectdb
+INFO  : Compiling command(queryId=hive_20250501172858_673fa439-bbc1-4228-958b-ff0a43d4b2d8): USE team14_projectdb
 INFO  : Semantic Analysis Completed (retrial = false)
 INFO  : Returning Hive schema: Schema(fieldSchemas:null, properties:null)
-INFO  : EXPLAIN output for queryid hive_20250501140209_7307340d-a310-47ec-8a79-9d56a84596a6 : STAGE DEPENDENCIES:
+INFO  : EXPLAIN output for queryid hive_20250501172858_673fa439-bbc1-4228-958b-ff0a43d4b2d8 : STAGE DEPENDENCIES:
   Stage-0 is a root stage [DDL]
 
 STAGE PLANS:
   Stage: Stage-0
 
 
-INFO  : Completed compiling command(queryId=hive_20250501140209_7307340d-a310-47ec-8a79-9d56a84596a6); Time taken: 0.063 seconds
-INFO  : Executing command(queryId=hive_20250501140209_7307340d-a310-47ec-8a79-9d56a84596a6): USE team14_projectdb
+INFO  : Completed compiling command(queryId=hive_20250501172858_673fa439-bbc1-4228-958b-ff0a43d4b2d8); Time taken: 0.049 seconds
+INFO  : Executing command(queryId=hive_20250501172858_673fa439-bbc1-4228-958b-ff0a43d4b2d8): USE team14_projectdb
 INFO  : Starting task [Stage-0:DDL] in serial mode
-INFO  : Completed executing command(queryId=hive_20250501140209_7307340d-a310-47ec-8a79-9d56a84596a6); Time taken: 0.01 seconds
+INFO  : Completed executing command(queryId=hive_20250501172858_673fa439-bbc1-4228-958b-ff0a43d4b2d8); Time taken: 0.011 seconds
 INFO  : OK
-No rows affected (0.173 seconds)
+No rows affected (0.143 seconds)
 0: jdbc:hive2://hadoop-03.uni.innopolis.ru:10> 
-0: jdbc:hive2://hadoop-03.uni.innopolis.ru:10> -- Drop tables if they exist (for idempotency)
-0: jdbc:hive2://hadoop-03.uni.innopolis.ru:10> DROP TABLE IF EXISTS evaluation_results;
-INFO  : Compiling command(queryId=hive_20250501140209_0011f3b5-646c-4269-8e36-e2b6272ceb35): DROP TABLE IF EXISTS evaluation_results
+0: jdbc:hive2://hadoop-03.uni.innopolis.ru:10> -- Drop tables if they exist (for  idempotency)
+0: jdbc:hive2://hadoop-03.uni.innopolis.ru:10> DROP TABLE IF EXISTS evaluation_r esults;
+INFO  : Compiling command(queryId=hive_20250501172858_48f22df4-8215-4718-a96d-71aa9f3fe780): DROP TABLE IF EXISTS evaluation_results
 INFO  : Semantic Analysis Completed (retrial = false)
 INFO  : Returning Hive schema: Schema(fieldSchemas:null, properties:null)
-INFO  : EXPLAIN output for queryid hive_20250501140209_0011f3b5-646c-4269-8e36-e2b6272ceb35 : STAGE DEPENDENCIES:
+INFO  : EXPLAIN output for queryid hive_20250501172858_48f22df4-8215-4718-a96d-71aa9f3fe780 : STAGE DEPENDENCIES:
   Stage-0 is a root stage [DDL]
 
 STAGE PLANS:
@@ -38,17 +38,17 @@ STAGE PLANS:
           table: evaluation_results
 
 
-INFO  : Completed compiling command(queryId=hive_20250501140209_0011f3b5-646c-4269-8e36-e2b6272ceb35); Time taken: 0.064 seconds
-INFO  : Executing command(queryId=hive_20250501140209_0011f3b5-646c-4269-8e36-e2b6272ceb35): DROP TABLE IF EXISTS evaluation_results
+INFO  : Completed compiling command(queryId=hive_20250501172858_48f22df4-8215-4718-a96d-71aa9f3fe780); Time taken: 0.036 seconds
+INFO  : Executing command(queryId=hive_20250501172858_48f22df4-8215-4718-a96d-71aa9f3fe780): DROP TABLE IF EXISTS evaluation_results
 INFO  : Starting task [Stage-0:DDL] in serial mode
-INFO  : Completed executing command(queryId=hive_20250501140209_0011f3b5-646c-4269-8e36-e2b6272ceb35); Time taken: 0.042 seconds
+INFO  : Completed executing command(queryId=hive_20250501172858_48f22df4-8215-4718-a96d-71aa9f3fe780); Time taken: 0.041 seconds
 INFO  : OK
-No rows affected (0.134 seconds)
-0: jdbc:hive2://hadoop-03.uni.innopolis.ru:10> DROP TABLE IF EXISTS model1_predictions;
-INFO  : Compiling command(queryId=hive_20250501140209_81991122-4852-47eb-8c81-41ac9f143bc2): DROP TABLE IF EXISTS model1_predictions
+No rows affected (0.097 seconds)
+0: jdbc:hive2://hadoop-03.uni.innopolis.ru:10> DROP TABLE IF EXISTS model1_predi ctions;
+INFO  : Compiling command(queryId=hive_20250501172858_e341ea90-e73a-40a5-aa02-7f1c8e33058a): DROP TABLE IF EXISTS model1_predictions
 INFO  : Semantic Analysis Completed (retrial = false)
 INFO  : Returning Hive schema: Schema(fieldSchemas:null, properties:null)
-INFO  : EXPLAIN output for queryid hive_20250501140209_81991122-4852-47eb-8c81-41ac9f143bc2 : STAGE DEPENDENCIES:
+INFO  : EXPLAIN output for queryid hive_20250501172858_e341ea90-e73a-40a5-aa02-7f1c8e33058a : STAGE DEPENDENCIES:
   Stage-0 is a root stage [DDL]
 
 STAGE PLANS:
@@ -58,17 +58,17 @@ STAGE PLANS:
           table: model1_predictions
 
 
-INFO  : Completed compiling command(queryId=hive_20250501140209_81991122-4852-47eb-8c81-41ac9f143bc2); Time taken: 0.043 seconds
-INFO  : Executing command(queryId=hive_20250501140209_81991122-4852-47eb-8c81-41ac9f143bc2): DROP TABLE IF EXISTS model1_predictions
+INFO  : Completed compiling command(queryId=hive_20250501172858_e341ea90-e73a-40a5-aa02-7f1c8e33058a); Time taken: 0.036 seconds
+INFO  : Executing command(queryId=hive_20250501172858_e341ea90-e73a-40a5-aa02-7f1c8e33058a): DROP TABLE IF EXISTS model1_predictions
 INFO  : Starting task [Stage-0:DDL] in serial mode
-INFO  : Completed executing command(queryId=hive_20250501140209_81991122-4852-47eb-8c81-41ac9f143bc2); Time taken: 0.041 seconds
+INFO  : Completed executing command(queryId=hive_20250501172858_e341ea90-e73a-40a5-aa02-7f1c8e33058a); Time taken: 0.04 seconds
 INFO  : OK
-No rows affected (0.104 seconds)
-0: jdbc:hive2://hadoop-03.uni.innopolis.ru:10> DROP TABLE IF EXISTS model2_predictions;
-INFO  : Compiling command(queryId=hive_20250501140209_998fe980-1e65-449a-bea2-787d0c45c8ee): DROP TABLE IF EXISTS model2_predictions
+No rows affected (0.097 seconds)
+0: jdbc:hive2://hadoop-03.uni.innopolis.ru:10> DROP TABLE IF EXISTS model2_predi ctions;
+INFO  : Compiling command(queryId=hive_20250501172858_f1e05290-1e6d-4ab6-b5d4-95590190327c): DROP TABLE IF EXISTS model2_predictions
 INFO  : Semantic Analysis Completed (retrial = false)
 INFO  : Returning Hive schema: Schema(fieldSchemas:null, properties:null)
-INFO  : EXPLAIN output for queryid hive_20250501140209_998fe980-1e65-449a-bea2-787d0c45c8ee : STAGE DEPENDENCIES:
+INFO  : EXPLAIN output for queryid hive_20250501172858_f1e05290-1e6d-4ab6-b5d4-95590190327c : STAGE DEPENDENCIES:
   Stage-0 is a root stage [DDL]
 
 STAGE PLANS:
@@ -78,17 +78,17 @@ STAGE PLANS:
           table: model2_predictions
 
 
-INFO  : Completed compiling command(queryId=hive_20250501140209_998fe980-1e65-449a-bea2-787d0c45c8ee); Time taken: 0.031 seconds
-INFO  : Executing command(queryId=hive_20250501140209_998fe980-1e65-449a-bea2-787d0c45c8ee): DROP TABLE IF EXISTS model2_predictions
+INFO  : Completed compiling command(queryId=hive_20250501172858_f1e05290-1e6d-4ab6-b5d4-95590190327c); Time taken: 0.032 seconds
+INFO  : Executing command(queryId=hive_20250501172858_f1e05290-1e6d-4ab6-b5d4-95590190327c): DROP TABLE IF EXISTS model2_predictions
 INFO  : Starting task [Stage-0:DDL] in serial mode
-INFO  : Completed executing command(queryId=hive_20250501140209_998fe980-1e65-449a-bea2-787d0c45c8ee); Time taken: 0.037 seconds
+INFO  : Completed executing command(queryId=hive_20250501172858_f1e05290-1e6d-4ab6-b5d4-95590190327c); Time taken: 0.047 seconds
 INFO  : OK
-No rows affected (0.084 seconds)
-0: jdbc:hive2://hadoop-03.uni.innopolis.ru:10> DROP TABLE IF EXISTS kl_divergence;
-INFO  : Compiling command(queryId=hive_20250501140209_6e69ed22-86ab-4090-ab9f-fc58b756fe04): DROP TABLE IF EXISTS kl_divergence
+No rows affected (0.096 seconds)
+0: jdbc:hive2://hadoop-03.uni.innopolis.ru:10> DROP TABLE IF EXISTS kl_divergenc e;
+INFO  : Compiling command(queryId=hive_20250501172858_7175477e-596c-4bb8-81d3-2977a46c691b): DROP TABLE IF EXISTS kl_divergence
 INFO  : Semantic Analysis Completed (retrial = false)
 INFO  : Returning Hive schema: Schema(fieldSchemas:null, properties:null)
-INFO  : EXPLAIN output for queryid hive_20250501140209_6e69ed22-86ab-4090-ab9f-fc58b756fe04 : STAGE DEPENDENCIES:
+INFO  : EXPLAIN output for queryid hive_20250501172858_7175477e-596c-4bb8-81d3-2977a46c691b : STAGE DEPENDENCIES:
   Stage-0 is a root stage [DDL]
 
 STAGE PLANS:
@@ -98,17 +98,17 @@ STAGE PLANS:
           table: kl_divergence
 
 
-INFO  : Completed compiling command(queryId=hive_20250501140209_6e69ed22-86ab-4090-ab9f-fc58b756fe04); Time taken: 0.032 seconds
-INFO  : Executing command(queryId=hive_20250501140209_6e69ed22-86ab-4090-ab9f-fc58b756fe04): DROP TABLE IF EXISTS kl_divergence
+INFO  : Completed compiling command(queryId=hive_20250501172858_7175477e-596c-4bb8-81d3-2977a46c691b); Time taken: 0.032 seconds
+INFO  : Executing command(queryId=hive_20250501172858_7175477e-596c-4bb8-81d3-2977a46c691b): DROP TABLE IF EXISTS kl_divergence
 INFO  : Starting task [Stage-0:DDL] in serial mode
-INFO  : Completed executing command(queryId=hive_20250501140209_6e69ed22-86ab-4090-ab9f-fc58b756fe04); Time taken: 0.044 seconds
+INFO  : Completed executing command(queryId=hive_20250501172858_7175477e-596c-4bb8-81d3-2977a46c691b); Time taken: 0.046 seconds
 INFO  : OK
-No rows affected (0.094 seconds)
-0: jdbc:hive2://hadoop-03.uni.innopolis.ru:10> DROP TABLE IF EXISTS lr_tuning_results;
-INFO  : Compiling command(queryId=hive_20250501140209_b718c58d-0e17-4308-9cf2-c2ed74ea3d3b): DROP TABLE IF EXISTS lr_tuning_results
+No rows affected (0.093 seconds)
+0: jdbc:hive2://hadoop-03.uni.innopolis.ru:10> DROP TABLE IF EXISTS lr_tuning_re sults;
+INFO  : Compiling command(queryId=hive_20250501172858_553cbb6d-627e-48c8-b14a-3f3d51022e58): DROP TABLE IF EXISTS lr_tuning_results
 INFO  : Semantic Analysis Completed (retrial = false)
 INFO  : Returning Hive schema: Schema(fieldSchemas:null, properties:null)
-INFO  : EXPLAIN output for queryid hive_20250501140209_b718c58d-0e17-4308-9cf2-c2ed74ea3d3b : STAGE DEPENDENCIES:
+INFO  : EXPLAIN output for queryid hive_20250501172858_553cbb6d-627e-48c8-b14a-3f3d51022e58 : STAGE DEPENDENCIES:
   Stage-0 is a root stage [DDL]
 
 STAGE PLANS:
@@ -118,17 +118,17 @@ STAGE PLANS:
           table: lr_tuning_results
 
 
-INFO  : Completed compiling command(queryId=hive_20250501140209_b718c58d-0e17-4308-9cf2-c2ed74ea3d3b); Time taken: 0.041 seconds
-INFO  : Executing command(queryId=hive_20250501140209_b718c58d-0e17-4308-9cf2-c2ed74ea3d3b): DROP TABLE IF EXISTS lr_tuning_results
+INFO  : Completed compiling command(queryId=hive_20250501172858_553cbb6d-627e-48c8-b14a-3f3d51022e58); Time taken: 0.039 seconds
+INFO  : Executing command(queryId=hive_20250501172858_553cbb6d-627e-48c8-b14a-3f3d51022e58): DROP TABLE IF EXISTS lr_tuning_results
 INFO  : Starting task [Stage-0:DDL] in serial mode
-INFO  : Completed executing command(queryId=hive_20250501140209_b718c58d-0e17-4308-9cf2-c2ed74ea3d3b); Time taken: 0.038 seconds
+INFO  : Completed executing command(queryId=hive_20250501172858_553cbb6d-627e-48c8-b14a-3f3d51022e58); Time taken: 0.044 seconds
 INFO  : OK
-No rows affected (0.096 seconds)
-0: jdbc:hive2://hadoop-03.uni.innopolis.ru:10> DROP TABLE IF EXISTS gbt_tuning_results;
-INFO  : Compiling command(queryId=hive_20250501140209_7012db74-f7ff-4d5e-a26f-9c6e223da5e2): DROP TABLE IF EXISTS gbt_tuning_results
+No rows affected (0.102 seconds)
+0: jdbc:hive2://hadoop-03.uni.innopolis.ru:10> DROP TABLE IF EXISTS gbt_tuning_r esults;
+INFO  : Compiling command(queryId=hive_20250501172858_f06d3a83-87ac-4c11-a191-f3f0014ac0f1): DROP TABLE IF EXISTS gbt_tuning_results
 INFO  : Semantic Analysis Completed (retrial = false)
 INFO  : Returning Hive schema: Schema(fieldSchemas:null, properties:null)
-INFO  : EXPLAIN output for queryid hive_20250501140209_7012db74-f7ff-4d5e-a26f-9c6e223da5e2 : STAGE DEPENDENCIES:
+INFO  : EXPLAIN output for queryid hive_20250501172858_f06d3a83-87ac-4c11-a191-f3f0014ac0f1 : STAGE DEPENDENCIES:
   Stage-0 is a root stage [DDL]
 
 STAGE PLANS:
@@ -138,25 +138,25 @@ STAGE PLANS:
           table: gbt_tuning_results
 
 
-INFO  : Completed compiling command(queryId=hive_20250501140209_7012db74-f7ff-4d5e-a26f-9c6e223da5e2); Time taken: 0.036 seconds
-INFO  : Executing command(queryId=hive_20250501140209_7012db74-f7ff-4d5e-a26f-9c6e223da5e2): DROP TABLE IF EXISTS gbt_tuning_results
+INFO  : Completed compiling command(queryId=hive_20250501172858_f06d3a83-87ac-4c11-a191-f3f0014ac0f1); Time taken: 0.032 seconds
+INFO  : Executing command(queryId=hive_20250501172858_f06d3a83-87ac-4c11-a191-f3f0014ac0f1): DROP TABLE IF EXISTS gbt_tuning_results
 INFO  : Starting task [Stage-0:DDL] in serial mode
-INFO  : Completed executing command(queryId=hive_20250501140209_7012db74-f7ff-4d5e-a26f-9c6e223da5e2); Time taken: 0.039 seconds
+INFO  : Completed executing command(queryId=hive_20250501172858_f06d3a83-87ac-4c11-a191-f3f0014ac0f1); Time taken: 0.048 seconds
 INFO  : OK
-No rows affected (0.093 seconds)
+No rows affected (0.107 seconds)
 0: jdbc:hive2://hadoop-03.uni.innopolis.ru:10> 
-0: jdbc:hive2://hadoop-03.uni.innopolis.ru:10> -- Create external table for model evaluation results
-0: jdbc:hive2://hadoop-03.uni.innopolis.ru:10> CREATE EXTERNAL TABLE evaluation_results (
+0: jdbc:hive2://hadoop-03.uni.innopolis.ru:10> -- Create external table for mode l evaluation results
+0: jdbc:hive2://hadoop-03.uni.innopolis.ru:10> CREATE EXTERNAL TABLE evaluation_ results (
 . . . . . . . . . . . . . . . . . . . . . . .>     Model_Type STRING,
 . . . . . . . . . . . . . . . . . . . . . . .>     RMSE DOUBLE,
 . . . . . . . . . . . . . . . . . . . . . . .>     R2 DOUBLE
 . . . . . . . . . . . . . . . . . . . . . . .> )
-. . . . . . . . . . . . . . . . . . . . . . .> ROW FORMAT SERDE 'org.apache.hadoop.hive.serde2.lazy.LazySimpleSerDe'
-. . . . . . . . . . . . . . . . . . . . . . .> WITH SERDEPROPERTIES ('field.delim' = ',')
+. . . . . . . . . . . . . . . . . . . . . . .> ROW FORMAT SERDE 'org.apache.hado op.hive.serde2.lazy.LazySimpleSerDe'
+. . . . . . . . . . . . . . . . . . . . . . .> WITH SERDEPROPERTIES ('field.deli m' = ',')
 . . . . . . . . . . . . . . . . . . . . . . .> STORED AS TEXTFILE
-. . . . . . . . . . . . . . . . . . . . . . .> LOCATION 'project/output/evaluation.csv'
-. . . . . . . . . . . . . . . . . . . . . . .> TBLPROPERTIES ('skip.header.line.count'='1'); -- Skip the header row
-INFO  : Compiling command(queryId=hive_20250501140210_e1529185-d23e-44ff-a764-ccf17e7ded68): CREATE EXTERNAL TABLE evaluation_results (
+. . . . . . . . . . . . . . . . . . . . . . .> LOCATION 'project/output/evaluati on.csv'
+. . . . . . . . . . . . . . . . . . . . . . .> TBLPROPERTIES ('skip.header.line. count'='1'); -- Skip the header row
+INFO  : Compiling command(queryId=hive_20250501172859_c64d93db-7573-4bd2-93a9-f4893025fc80): CREATE EXTERNAL TABLE evaluation_results (
 Model_Type STRING,
 RMSE DOUBLE,
 R2 DOUBLE
@@ -168,7 +168,7 @@ LOCATION 'project/output/evaluation.csv'
 TBLPROPERTIES ('skip.header.line.count'='1')
 INFO  : Semantic Analysis Completed (retrial = false)
 INFO  : Returning Hive schema: Schema(fieldSchemas:null, properties:null)
-INFO  : EXPLAIN output for queryid hive_20250501140210_e1529185-d23e-44ff-a764-ccf17e7ded68 : STAGE DEPENDENCIES:
+INFO  : EXPLAIN output for queryid hive_20250501172859_c64d93db-7573-4bd2-93a9-f4893025fc80 : STAGE DEPENDENCIES:
   Stage-0 is a root stage [DDL]
 
 STAGE PLANS:
@@ -188,8 +188,8 @@ STAGE PLANS:
           isExternal: true
 
 
-INFO  : Completed compiling command(queryId=hive_20250501140210_e1529185-d23e-44ff-a764-ccf17e7ded68); Time taken: 0.03 seconds
-INFO  : Executing command(queryId=hive_20250501140210_e1529185-d23e-44ff-a764-ccf17e7ded68): CREATE EXTERNAL TABLE evaluation_results (
+INFO  : Completed compiling command(queryId=hive_20250501172859_c64d93db-7573-4bd2-93a9-f4893025fc80); Time taken: 0.03 seconds
+INFO  : Executing command(queryId=hive_20250501172859_c64d93db-7573-4bd2-93a9-f4893025fc80): CREATE EXTERNAL TABLE evaluation_results (
 Model_Type STRING,
 RMSE DOUBLE,
 R2 DOUBLE
@@ -200,21 +200,21 @@ STORED AS TEXTFILE
 LOCATION 'project/output/evaluation.csv'
 TBLPROPERTIES ('skip.header.line.count'='1')
 INFO  : Starting task [Stage-0:DDL] in serial mode
-INFO  : Completed executing command(queryId=hive_20250501140210_e1529185-d23e-44ff-a764-ccf17e7ded68); Time taken: 0.03 seconds
+INFO  : Completed executing command(queryId=hive_20250501172859_c64d93db-7573-4bd2-93a9-f4893025fc80); Time taken: 0.045 seconds
 INFO  : OK
-No rows affected (0.093 seconds)
+No rows affected (0.106 seconds)
 0: jdbc:hive2://hadoop-03.uni.innopolis.ru:10> 
-0: jdbc:hive2://hadoop-03.uni.innopolis.ru:10> -- Create external table for Model 1 (Linear Regression) predictions
-0: jdbc:hive2://hadoop-03.uni.innopolis.ru:10> CREATE EXTERNAL TABLE model1_predictions (
+0: jdbc:hive2://hadoop-03.uni.innopolis.ru:10> -- Create external table for Mode l 1 (Linear Regression) predictions
+0: jdbc:hive2://hadoop-03.uni.innopolis.ru:10> CREATE EXTERNAL TABLE model1_pred ictions (
 . . . . . . . . . . . . . . . . . . . . . . .>     label DOUBLE,
 . . . . . . . . . . . . . . . . . . . . . . .>     prediction DOUBLE
 . . . . . . . . . . . . . . . . . . . . . . .> )
-. . . . . . . . . . . . . . . . . . . . . . .> ROW FORMAT SERDE 'org.apache.hadoop.hive.serde2.lazy.LazySimpleSerDe'
-. . . . . . . . . . . . . . . . . . . . . . .> WITH SERDEPROPERTIES ('field.delim' = ',')
+. . . . . . . . . . . . . . . . . . . . . . .> ROW FORMAT SERDE 'org.apache.hado op.hive.serde2.lazy.LazySimpleSerDe'
+. . . . . . . . . . . . . . . . . . . . . . .> WITH SERDEPROPERTIES ('field.deli m' = ',')
 . . . . . . . . . . . . . . . . . . . . . . .> STORED AS TEXTFILE
-. . . . . . . . . . . . . . . . . . . . . . .> LOCATION 'project/output/model1_predictions.csv'
-. . . . . . . . . . . . . . . . . . . . . . .> TBLPROPERTIES ('skip.header.line.count'='1'); -- Skip the header row
-INFO  : Compiling command(queryId=hive_20250501140210_6c3b06a7-5dc5-4b2e-8fba-df294e460dcb): CREATE EXTERNAL TABLE model1_predictions (
+. . . . . . . . . . . . . . . . . . . . . . .> LOCATION 'project/output/model1_p redictions.csv'
+. . . . . . . . . . . . . . . . . . . . . . .> TBLPROPERTIES ('skip.header.line. count'='1'); -- Skip the header row
+INFO  : Compiling command(queryId=hive_20250501172859_5321341e-1dc6-4e45-8082-bd1e07249ea1): CREATE EXTERNAL TABLE model1_predictions (
 label DOUBLE,
 prediction DOUBLE
 )
@@ -225,7 +225,7 @@ LOCATION 'project/output/model1_predictions.csv'
 TBLPROPERTIES ('skip.header.line.count'='1')
 INFO  : Semantic Analysis Completed (retrial = false)
 INFO  : Returning Hive schema: Schema(fieldSchemas:null, properties:null)
-INFO  : EXPLAIN output for queryid hive_20250501140210_6c3b06a7-5dc5-4b2e-8fba-df294e460dcb : STAGE DEPENDENCIES:
+INFO  : EXPLAIN output for queryid hive_20250501172859_5321341e-1dc6-4e45-8082-bd1e07249ea1 : STAGE DEPENDENCIES:
   Stage-0 is a root stage [DDL]
 
 STAGE PLANS:
@@ -245,8 +245,8 @@ STAGE PLANS:
           isExternal: true
 
 
-INFO  : Completed compiling command(queryId=hive_20250501140210_6c3b06a7-5dc5-4b2e-8fba-df294e460dcb); Time taken: 0.03 seconds
-INFO  : Executing command(queryId=hive_20250501140210_6c3b06a7-5dc5-4b2e-8fba-df294e460dcb): CREATE EXTERNAL TABLE model1_predictions (
+INFO  : Completed compiling command(queryId=hive_20250501172859_5321341e-1dc6-4e45-8082-bd1e07249ea1); Time taken: 0.027 seconds
+INFO  : Executing command(queryId=hive_20250501172859_5321341e-1dc6-4e45-8082-bd1e07249ea1): CREATE EXTERNAL TABLE model1_predictions (
 label DOUBLE,
 prediction DOUBLE
 )
@@ -256,21 +256,21 @@ STORED AS TEXTFILE
 LOCATION 'project/output/model1_predictions.csv'
 TBLPROPERTIES ('skip.header.line.count'='1')
 INFO  : Starting task [Stage-0:DDL] in serial mode
-INFO  : Completed executing command(queryId=hive_20250501140210_6c3b06a7-5dc5-4b2e-8fba-df294e460dcb); Time taken: 0.023 seconds
+INFO  : Completed executing command(queryId=hive_20250501172859_5321341e-1dc6-4e45-8082-bd1e07249ea1); Time taken: 0.021 seconds
 INFO  : OK
-No rows affected (0.087 seconds)
+No rows affected (0.072 seconds)
 0: jdbc:hive2://hadoop-03.uni.innopolis.ru:10> 
-0: jdbc:hive2://hadoop-03.uni.innopolis.ru:10> -- Create external table for Model 2 (GBT Regressor) predictions
-0: jdbc:hive2://hadoop-03.uni.innopolis.ru:10> CREATE EXTERNAL TABLE model2_predictions (
+0: jdbc:hive2://hadoop-03.uni.innopolis.ru:10> -- Create external table for Mode l 2 (GBT Regressor) predictions
+0: jdbc:hive2://hadoop-03.uni.innopolis.ru:10> CREATE EXTERNAL TABLE model2_pred ictions (
 . . . . . . . . . . . . . . . . . . . . . . .>     label DOUBLE,
 . . . . . . . . . . . . . . . . . . . . . . .>     prediction DOUBLE
 . . . . . . . . . . . . . . . . . . . . . . .> )
-. . . . . . . . . . . . . . . . . . . . . . .> ROW FORMAT SERDE 'org.apache.hadoop.hive.serde2.lazy.LazySimpleSerDe'
-. . . . . . . . . . . . . . . . . . . . . . .> WITH SERDEPROPERTIES ('field.delim' = ',')
+. . . . . . . . . . . . . . . . . . . . . . .> ROW FORMAT SERDE 'org.apache.hado op.hive.serde2.lazy.LazySimpleSerDe'
+. . . . . . . . . . . . . . . . . . . . . . .> WITH SERDEPROPERTIES ('field.deli m' = ',')
 . . . . . . . . . . . . . . . . . . . . . . .> STORED AS TEXTFILE
-. . . . . . . . . . . . . . . . . . . . . . .> LOCATION 'project/output/model2_predictions.csv'
-. . . . . . . . . . . . . . . . . . . . . . .> TBLPROPERTIES ('skip.header.line.count'='1'); -- Skip the header row
-INFO  : Compiling command(queryId=hive_20250501140210_998caf78-126b-4a12-9978-299619e49613): CREATE EXTERNAL TABLE model2_predictions (
+. . . . . . . . . . . . . . . . . . . . . . .> LOCATION 'project/output/model2_p redictions.csv'
+. . . . . . . . . . . . . . . . . . . . . . .> TBLPROPERTIES ('skip.header.line. count'='1'); -- Skip the header row
+INFO  : Compiling command(queryId=hive_20250501172859_3bd2aca9-24f4-43ae-899b-715a8439fbf7): CREATE EXTERNAL TABLE model2_predictions (
 label DOUBLE,
 prediction DOUBLE
 )
@@ -281,7 +281,7 @@ LOCATION 'project/output/model2_predictions.csv'
 TBLPROPERTIES ('skip.header.line.count'='1')
 INFO  : Semantic Analysis Completed (retrial = false)
 INFO  : Returning Hive schema: Schema(fieldSchemas:null, properties:null)
-INFO  : EXPLAIN output for queryid hive_20250501140210_998caf78-126b-4a12-9978-299619e49613 : STAGE DEPENDENCIES:
+INFO  : EXPLAIN output for queryid hive_20250501172859_3bd2aca9-24f4-43ae-899b-715a8439fbf7 : STAGE DEPENDENCIES:
   Stage-0 is a root stage [DDL]
 
 STAGE PLANS:
@@ -301,8 +301,8 @@ STAGE PLANS:
           isExternal: true
 
 
-INFO  : Completed compiling command(queryId=hive_20250501140210_998caf78-126b-4a12-9978-299619e49613); Time taken: 0.05 seconds
-INFO  : Executing command(queryId=hive_20250501140210_998caf78-126b-4a12-9978-299619e49613): CREATE EXTERNAL TABLE model2_predictions (
+INFO  : Completed compiling command(queryId=hive_20250501172859_3bd2aca9-24f4-43ae-899b-715a8439fbf7); Time taken: 0.028 seconds
+INFO  : Executing command(queryId=hive_20250501172859_3bd2aca9-24f4-43ae-899b-715a8439fbf7): CREATE EXTERNAL TABLE model2_predictions (
 label DOUBLE,
 prediction DOUBLE
 )
@@ -312,21 +312,21 @@ STORED AS TEXTFILE
 LOCATION 'project/output/model2_predictions.csv'
 TBLPROPERTIES ('skip.header.line.count'='1')
 INFO  : Starting task [Stage-0:DDL] in serial mode
-INFO  : Completed executing command(queryId=hive_20250501140210_998caf78-126b-4a12-9978-299619e49613); Time taken: 0.03 seconds
+INFO  : Completed executing command(queryId=hive_20250501172859_3bd2aca9-24f4-43ae-899b-715a8439fbf7); Time taken: 0.021 seconds
 INFO  : OK
-No rows affected (0.112 seconds)
+No rows affected (0.073 seconds)
 0: jdbc:hive2://hadoop-03.uni.innopolis.ru:10> 
-0: jdbc:hive2://hadoop-03.uni.innopolis.ru:10> -- Create external table for KL Divergence results (to be created by PySpark script)
-0: jdbc:hive2://hadoop-03.uni.innopolis.ru:10> CREATE EXTERNAL TABLE kl_divergence (
+0: jdbc:hive2://hadoop-03.uni.innopolis.ru:10> -- Create external table for KL D ivergence results (to be created by PySpark script)
+0: jdbc:hive2://hadoop-03.uni.innopolis.ru:10> CREATE EXTERNAL TABLE kl_divergen ce (
 . . . . . . . . . . . . . . . . . . . . . . .>     model_type STRING,
 . . . . . . . . . . . . . . . . . . . . . . .>     kl_divergence DOUBLE
 . . . . . . . . . . . . . . . . . . . . . . .> )
-. . . . . . . . . . . . . . . . . . . . . . .> ROW FORMAT SERDE 'org.apache.hadoop.hive.serde2.lazy.LazySimpleSerDe'
-. . . . . . . . . . . . . . . . . . . . . . .> WITH SERDEPROPERTIES ('field.delim' = ',')
+. . . . . . . . . . . . . . . . . . . . . . .> ROW FORMAT SERDE 'org.apache.hado op.hive.serde2.lazy.LazySimpleSerDe'
+. . . . . . . . . . . . . . . . . . . . . . .> WITH SERDEPROPERTIES ('field.deli m' = ',')
 . . . . . . . . . . . . . . . . . . . . . . .> STORED AS TEXTFILE
-. . . . . . . . . . . . . . . . . . . . . . .> LOCATION 'project/output/kl_divergence.csv'
-. . . . . . . . . . . . . . . . . . . . . . .> TBLPROPERTIES ('skip.header.line.count'='1'); -- Skip the header row
-INFO  : Compiling command(queryId=hive_20250501140210_d8bc4596-cd79-436a-82e1-ecce4632e66b): CREATE EXTERNAL TABLE kl_divergence (
+. . . . . . . . . . . . . . . . . . . . . . .> LOCATION 'project/output/kl_diver gence.csv'
+. . . . . . . . . . . . . . . . . . . . . . .> TBLPROPERTIES ('skip.header.line. count'='1'); -- Skip the header row
+INFO  : Compiling command(queryId=hive_20250501172859_9faab8a5-02f3-4ccb-a08a-3e5c31d3261b): CREATE EXTERNAL TABLE kl_divergence (
 model_type STRING,
 kl_divergence DOUBLE
 )
@@ -337,7 +337,7 @@ LOCATION 'project/output/kl_divergence.csv'
 TBLPROPERTIES ('skip.header.line.count'='1')
 INFO  : Semantic Analysis Completed (retrial = false)
 INFO  : Returning Hive schema: Schema(fieldSchemas:null, properties:null)
-INFO  : EXPLAIN output for queryid hive_20250501140210_d8bc4596-cd79-436a-82e1-ecce4632e66b : STAGE DEPENDENCIES:
+INFO  : EXPLAIN output for queryid hive_20250501172859_9faab8a5-02f3-4ccb-a08a-3e5c31d3261b : STAGE DEPENDENCIES:
   Stage-0 is a root stage [DDL]
 
 STAGE PLANS:
@@ -357,8 +357,8 @@ STAGE PLANS:
           isExternal: true
 
 
-INFO  : Completed compiling command(queryId=hive_20250501140210_d8bc4596-cd79-436a-82e1-ecce4632e66b); Time taken: 0.035 seconds
-INFO  : Executing command(queryId=hive_20250501140210_d8bc4596-cd79-436a-82e1-ecce4632e66b): CREATE EXTERNAL TABLE kl_divergence (
+INFO  : Completed compiling command(queryId=hive_20250501172859_9faab8a5-02f3-4ccb-a08a-3e5c31d3261b); Time taken: 0.027 seconds
+INFO  : Executing command(queryId=hive_20250501172859_9faab8a5-02f3-4ccb-a08a-3e5c31d3261b): CREATE EXTERNAL TABLE kl_divergence (
 model_type STRING,
 kl_divergence DOUBLE
 )
@@ -368,23 +368,23 @@ STORED AS TEXTFILE
 LOCATION 'project/output/kl_divergence.csv'
 TBLPROPERTIES ('skip.header.line.count'='1')
 INFO  : Starting task [Stage-0:DDL] in serial mode
-INFO  : Completed executing command(queryId=hive_20250501140210_d8bc4596-cd79-436a-82e1-ecce4632e66b); Time taken: 0.058 seconds
+INFO  : Completed executing command(queryId=hive_20250501172859_9faab8a5-02f3-4ccb-a08a-3e5c31d3261b); Time taken: 0.034 seconds
 INFO  : OK
-No rows affected (0.139 seconds)
+No rows affected (0.087 seconds)
 0: jdbc:hive2://hadoop-03.uni.innopolis.ru:10> 
-0: jdbc:hive2://hadoop-03.uni.innopolis.ru:10> -- ADDED: Table for Linear Regression Tuning Results
-0: jdbc:hive2://hadoop-03.uni.innopolis.ru:10> CREATE EXTERNAL TABLE lr_tuning_results (
+0: jdbc:hive2://hadoop-03.uni.innopolis.ru:10> -- ADDED: Table for Linear Regres sion Tuning Results
+0: jdbc:hive2://hadoop-03.uni.innopolis.ru:10> CREATE EXTERNAL TABLE lr_tuning_r esults (
 . . . . . . . . . . . . . . . . . . . . . . .>     regParam DOUBLE,
 . . . . . . . . . . . . . . . . . . . . . . .>     elasticNetParam DOUBLE,
-. . . . . . . . . . . . . . . . . . . . . . .>     aggregationDepth INT, -- Assuming Spark saves this as INT
+. . . . . . . . . . . . . . . . . . . . . . .>     aggregationDepth INT, -- Assu ming Spark saves this as INT
 . . . . . . . . . . . . . . . . . . . . . . .>     avgRMSE DOUBLE
 . . . . . . . . . . . . . . . . . . . . . . .> )
 . . . . . . . . . . . . . . . . . . . . . . .> ROW FORMAT DELIMITED
 . . . . . . . . . . . . . . . . . . . . . . .> FIELDS TERMINATED BY ','
 . . . . . . . . . . . . . . . . . . . . . . .> STORED AS TEXTFILE
-. . . . . . . . . . . . . . . . . . . . . . .> LOCATION 'project/output/lr_tuning_results.csv'
-. . . . . . . . . . . . . . . . . . . . . . .> TBLPROPERTIES ('skip.header.line.count'='1');
-INFO  : Compiling command(queryId=hive_20250501140210_fbd7ff01-ba98-408a-8eb4-b3f6b0a41371): CREATE EXTERNAL TABLE lr_tuning_results (
+. . . . . . . . . . . . . . . . . . . . . . .> LOCATION 'project/output/lr_tunin g_results.csv'
+. . . . . . . . . . . . . . . . . . . . . . .> TBLPROPERTIES ('skip.header.line. count'='1');
+INFO  : Compiling command(queryId=hive_20250501172859_2b402b61-55c6-49b5-889d-c7950f2cda8d): CREATE EXTERNAL TABLE lr_tuning_results (
 regParam DOUBLE,
 elasticNetParam DOUBLE,
 aggregationDepth INT,
@@ -397,7 +397,7 @@ LOCATION 'project/output/lr_tuning_results.csv'
 TBLPROPERTIES ('skip.header.line.count'='1')
 INFO  : Semantic Analysis Completed (retrial = false)
 INFO  : Returning Hive schema: Schema(fieldSchemas:null, properties:null)
-INFO  : EXPLAIN output for queryid hive_20250501140210_fbd7ff01-ba98-408a-8eb4-b3f6b0a41371 : STAGE DEPENDENCIES:
+INFO  : EXPLAIN output for queryid hive_20250501172859_2b402b61-55c6-49b5-889d-c7950f2cda8d : STAGE DEPENDENCIES:
   Stage-0 is a root stage [DDL]
 
 STAGE PLANS:
@@ -416,8 +416,8 @@ STAGE PLANS:
           isExternal: true
 
 
-INFO  : Completed compiling command(queryId=hive_20250501140210_fbd7ff01-ba98-408a-8eb4-b3f6b0a41371); Time taken: 0.032 seconds
-INFO  : Executing command(queryId=hive_20250501140210_fbd7ff01-ba98-408a-8eb4-b3f6b0a41371): CREATE EXTERNAL TABLE lr_tuning_results (
+INFO  : Completed compiling command(queryId=hive_20250501172859_2b402b61-55c6-49b5-889d-c7950f2cda8d); Time taken: 0.031 seconds
+INFO  : Executing command(queryId=hive_20250501172859_2b402b61-55c6-49b5-889d-c7950f2cda8d): CREATE EXTERNAL TABLE lr_tuning_results (
 regParam DOUBLE,
 elasticNetParam DOUBLE,
 aggregationDepth INT,
@@ -429,23 +429,23 @@ STORED AS TEXTFILE
 LOCATION 'project/output/lr_tuning_results.csv'
 TBLPROPERTIES ('skip.header.line.count'='1')
 INFO  : Starting task [Stage-0:DDL] in serial mode
-INFO  : Completed executing command(queryId=hive_20250501140210_fbd7ff01-ba98-408a-8eb4-b3f6b0a41371); Time taken: 0.047 seconds
+INFO  : Completed executing command(queryId=hive_20250501172859_2b402b61-55c6-49b5-889d-c7950f2cda8d); Time taken: 0.021 seconds
 INFO  : OK
-No rows affected (0.154 seconds)
+No rows affected (0.08 seconds)
 0: jdbc:hive2://hadoop-03.uni.innopolis.ru:10> 
-0: jdbc:hive2://hadoop-03.uni.innopolis.ru:10> -- ADDED: Table for GBT Regressor Tuning Results
-0: jdbc:hive2://hadoop-03.uni.innopolis.ru:10> CREATE EXTERNAL TABLE gbt_tuning_results (
-. . . . . . . . . . . . . . . . . . . . . . .>     maxDepth INT, -- Assuming Spark saves this as INT
-. . . . . . . . . . . . . . . . . . . . . . .>     maxIter INT, -- Assuming Spark saves this as INT
+0: jdbc:hive2://hadoop-03.uni.innopolis.ru:10> -- ADDED: Table for GBT Regressor  Tuning Results
+0: jdbc:hive2://hadoop-03.uni.innopolis.ru:10> CREATE EXTERNAL TABLE gbt_tuning_ results (
+. . . . . . . . . . . . . . . . . . . . . . .>     maxDepth INT, -- Assuming Spa rk saves this as INT
+. . . . . . . . . . . . . . . . . . . . . . .>     maxIter INT, -- Assuming Spar k saves this as INT
 . . . . . . . . . . . . . . . . . . . . . . .>     stepSize DOUBLE,
 . . . . . . . . . . . . . . . . . . . . . . .>     avgRMSE DOUBLE
 . . . . . . . . . . . . . . . . . . . . . . .> )
 . . . . . . . . . . . . . . . . . . . . . . .> ROW FORMAT DELIMITED
 . . . . . . . . . . . . . . . . . . . . . . .> FIELDS TERMINATED BY ','
 . . . . . . . . . . . . . . . . . . . . . . .> STORED AS TEXTFILE
-. . . . . . . . . . . . . . . . . . . . . . .> LOCATION 'project/output/gbt_tuning_results.csv'
-. . . . . . . . . . . . . . . . . . . . . . .> TBLPROPERTIES ('skip.header.line.count'='1');
-INFO  : Compiling command(queryId=hive_20250501140210_6609bb3a-b73e-4bcb-bbb4-d6c104d841bd): CREATE EXTERNAL TABLE gbt_tuning_results (
+. . . . . . . . . . . . . . . . . . . . . . .> LOCATION 'project/output/gbt_tuni ng_results.csv'
+. . . . . . . . . . . . . . . . . . . . . . .> TBLPROPERTIES ('skip.header.line. count'='1');
+INFO  : Compiling command(queryId=hive_20250501172859_faa5fb8b-55f9-4b0d-8325-9d32d39a185a): CREATE EXTERNAL TABLE gbt_tuning_results (
 maxDepth INT,
 maxIter INT,
 stepSize DOUBLE,
@@ -458,7 +458,7 @@ LOCATION 'project/output/gbt_tuning_results.csv'
 TBLPROPERTIES ('skip.header.line.count'='1')
 INFO  : Semantic Analysis Completed (retrial = false)
 INFO  : Returning Hive schema: Schema(fieldSchemas:null, properties:null)
-INFO  : EXPLAIN output for queryid hive_20250501140210_6609bb3a-b73e-4bcb-bbb4-d6c104d841bd : STAGE DEPENDENCIES:
+INFO  : EXPLAIN output for queryid hive_20250501172859_faa5fb8b-55f9-4b0d-8325-9d32d39a185a : STAGE DEPENDENCIES:
   Stage-0 is a root stage [DDL]
 
 STAGE PLANS:
@@ -477,8 +477,8 @@ STAGE PLANS:
           isExternal: true
 
 
-INFO  : Completed compiling command(queryId=hive_20250501140210_6609bb3a-b73e-4bcb-bbb4-d6c104d841bd); Time taken: 0.033 seconds
-INFO  : Executing command(queryId=hive_20250501140210_6609bb3a-b73e-4bcb-bbb4-d6c104d841bd): CREATE EXTERNAL TABLE gbt_tuning_results (
+INFO  : Completed compiling command(queryId=hive_20250501172859_faa5fb8b-55f9-4b0d-8325-9d32d39a185a); Time taken: 0.027 seconds
+INFO  : Executing command(queryId=hive_20250501172859_faa5fb8b-55f9-4b0d-8325-9d32d39a185a): CREATE EXTERNAL TABLE gbt_tuning_results (
 maxDepth INT,
 maxIter INT,
 stepSize DOUBLE,
@@ -490,16 +490,16 @@ STORED AS TEXTFILE
 LOCATION 'project/output/gbt_tuning_results.csv'
 TBLPROPERTIES ('skip.header.line.count'='1')
 INFO  : Starting task [Stage-0:DDL] in serial mode
-INFO  : Completed executing command(queryId=hive_20250501140210_6609bb3a-b73e-4bcb-bbb4-d6c104d841bd); Time taken: 0.054 seconds
+INFO  : Completed executing command(queryId=hive_20250501172859_faa5fb8b-55f9-4b0d-8325-9d32d39a185a); Time taken: 0.029 seconds
 INFO  : OK
-No rows affected (0.171 seconds)
+No rows affected (0.08 seconds)
 0: jdbc:hive2://hadoop-03.uni.innopolis.ru:10> 
 0: jdbc:hive2://hadoop-03.uni.innopolis.ru:10> -- Verify table creation
 0: jdbc:hive2://hadoop-03.uni.innopolis.ru:10> SHOW TABLES; 
-INFO  : Compiling command(queryId=hive_20250501140211_d691afb6-17bf-47c4-98f8-ddde2154fc4c): SHOW TABLES
+INFO  : Compiling command(queryId=hive_20250501172859_858e5096-18b0-46a7-9820-c92e752b68e7): SHOW TABLES
 INFO  : Semantic Analysis Completed (retrial = false)
 INFO  : Returning Hive schema: Schema(fieldSchemas:[FieldSchema(name:tab_name, type:string, comment:from deserializer)], properties:null)
-INFO  : EXPLAIN output for queryid hive_20250501140211_d691afb6-17bf-47c4-98f8-ddde2154fc4c : STAGE DEPENDENCIES:
+INFO  : EXPLAIN output for queryid hive_20250501172859_858e5096-18b0-46a7-9820-c92e752b68e7 : STAGE DEPENDENCIES:
   Stage-0 is a root stage [DDL]
   Stage-1 depends on stages: Stage-0 [FETCH]
 
@@ -508,7 +508,7 @@ STAGE PLANS:
       Show Table Operator:
         Show Tables
           database name: team14_projectdb
-          result file: file:/tmp/hive/0ab896b7-5528-4a1a-89ec-03fee3603dc5/hive_2025-05-01_14-02-11_142_2449905350462162052-432/-local-10000
+          result file: file:/tmp/hive/ecca5808-43e2-4134-b34d-7fa4e1246280/hive_2025-05-01_17-28-59_923_4872632474797239442-586/-local-10000
 
   Stage: Stage-1
     Fetch Operator
@@ -517,10 +517,10 @@ STAGE PLANS:
         ListSink
 
 
-INFO  : Completed compiling command(queryId=hive_20250501140211_d691afb6-17bf-47c4-98f8-ddde2154fc4c); Time taken: 0.016 seconds
-INFO  : Executing command(queryId=hive_20250501140211_d691afb6-17bf-47c4-98f8-ddde2154fc4c): SHOW TABLES
+INFO  : Completed compiling command(queryId=hive_20250501172859_858e5096-18b0-46a7-9820-c92e752b68e7); Time taken: 0.017 seconds
+INFO  : Executing command(queryId=hive_20250501172859_858e5096-18b0-46a7-9820-c92e752b68e7): SHOW TABLES
 INFO  : Starting task [Stage-0:DDL] in serial mode
-INFO  : Completed executing command(queryId=hive_20250501140211_d691afb6-17bf-47c4-98f8-ddde2154fc4c); Time taken: 0.005 seconds
+INFO  : Completed executing command(queryId=hive_20250501172859_858e5096-18b0-46a7-9820-c92e752b68e7); Time taken: 0.006 seconds
 INFO  : OK
 +------------------------+
 |        tab_name        |
@@ -534,5 +534,5 @@ INFO  : OK
 | model2_predictions     |
 | table_schema           |
 +------------------------+
-8 rows selected (0.062 seconds)
+8 rows selected (0.072 seconds)
 0: jdbc:hive2://hadoop-03.uni.innopolis.ru:10> Closing: 0: jdbc:hive2://hadoop-03.uni.innopolis.ru:10001/team14_projectdb
