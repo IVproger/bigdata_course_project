@@ -1,4 +1,4 @@
-# 🏗️ Big-Data Salary-Prediction Pipeline
+# 🏗️ Big-Data Salary Prediction project overview
 
 End-to-end Spark / Hadoop project that ingests **Kaggle job-description data**, turns it into an **analytics-ready Hive warehouse**, runs **Spark-SQL EDA**, trains & tunes **Spark-ML regression models**, and surfaces everything in an **Apache Superset dashboard**.
 
@@ -82,7 +82,7 @@ flowchart LR
 
 ```bash
 # clone & bootstrap
-git clone https://github.com/<your-org>/big-data-salary.git && cd big-data-salary
+git clone https://github.com/IVproger/bigdata_course_project.git && cd bigdata_course_project
 python -m venv .venv && source .venv/bin/activate
 pip install -r requirements.txt
 
@@ -111,7 +111,7 @@ bash scripts/stage4.sh   # metrics → Hive for BI
 | **1 Data Collection** | Kaggle → PostgreSQL → Sqoop Avro in HDFS | `warehouse/*.avro` |
 | **2 Warehouse & EDA** | Partitioned + bucketed Hive table, 6 Spark-SQL analyses | `output/q*_results.csv` |
 | **3 Predictive ML** | Linear vs. GBT, 3-fold CV, log-salary target | `models/**`, `output/model*_predictions.csv` |
-| **4 Presentation** | KL divergence, Hive externals for Superset | `output/kl_divergence.csv` |
+| **4 Presentation** | KL divergence, Hive externals for Superset | `output/evaluation.csv `, `output/kl_divergence.csv`, `output/model1_predictions.csv`, `output/model2_predictions.csv`|
 
 Details live in [`docs/report_*.md`](docs/) for auditors and graders.
 
@@ -119,14 +119,16 @@ Details live in [`docs/report_*.md`](docs/) for auditors and graders.
 
 ## 📊 Dashboard Preview
 
+[Dashboard Link](http://hadoop-03.uni.innopolis.ru:8808/superset/dashboard/97/)
+
 <p align="center">
-  <img src="docs/img/superset_overview.png" width="700" alt="Superset overview dashboard"/>
+  <img src="static/Superset_dash1.png" width="700" alt="Data description"/>
 </p>
 
 <!-- Repeat for any other EDA screenshots -->
 <p align="center">
-  <img src="docs/img/salary_dist_by_role.png" width="350" alt="Salary distribution by role"/>
-  <img src="docs/img/model_rmse_comparison.png" width="350" alt="Model RMSE comparison"/>
+  <img src="static/EDA_dash1.png" width="350" alt="EDA"/>
+  <img src="static/Superset_dash2.png" width="350" alt="ML Modelling"/>
 </p>
 
 ---
@@ -134,25 +136,10 @@ Details live in [`docs/report_*.md`](docs/) for auditors and graders.
 ## 🔬 Results
 | Model | RMSE (log) | R² (log) | KL-Div. (salary) |
 |-------|------------|----------|------------------|
-| Linear Reg. | 0.273 | 0.87 | 0.052 |
-| GBT | **0.201** | **0.93** | **0.039** |
+| Linear Reg. | 0.092 | **-1.59E-6** | 18.77 |
+| GBT | **0.091** | 1.05E-4 | **16.3** |
 
-→ GBT shows a 26 % RMSE reduction and better KL divergence, indicating tighter fit on the heavy-tailed salary distribution.
-
----
-
-## 🛠️ Development Tips
-```bash
-# unit tests
-pytest -q
-
-# lint / style
-ruff check .
-black --check .
-
-# regenerate architecture diagram (draw.io export)
-docs/img/architecture_overview.png
-```
+→ GBT shows and better RMSE and KL divergence, indicating tighter fit on the heavy-tailed salary distribution.
 
 ---
 
