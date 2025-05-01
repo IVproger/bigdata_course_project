@@ -39,13 +39,15 @@ spark-submit \
 echo "Creating Hive tables for Stage 3 results and KL divergence..."
 
 # --- HDFS Cleanup (for Hive table locations) ---
-echo "Cleaning potential conflicting files/directories in HDFS Hive table locations..."
-hdfs dfs -rm -r -f project/output/evaluation.csv >/dev/null 2>&1 || true
-hdfs dfs -rm -r -f project/output/model1_predictions.csv >/dev/null 2>&1 || true
-hdfs dfs -rm -r -f project/output/model2_predictions.csv >/dev/null 2>&1 || true
-# Note: kl_divergence.csv directory is removed earlier
-hdfs dfs -rm -r -f project/output/lr_tuning_results.csv >/dev/null 2>&1 || true
-hdfs dfs -rm -r -f project/output/gbt_tuning_results.csv >/dev/null 2>&1 || true
+echo "Cleaning potential conflicting files in HDFS Hive table locations..."
+hdfs dfs -rm -f project/output/evaluation.csv >/dev/null 2>&1 || true
+hdfs dfs -rm -f project/output/model1_predictions.csv >/dev/null 2>&1 || true
+hdfs dfs -rm -f project/output/model2_predictions.csv >/dev/null 2>&1 || true
+# Note: kl_divergence.csv is handled by the Spark script and the -rm -r above,
+# but removing the file path specifically ensures no conflict if Spark wrote a file instead of a dir.
+hdfs dfs -rm -f project/output/kl_divergence.csv >/dev/null 2>&1 || true
+hdfs dfs -rm -f project/output/lr_tuning_results.csv >/dev/null 2>&1 || true
+hdfs dfs -rm -f project/output/gbt_tuning_results.csv >/dev/null 2>&1 || true
 
 # Ensure the Hive script exists
 if [ ! -f sql/stage4_hive_tables.hql ]; then
