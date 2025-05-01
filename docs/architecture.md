@@ -1,3 +1,4 @@
+```mermaid
 flowchart LR
     %% ────────────────────────────
     %% Stage I — Data Collection
@@ -52,3 +53,4 @@ flowchart LR
     SparkSQL --> SparkML
     LR --> HiveExt
     GBT --> HiveExt
+```
