@@ -63,8 +63,8 @@ CREATE EXTERNAL TABLE lr_tuning_results (
     elasticNetParam DOUBLE,
     regParam DOUBLE
 )
-ROW FORMAT DELIMITED
-FIELDS TERMINATED BY ','
+ROW FORMAT SERDE 'org.apache.hadoop.hive.serde2.lazy.LazySimpleSerDe'
+WITH SERDEPROPERTIES ('field.delim' = ',')
 STORED AS TEXTFILE
 LOCATION 'project/output/lr_tuning_results.csv'
 TBLPROPERTIES ('skip.header.line.count'='1');
@@ -76,8 +76,8 @@ CREATE EXTERNAL TABLE gbt_tuning_results (
     maxIter INT, -- Assuming Spark saves this as INT
     stepSize DOUBLE
 )
-ROW FORMAT DELIMITED
-FIELDS TERMINATED BY ','
+ROW FORMAT SERDE 'org.apache.hadoop.hive.serde2.lazy.LazySimpleSerDe'
+WITH SERDEPROPERTIES ('field.delim' = ',')
 STORED AS TEXTFILE
 LOCATION 'project/output/gbt_tuning_results.csv'
 TBLPROPERTIES ('skip.header.line.count'='1');
