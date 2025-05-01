@@ -4,12 +4,12 @@ End-to-end Spark / Hadoop project that ingests **Kaggle job-description data**, 
 
 High End architecture of the project
 ```mermaid
-flowchart TB
+flowchart LR
     %% ────────────────────────────
     %% Stage I — Data Collection
     %% ────────────────────────────
     subgraph STAGE1["Stage I — Data Collection"]
-        direction LR
+        direction TB
         Kaggle["Kaggle CLI<br/>(job-descriptions.csv)"] --> PostgreSQL["PostgreSQL"]
         PostgreSQL --> Sqoop["Sqoop Import"]
         Sqoop --> HDFS1["HDFS<br/>Avro (+ schema)"]
@@ -18,15 +18,15 @@ flowchart TB
     %% ────────────────────────────
     %% Stage II — Data Warehouse & EDA
     %% ────────────────────────────
-    subgraph STAGE2["Stage II — Data Warehouse & EDA"]
-        direction LR
+    subgraph STAGE2["Stage II — Data Warehouse &<br/>EDA"]
+        direction TB
         Hive["Hive Externals<br/>(partitioned & bucketed)"] --> SparkSQL["Spark SQL<br/>(6 analyses)"]
     end
 
     %% ────────────────────────────
     %% Stage III — Predictive Analytics
     %% ────────────────────────────
-    subgraph STAGE3["Stage III — Predictive Analytics"]
+    subgraph STAGE3["Stage III — Predictive<br/>Analytics"]
         direction TB
         Preproc["Data Preprocessing<br/>(Spark DataFrame ops)"] --> SparkML["ML Modelling<br/>(Spark ML Pipeline)"]
         SparkML --> LR["Linear Regression"]
@@ -36,19 +36,18 @@ flowchart TB
     %% ────────────────────────────
     %% Stage IV — Presentation & Delivery
     %% ────────────────────────────
-    subgraph STAGE4["Stage IV — Presentation & Delivery"]
-        direction LR
+    subgraph STAGE4["Stage IV — Presentation &<br/>Delivery"]
+        direction TB
         HiveExt["Hive Externals<br/>(metrics & predictions)"] --> Superset["Apache Superset<br/>Dashboards"]
     end
 
     %% ────────────────────────────
-    %% Cross-stage flow
+    %% Cross-stage flow (left → right)
     %% ────────────────────────────
-    HDFS1 --> Hive            
-    SparkSQL --> Preproc        
-    LR --> HiveExt       
+    HDFS1 --> Hive 
+    SparkSQL --> Preproc
+    LR --> HiveExt
     GBT --> HiveExt
-
 ```
 ---
 
