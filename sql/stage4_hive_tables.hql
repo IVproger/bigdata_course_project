@@ -58,10 +58,10 @@ TBLPROPERTIES ('skip.header.line.count'='1'); -- Skip the header row
 
 -- ADDED: Table for Linear Regression Tuning Results
 CREATE EXTERNAL TABLE lr_tuning_results (
-    regParam DOUBLE,
-    elasticNetParam DOUBLE,
     aggregationDepth INT, -- Assuming Spark saves this as INT
-    avgRMSE DOUBLE
+    avgRMSE DOUBLE,
+    elasticNetParam DOUBLE,
+    regParam DOUBLE
 )
 ROW FORMAT DELIMITED
 FIELDS TERMINATED BY ','
@@ -71,10 +71,10 @@ TBLPROPERTIES ('skip.header.line.count'='1');
 
 -- ADDED: Table for GBT Regressor Tuning Results
 CREATE EXTERNAL TABLE gbt_tuning_results (
+    avgRMSE DOUBLE,
     maxDepth INT, -- Assuming Spark saves this as INT
     maxIter INT, -- Assuming Spark saves this as INT
-    stepSize DOUBLE,
-    avgRMSE DOUBLE
+    stepSize DOUBLE
 )
 ROW FORMAT DELIMITED
 FIELDS TERMINATED BY ','
