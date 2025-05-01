@@ -7,31 +7,24 @@ from pprint import pprint
 
 from pyspark.sql import SparkSession
 from pyspark.sql import functions as F
-# Import necessary types for schema definition
 from pyspark.sql.types import StructType, StructField, DoubleType
 from pyspark.ml.linalg import VectorUDT # Import VectorUDT for schema
 
 from pyspark.ml import PipelineModel
 from pyspark.ml.regression import LinearRegression, GBTRegressor
 from pyspark.ml.evaluation import RegressionEvaluator
-# Import TrainValidationSplit and remove CrossValidator if not needed
-from pyspark.ml.tuning import ParamGridBuilder, TrainValidationSplit
+from pyspark.ml.tuning import ParamGridBuilder, CrossValidator
 
 # Function to run HDFS commands (used for cleanup and checking existence)
 def run_hdfs_command(command):
-    # In a real cluster environment, you might use subprocess or os.system
-    # For simplicity here, we'll just print the command.
-    # Replace with actual execution logic if needed.
     print(f"Executing HDFS command (simulation): {command}")
-    # Example using os.popen (uncomment and adapt if needed):
-    # return os.popen(command).read()
     return "" # Return empty string for simulation
 
 
 def main():
     # --- Spark Session Setup ---
-    team = 14 # Make sure this matches your team number
-    warehouse = "project/hive/warehouse" # Standard warehouse location
+    team = 14
+    warehouse = "project/hive/warehouse"
 
     spark = SparkSession.builder \
         .appName(f"Team {team} - Spark ML Modeling") \
@@ -87,21 +80,42 @@ def main():
         .addGrid(lr.aggregationDepth, [2, 3]) \
         .build()
 
-    # Use TrainValidationSplit instead of CrossValidator
-    print("Setting up TrainValidationSplit for Linear Regression...")
-    lr_tvs = TrainValidationSplit(estimator=lr,
-                                estimatorParamMaps=lr_grid,
-                                evaluator=evaluator_rmse, # Use RMSE for tuning
-                                trainRatio=0.8, # 80% for training, 20% for validation
-                                parallelism=4, # Number of parallel jobs
-                                seed=42)
+    # Use CrossValidator
+    print("Setting up CrossValidator for Linear Regression...")
+    lr_cv = CrossValidator(estimator=lr,
+                         estimatorParamMaps=lr_grid,
+                         evaluator=evaluator_rmse, # Use RMSE for tuning
+                         numFolds=3, # Use 3 folds for cross-validation
+                         parallelism=4, # Number of parallel jobs
+                         seed=42)
 
-    print("Starting TrainValidationSplit fitting for Linear Regression...")
-    lr_tvs_model = lr_tvs.fit(train_data) # Fit on the main training data
-    model1 = lr_tvs_model.bestModel
-    print("TrainValidationSplit fitting finished. Best Linear Regression model selected.")
+    print("Starting CrossValidator fitting for Linear Regression...")
+    lr_cv_model = lr_cv.fit(train_data) # Fit on the main training data
+    model1 = lr_cv_model.bestModel
+    print("CrossValidator fitting finished. Best Linear Regression model selected.")
     print("Best Linear Regression Params:")
     pprint(model1.extractParamMap())
+
+    print("Extracting and saving Linear Regression tuning results...")
+    lr_param_maps = lr_cv.getEstimatorParamMaps()
+    lr_avg_metrics = lr_cv_model.avgMetrics
+    lr_tuning_results = []
+    for params, metric in zip(lr_param_maps, lr_avg_metrics):
+        param_dict = {param.name: value for param, value in params.items()}
+        # Cast NumPy float64 to Python float
+        param_dict['avgRMSE'] = float(metric)
+        lr_tuning_results.append(param_dict)
+
+    if lr_tuning_results:
+        lr_tuning_df = spark.createDataFrame(lr_tuning_results)
+        lr_tuning_path_hdfs = "project/output/lr_tuning_results.csv"
+        print(f"Saving LR tuning results to HDFS: {lr_tuning_path_hdfs}")
+        run_hdfs_command(f"hdfs dfs -rm -r -f {lr_tuning_path_hdfs}")
+        lr_tuning_df.coalesce(1).write.mode("overwrite").format("csv") \
+            .option("header", "true").save(lr_tuning_path_hdfs)
+        print("LR tuning results saved.")
+    else:
+        print("No LR tuning results to save.")
 
     # Save Model 1
     model1_path_hdfs = "project/models/model1"
@@ -114,18 +128,20 @@ def main():
     print("Predicting on test data using Model 1...")
     predictions1 = model1.transform(test_data)
 
-    print("Evaluating Model 1...")
+    print("Evaluating Model 1 (on log-scale)...")
     rmse1 = evaluator_rmse.evaluate(predictions1)
     r21 = evaluator_r2.evaluate(predictions1)
-    print(f"Model 1 - Test RMSE: {rmse1}")
-    print(f"Model 1 - Test R2: {r21}")
+    # Store log-scale results for comparison table
     results.append(("LinearRegression", str(model1), rmse1, r21))
 
-    # Save Predictions 1
+    print("Converting Model 1 predictions back to original scale using expm1...")
+    predictions1_orig_scale = predictions1.withColumn("prediction", F.expm1(F.col("prediction")))
+
+    # Save Predictions 1 (NOW both label and prediction on original scale)
     predictions1_path_hdfs = "project/output/model1_predictions.csv"
     print(f"Saving Model 1 predictions to HDFS: {predictions1_path_hdfs}")
     run_hdfs_command(f"hdfs dfs -rm -r -f {predictions1_path_hdfs}") # Clean up previous predictions
-    predictions1.select("label", "prediction") \
+    predictions1_orig_scale.select(F.expm1(F.col("label")).alias("label"), "prediction") \
         .coalesce(1) \
         .write \
         .mode("overwrite") \
@@ -143,26 +159,47 @@ def main():
     # Hyperparameter Tuning Setup
     print("Setting up ParamGridBuilder for GBT...")
     gbt_grid = ParamGridBuilder() \
-        .addGrid(gbt.maxDepth, [3, 5, 7]) \
-        .addGrid(gbt.maxIter, [10, 20]) \
+        .addGrid(gbt.maxDepth, [3, 5]) \
+        .addGrid(gbt.maxIter, [10]) \
         .addGrid(gbt.stepSize, [0.1, 0.05]) \
         .build()
 
-    # Use TrainValidationSplit instead of CrossValidator
-    print("Setting up TrainValidationSplit for GBT...")
-    gbt_tvs = TrainValidationSplit(estimator=gbt,
-                                 estimatorParamMaps=gbt_grid,
-                                 evaluator=evaluator_rmse, # Use RMSE for tuning
-                                 trainRatio=0.8, # 80% for training, 20% for validation
-                                 parallelism=4,
-                                 seed=42)
+    # Use CrossValidator
+    print("Setting up CrossValidator for GBT...")
+    gbt_cv = CrossValidator(estimator=gbt,
+                          estimatorParamMaps=gbt_grid,
+                          evaluator=evaluator_rmse, # Use RMSE for tuning
+                          numFolds=3, # Use 3 folds for cross-validation
+                          parallelism=4,
+                          seed=42)
 
-    print("Starting TrainValidationSplit fitting for GBT...")
-    gbt_tvs_model = gbt_tvs.fit(train_data) # Fit on the main training data
-    model2 = gbt_tvs_model.bestModel
-    print("TrainValidationSplit fitting finished. Best GBT model selected.")
+    print("Starting CrossValidator fitting for GBT...")
+    gbt_cv_model = gbt_cv.fit(train_data) # Fit on the main training data
+    model2 = gbt_cv_model.bestModel
+    print("CrossValidator fitting finished. Best GBT model selected.")
     print("Best GBT Params:")
     pprint(model2.extractParamMap())
+
+    print("Extracting and saving GBT tuning results...")
+    gbt_param_maps = gbt_cv.getEstimatorParamMaps()
+    gbt_avg_metrics = gbt_cv_model.avgMetrics
+    gbt_tuning_results = []
+    for params, metric in zip(gbt_param_maps, gbt_avg_metrics):
+        param_dict = {param.name: value for param, value in params.items()}
+        # Cast NumPy float64 to Python float
+        param_dict['avgRMSE'] = float(metric)
+        gbt_tuning_results.append(param_dict)
+
+    if gbt_tuning_results:
+        gbt_tuning_df = spark.createDataFrame(gbt_tuning_results)
+        gbt_tuning_path_hdfs = "project/output/gbt_tuning_results.csv"
+        print(f"Saving GBT tuning results to HDFS: {gbt_tuning_path_hdfs}")
+        run_hdfs_command(f"hdfs dfs -rm -r -f {gbt_tuning_path_hdfs}")
+        gbt_tuning_df.coalesce(1).write.mode("overwrite").format("csv") \
+            .option("header", "true").save(gbt_tuning_path_hdfs)
+        print("GBT tuning results saved.")
+    else:
+        print("No GBT tuning results to save.")
 
     # Save Model 2
     model2_path_hdfs = "project/models/model2"
@@ -175,18 +212,20 @@ def main():
     print("Predicting on test data using Model 2...")
     predictions2 = model2.transform(test_data)
 
-    print("Evaluating Model 2...")
+    print("Evaluating Model 2 (on log-scale)...")
     rmse2 = evaluator_rmse.evaluate(predictions2)
     r22 = evaluator_r2.evaluate(predictions2)
-    print(f"Model 2 - Test RMSE: {rmse2}")
-    print(f"Model 2 - Test R2: {r22}")
+    # Store log-scale results for comparison table
     results.append(("GBTRegressor", str(model2), rmse2, r22))
 
-    # Save Predictions 2
+    print("Converting Model 2 predictions back to original scale using expm1...")
+    predictions2_orig_scale = predictions2.withColumn("prediction", F.expm1(F.col("prediction")))
+
+    # Save Predictions 2 (NOW both label and prediction on original scale)
     predictions2_path_hdfs = "project/output/model2_predictions.csv"
     print(f"Saving Model 2 predictions to HDFS: {predictions2_path_hdfs}")
     run_hdfs_command(f"hdfs dfs -rm -r -f {predictions2_path_hdfs}") # Clean up previous predictions
-    predictions2.select("label", "prediction") \
+    predictions2_orig_scale.select(F.expm1(F.col("label")).alias("label"), "prediction") \
         .coalesce(1) \
         .write \
         .mode("overwrite") \

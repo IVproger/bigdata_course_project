@@ -348,6 +348,10 @@ def main():
     transformed_data = pipeline_model.transform(df_selected)
     ml_data = transformed_data.select("features", F.col(target).alias("label"))
     
+    # Apply log transformation to the target column
+    print("Applying log transformation to the target column")
+    ml_data = ml_data.withColumn("label", F.log1p(F.col("label"))) # Using log1p is generally safer
+    
     # Split and save data
     print("Split and save data")
     (train_data, test_data) = ml_data.randomSplit([0.7, 0.3], seed=42)
