@@ -30,8 +30,18 @@ The primary business objectives driving this project were:
 
 ---
 
-## Data Description
+## 2. Dataset Description
 
+In this project, we address the challenge of predicting average salaries across diverse job roles by developing and evaluating regression models on an extensive job-postings dataset. Using advanced machine learning techniques, we quantify how factors—such as required experience, educational background, geographic location, company size, and textual features (e.g., skills and responsibilities) — drive variations in salary levels.
+
+**Data Source & Repository:**
+We use the Job Description Dataset by Ravindra Singh Rana, published on Kaggle (1.6M records; 1.74 GB CSV) – available at:
+[https://www.kaggle.com/datasets/ravindrasinghrana/job-description-dataset/data](https://www.kaggle.com/datasets/ravindrasinghrana/job-description-dataset/data)
+
+All project code, notebooks, and dashboard components are maintained in our GitHub repo:
+[https://github.com/IVproger/bigdata_course_project.git](https://github.com/IVproger/bigdata_course_project.git)
+
+**About Dataset:**
 The project utilizes the "Job Description Dataset" sourced from Kaggle (`ravindrasinghrana/job-description-dataset`). This dataset is a comprehensive collection of **synthetic job postings**, created specifically for facilitating research and analysis in areas such as job market trends, Natural Language Processing (NLP), and Machine Learning model development within an educational context.
 
 It offers a diverse set of job listings across various industries and job types. The columns included in the dataset are:
@@ -60,25 +70,40 @@ It offers a diverse set of job listings across various industries and job types.
 *   **Company Name:** The name of the hiring company.
 *   **Company Profile:** A brief overview of the company's background and mission.
 
-This rich, albeit synthetic, dataset serves as the input for all subsequent processing and analysis stages in the project. Its structure allows for exploration into various potential use cases, such as building predictive models for job market trends, enhancing job recommendation systems, developing NLP models for resume parsing, analyzing regional job market disparities, and exploring salary prediction models.
-
-*(Acknowledgements from the dataset creators: Python Faker library for dataset generation and ChatGPT for fine-tuning and quality assurance.)*
-
----
 
 ## Data Characteristics
 
-*(This section should ideally be populated with findings from initial data exploration, potentially performed before or during Stage 1/2. Examples include:)*
+**Number of Records:** 1.62 Million
 
-*   **Volume:** Total number of records (job postings) in the dataset. (e.g., obtained via `SELECT COUNT(*)` in `sql/test_database.sql`).
-*   **Data Types:** Mix of numerical (latitude, longitude, company size), categorical (work type, preference, country), date/time (posting date), and text data (description, skills, qualifications, title).
-*   **Missing Values:** Assessment of missing values in key columns (e.g., salary range, experience, qualifications). *(Mention if any specific handling like imputation or removal was done, although the reports suggest dropping rows with nulls was the primary method in Stage 3 preprocessing)*.
-*   **Distribution:** Brief notes on the distribution of important features (e.g., salary ranges are often skewed, distribution of job postings across countries/work types).
-*   **Text Data:** High cardinality and unstructured nature of text fields like Job Description, Skills, Responsibilities require NLP techniques for feature extraction.
-*   **Coordinates:** Latitude and Longitude present, requiring validation (constraints added in `sql/create_tables.sql`).
-*   **Date Range:** Span of the `job_posting_date`.
+**Data Types (as defined in Hive/PostgreSQL):**
 
-*(Please add specific observations about the dataset characteristics here based on any initial analysis performed).*
+| column_name       | data_type    |
+| :---------------- | :----------- |
+| id                | INT          |
+| job_id            | BIGINT       |
+| experience        | STRING       |
+| qualifications    | STRING       |
+| salary_range      | STRING       |
+| location          | STRING       |
+| country           | STRING       |
+| latitude          | DECIMAL(9,6) |
+| longitude         | DECIMAL(9,6) |
+| company_size      | INT          |
+| job_posting_date  | DATE         |
+| contact_person    | STRING       |
+| preference        | STRING       |
+| contact           | STRING       |
+| job_title         | STRING       |
+| role              | STRING       |
+| job_portal        | STRING       |
+| job_description   | STRING       |
+| benefits          | STRING       |
+| skills            | STRING       |
+| responsibilities  | STRING       |
+| company_name      | STRING       |
+| company_profile   | STRING       |
+| work_type         | STRING       |
+
 
 ---
 
@@ -87,79 +112,60 @@ This rich, albeit synthetic, dataset serves as the input for all subsequent proc
 The project follows a staged batch processing architecture, leveraging various components of the Hadoop ecosystem and related technologies. The diagram below illustrates the flow:
 
 ```mermaid
-graph LR
-    subgraph Input
-        Kaggle[(Kaggle API)]
+flowchart LR
+    %% ────────────────────────────
+    %% Stage I — Data Collection
+    %% ────────────────────────────
+    subgraph "Stage I — Data Collection"
+        Kaggle["Kaggle CLI<br/>(job-descriptions.csv)"]
+        PostgreSQL["PostgreSQL"]
+        Sqoop["Sqoop Import"]
+        HDFS1["HDFS<br/>Avro (+ schema)"]
+
+        Kaggle --> PostgreSQL
+        PostgreSQL --> Sqoop
+        Sqoop --> HDFS1
     end
 
-    subgraph Stage 1: Collection & Initial Storage
-        direction LR
-        LocalCSV[Local CSV File<br>(data/*.csv)]
-        Postgres[(PostgreSQL DB<br>team14_projectdb)]
-        Sqoop[Sqoop Import]
-        HDFS_Avro[HDFS Avro/Snappy<br>(project/warehouse)]
-        Kaggle --> |scripts/data_collection.sh| LocalCSV
-        LocalCSV --> |scripts/build_projectdb.py| Postgres
-        Postgres --> |scripts/stage1.sh| Sqoop
-        Sqoop --> HDFS_Avro
+    %% ────────────────────────────
+    %% Stage II — Data Warehouse & EDA
+    %% ────────────────────────────
+    subgraph "Stage II — Data Warehouse & EDA"
+        Hive["Hive External Tables<br/>(partitioned & bucketed)"]
+        SparkSQL["Spark SQL<br/>(6 analyses)"]
+
+        Hive --> SparkSQL
     end
 
-    subgraph Stage 2: Warehousing & EDA
-        direction LR
-        Hive[Hive External Table<br>(Partitioned/Bucketed<br>project/hive/warehouse)]
-        SparkSQL_EDA[Spark SQL EDA<br>(scripts/run_hive_queries.py)]
-        Postgres_Results[(PostgreSQL<br>q*_results tables)]
-        LocalCSV_Results[Local CSV<br>(output/q*.csv)]
-        HDFS_Avro --> |scripts/create_hive_tables.sh| Hive
-        Hive --> |Spark SQL| SparkSQL_EDA
-        SparkSQL_EDA --> Postgres_Results
-        SparkSQL_EDA --> LocalCSV_Results
+    %% ────────────────────────────
+    %% Stage III — Predictive Analytics
+    %% ────────────────────────────
+    subgraph "Stage III — Predictive Analytics"
+        SparkML["Spark ML Pipeline"]
+        LR["Linear Regression"]
+        GBT["Gradient-Boosted Trees"]
+
+        SparkML --> LR
+        SparkML --> GBT
     end
 
-    subgraph Stage 3: Predictive Analytics
-        direction LR
-        Spark_Preproc[Spark Preprocessing<br>(scripts/data_preprocessing.py)]
-        HDFS_Json[HDFS JSON<br>(project/data/train, test)]
-        Spark_ML[Spark ML Modeling<br>(scripts/ml_modeling.py)]
-        HDFS_Models[HDFS Models<br>(project/models/)]
-        HDFS_Preds[HDFS Predictions/Eval<br>(project/output/*.csv)]
-        Local_Downloads[Local Files<br>(models/, data/, output/)]
+    %% ────────────────────────────
+    %% Stage IV — Presentation & Delivery
+    %% ────────────────────────────
+    subgraph "Stage IV — Presentation & Delivery"
+        HiveExt["Hive Externals<br/>(metrics & predictions)"]
+        Superset["Apache Superset<br/>Dashboards"]
 
-        Hive --> |PySpark| Spark_Preproc
-        Spark_Preproc --> HDFS_Json
-        HDFS_Json --> |PySpark| Spark_ML
-        Spark_ML --> HDFS_Models
-        Spark_ML --> HDFS_Preds
-        HDFS_Models --> |scripts/stage3.sh| Local_Downloads
-        HDFS_Preds --> |scripts/stage3.sh| Local_Downloads
-        HDFS_Json --> |scripts/stage3.sh| Local_Downloads
+        HiveExt --> Superset
     end
 
-    subgraph Stage 4: Presentation Prep
-        direction LR
-        Spark_KL[Spark KL Calc<br>(scripts/calculate_kl.py)]
-        HDFS_KL[HDFS KL Results<br>(project/output/kl_divergence.csv)]
-        Hive_Results_Tables[Hive External Tables<br>for Results]
-        Local_KL[Local CSV<br>(output/kl_divergence.csv)]
-
-        HDFS_Preds --> |PySpark| Spark_KL
-        Spark_KL --> HDFS_KL
-        HDFS_Preds --> |scripts/stage4.sh| Hive_Results_Tables
-        HDFS_Eval --> |scripts/stage4.sh| Hive_Results_Tables(HDFS_Preds refers also to HDFS_Eval)
-        HDFS_KL --> |scripts/stage4.sh| Hive_Results_Tables
-        HDFS_KL --> |scripts/stage4.sh| Local_KL
-    end
-
-    subgraph Presentation
-       Superset[Apache Superset<br>(Manual Dashboard)]
-    end
-
-    Postgres_Results --> Superset
-    Hive_Results_Tables --> Superset
-
-
-    style Input fill:#f9f,stroke:#333,stroke-width:2px
-    style Presentation fill:#ccf,stroke:#333,stroke-width:2px
+    %% ────────────────────────────
+    %% Cross-stage flow
+    %% ────────────────────────────
+    HDFS1 --> Hive
+    SparkSQL --> SparkML
+    LR --> HiveExt
+    GBT --> HiveExt
 ```
 
 **Workflow Summary:**
@@ -221,26 +227,57 @@ Automation scripts (`scripts/stage*.sh`) orchestrate the transitions between the
 
 Data preparation occurred primarily in two phases: initial loading/structuring in Stage 1 and feature engineering/preprocessing in Stage 3.
 
-### ER Diagram (Conceptual)
+### ER Diagram
 
 The primary relational structure was defined in Stage 1 within PostgreSQL.
 
 *   **Table:** `job_descriptions`
     *   **Columns:** (Includes fields like `id` (PK), `job_id` (unique), `experience`, `qualifications`, `salary_range`, `location`, `country`, `latitude`, `longitude`, `work_type`, `company_size`, `job_posting_date`, `preference`, `contact_person`, `contact`, `job_title`, `role`, `job_portal`, `job_description`, `benefits`, `skills`, `responsibilities`, `company_name`, `company_profile`)
-    *   **Relationships:** This project uses a single primary table for the job postings. No explicit relationships to other tables (like separate `company` or `location` tables) were defined in the provided schema (`sql/create_tables.sql`).
+    *   **Relationships:** This project uses a single primary table for the job postings. No explicit relationships to other tables.
     *   **Constraints:** Includes primary key (`id`), data type definitions, and check constraints (e.g., latitude/longitude ranges, positive company size, job posting date not in the future).
 
-*(A visual ER diagram based on `sql/create_tables.sql` could be inserted here if generated using an external tool).*
+```mermaid
+erDiagram
+    job_descriptions {
+        int id PK
+        string job_id "UNIQUE"
+        string experience
+        string qualifications
+        string salary_range
+        string location
+        string country
+        decimal latitude
+        decimal longitude
+        string work_type
+        int company_size
+        date job_posting_date
+        string preference
+        string contact_person
+        string contact
+        string job_title
+        string role
+        string job_portal
+        string job_description
+        string benefits
+        string skills
+        string responsibilities
+        string company_name
+        string company_profile
+    }
+```
 
 ### Some Samples from the Database
 
-*(This section requires manually querying the PostgreSQL `job_descriptions` table and inserting representative sample rows. Example queries from `sql/test_database.sql` could be used, or simple `SELECT * FROM job_descriptions LIMIT 5;`).*
 
-```sql
--- Placeholder for sample data query result
--- Example: SELECT job_title, country, work_type, salary_range FROM job_descriptions LIMIT 5;
--- (Run this query against the PostgreSQL DB and paste the output here)
-```
+| id  | job_id         | experience     | job_posting_date | qualifications | salary_range | location   | country      | latitude | longitude | work_type | company_size | contact_person   | contact                 | job_title                    | role                     | job_portal   | job_description                                                                                                                                                              | benefits                                                                                                                     | skills                                                                                                                                 | responsibilities                                                                                                                                   | company_name                      | company_profile                                                                                                                             |
+| :-: | :------------- | :------------- | :--------------- | :------------- | :----------- | :--------- | :----------- | :------- | :-------- | :-------- | :----------- | :--------------- | :---------------------- | :--------------------------- | :----------------------- | :----------- | :--------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | :--------------------------------------------------------------------------------------------------------------------------- | :--------------------------------------------------------------------------------------------------------------------------------------------- | :----------------------------------------------------------------------------------------------------------------------------------------- | :-------------------------------- | :------------------------------------------------------------------------------------------------------------------------------------------ |
+| 1   | 1089843540111562 | 5 to 15 Years  | 2022-04-24       | M.Tech         | $59K-$99K    | Douglas    | Isle of Man  | 54.2361  | -4.5481   | Intern    | 26801        | Brandon Cunningham | 001-381-930-7517x737    | Digital Marketing Specialist | Social Media Manager     | Snagajob     | Social Media Managers oversee an organizations social media presence. They create and schedule content, engage with followers, and analyze social media metrics to drive brand awareness and engagement. | {'Flexible Spending Accounts (FSAs), Relocation Assistance, Legal Assistance, Employee Recognition Programs, Financial Counseling'} | Social media platforms (e.g., Facebook, Twitter, Instagram) Content creation and scheduling Social media analytics and insights Community engagement Paid social advertising | Manage and grow social media accounts, create engaging content, and interact with the online community. Develop social media content calendars and strategies. Monitor social media trends and engagement metrics. | Icahn Enterprises                 | {"Sector":"Diversified","Industry":"Diversified Financials","City":"Sunny Isles Beach","State":"Florida","Zip":"33160","Website":"www.ielp.com","Ticker":"IEP","CEO":"David Willetts"} |
+| 2   | 398454096642776  | 2 to 12 Years  | 2022-12-19       | BCA            | $56K-$116K   | Ashgabat   | Turkmenistan | 38.9697  | 59.5563   | Intern    | 100340       | Francisco Larsen   | 461-509-4216            | Web Developer                | Frontend Web Developer   | Idealist     | Frontend Web Developers design and implement user interfaces for websites, ensuring they are visually appealing and user-friendly. They collaborate with designers and backend developers to create seamless web experiences for users. | {'Health Insurance, Retirement Plans, Paid Time Off (PTO), Flexible Work Arrangements, Employee Assistance Programs (EAP)'} | HTML, CSS, JavaScript Frontend frameworks (e.g., React, Angular) User experience (UX)                                                        | Design and code user interfaces for websites, ensuring a seamless and visually appealing user experience. Collaborate with UX designers to optimize user journeys. Ensure cross-browser compatibility and responsive design. | PNC Financial Services Group      | {"Sector":"Financial Services","Industry":"Commercial Banks","City":"Pittsburgh","State":"Pennsylvania","Zip":"15222","Website":"www.pnc.com","Ticker":"PNC","CEO":"William S. Demchak"} |
+| 3   | 481640072963533  | 0 to 12 Years  | 2022-09-14       | PhD            | $61K-$104K   | Macao      | Macao SAR, China | 22.1987  | 113.5439  | Temporary | 84525        | Gary Gibson      | 9687619505              | Operations Manager           | Quality Control Manager  | Jobs2Careers | Quality Control Managers establish and enforce quality standards within an organization. They develop quality control processes, perform inspections, and implement corrective actions to maintain product or service quality. | {'Legal Assistance, Bonuses and Incentive Programs, Wellness Programs, Employee Discounts, Retirement Plans'}              | Quality control processes and methodologies Statistical process control (SPC) Root cause analysis and corrective action Quality management systems (e.g., ISO 9001) Compliance and regulatory knowledge | Establish and enforce quality control standards and procedures. Conduct quality audits and inspections. Collaborate with production teams to address quality issues and implement improvements.      | United Services Automobile Assn.  | {"Sector":"Insurance","Industry":"Insurance: Property and Casualty (Stock)","City":"San Antonio","State":"Texas","Zip":"78288","Website":"www.usaa.com","Ticker":"","CEO":"Wayne Peacock"}  |
+
+This rich, albeit synthetic, dataset serves as the input for all subsequent processing and analysis stages in the project. Its structure allows for exploration into various potential use cases, such as building predictive models for job market trends, enhancing job recommendation systems, developing NLP models for resume parsing, analyzing regional job market disparities, and exploring salary prediction models.
+
+*(Acknowledgements from the dataset creators: Python Faker library for dataset generation and ChatGPT for fine-tuning and quality assurance.)*
 
 ### Creating Hive Tables and Preparing the Data for Analysis
 
@@ -273,16 +310,66 @@ These tables/files contain the aggregated data answering the specific analytical
 
 ### Charts
 
+[Link to the Superset](http://hadoop-03.uni.innopolis.ru:8808/superset/dashboard/97/)
+
 Visualizations for the EDA results were generated manually using Apache Superset, connecting to the PostgreSQL `q*_results` tables. These charts are saved as image files:
 
-*   `output/q1.jpg` / `png`: Visualizing average salary by country.
-*   `output/q2.jpg` / `png`: Visualizing top roles by gender preference.
-*   `output/q3.jpg` / `png`: Visualizing monthly job posting trends.
-*   `output/q4.jpg` / `png`: Visualizing job categories by count and average salary.
-*   `output/q5.jpg` / `png`: Visualizing top job titles and their common qualifications.
-*   `output/q6.jpg` / `png`: Visualizing bi-annual trends for top roles.
+*   ![Visualizing average salary by country](report_files/q1.jpg)
+# **Insight:**  
+The choropleth map displays average salary levels across countries, derived from parsed salary ranges. Darker shades indicate higher average salaries. However, due to the synthetic nature of the data, these geographical distributions may not correspond to real economic trends.
 
-*(Insert or reference the actual chart images here if desired).*
+# **Application:**  
+This visualization helps business stakeholders benchmark compensation by region, support international hiring decisions, and guide job seekers toward high-paying locations.
+
+
+*   ![Visualizing top roles by gender preference](report_files/q2_1.jpg).
+*   ![Visualizing top roles by gender preference](report_files/q2_2.jpg).
+*   ![Visualizing top roles by gender preference](report_files/q2_3.jpg).
+
+# **Insight:**  
+Roles like Interaction Designer and Network Administrator appear frequently across both genders. Slight variations exist, but given the synthetic data, these differences may not reflect actual workforce diversity.
+
+# **Application:**  
+These visualizations assist stakeholders in understanding gender distribution across job functions, supporting diversity and inclusion initiatives in hiring and workforce development.
+
+
+*   ![Visualizing monthly job posting trends](report_files/q3.jpg).
+
+# **Insight:**  
+The line chart indicates consistent job posting volumes over time, with minor fluctuations. These patterns likely result from the data generation process rather than actual market seasonality.
+
+# **Application:**  
+This visualization aids in identifying hiring cycles, enabling recruiters to optimize job ad timing and workforce planning.
+
+
+*   ![Visualizing job categories by count and average salary](report_files/q4.jpg).
+
+# **Insight:**  
+Sectors like Technology, Management, and Data & Analytics show high job counts. The "Other" category's prominence suggests a placeholder or default classification in the synthetic data.
+
+# **Application:**  
+This chart helps stakeholders understand which industries are actively hiring, informing job seekers and HR teams about sector-specific opportunities and competition.
+
+
+
+*   ![Visualizing top job titles and their common qualifications](report_files/q5.jpg).
+
+# **Insight:**  
+Roles such as UX/UI Designer, Software Engineer, and Digital Marketing Specialist are prevalent across qualifications like B.Tech, MBA, and B.Com. The data leans towards technical and business degrees.
+
+# **Application:**  
+This visualization guides academic institutions and students toward in-demand skills and qualifications, aligning education with job market needs.
+
+
+*   ![Visualizing bi-annual trends for top roles](report_files/q6.jpg).
+
+# **Insight:**  
+Trend lines show cyclic demand patterns for roles like Interaction Designer and Network Administrator. These patterns likely stem from the synthetic data's structure.
+
+# **Application:**  
+This chart assists in workforce planning, training programs, and forecasting demand for specific talent profiles.
+
+
 
 ### Interpretation
 
