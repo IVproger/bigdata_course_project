@@ -122,13 +122,13 @@ Details live in [`docs/report_*.md`](docs/) for auditors and graders.
 [Dashboard Link](http://hadoop-03.uni.innopolis.ru:8808/superset/dashboard/97/)
 
 <p align="center">
-  <img src="static/Superset_dash1.png" width="700" alt="Data description"/>
+  <img src="static/readme/Superset_dash1.png" width="700" alt="Data description"/>
 </p>
 
 <!-- Repeat for any other EDA screenshots -->
 <p align="center">
-  <img src="static/EDA_dash1.png" width="350" alt="EDA"/>
-  <img src="static/Superset_dash2.png" width="350" alt="ML Modelling"/>
+  <img src="static/readme/Superset_dash2.png" width="350" alt="EDA"/>
+  <img src="static/readme/Superset_dash3.png" width="350" alt="ML Modelling"/>
 </p>
 
 ---
