@@ -120,7 +120,7 @@ Details live in [`docs/report_*.md`](docs/) for auditors and graders.
 ## 📊 Dashboard Preview
 
 <p align="center">
-  <img src="docs/img/superset_overview.png" width="700" alt="Superset overview dashboard"/>
+  <img src="docs/static/EDA_dash1.png" width="700" alt="Superset overview dashboard"/>
 </p>
 
 <!-- Repeat for any other EDA screenshots -->
