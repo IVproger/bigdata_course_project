@@ -137,7 +137,10 @@ def main():
     db = 'team14_projectdb'
     table_name = 'job_descriptions_part'
     df = spark.read.format("avro").table(f'{db}.{table_name}')
-    
+
+    # Make sure job_id is selected and is not null (important for joining later)
+    df = df.filter(F.col("job_id").isNotNull())
+
     # Data preprocessing
     print("Drop Nan values")
     df = df.na.drop()
@@ -301,7 +304,8 @@ def main():
         
     # All features to use in the model
     all_features = numerical_features + categorical_features + text_features + cyclical_features + binary_features
-    selected_columns = all_features + [target]
+    # Include job_id in the selected columns
+    selected_columns = all_features + [target, 'job_id']
     df_selected = df.select(selected_columns)
     
     # Build ML pipeline
@@ -346,28 +350,40 @@ def main():
     print("Fit pipeline and transform data")
     pipeline_model = pipeline.fit(df_selected)
     transformed_data = pipeline_model.transform(df_selected)
-    ml_data = transformed_data.select("features", F.col(target).alias("label"))
+    # Select job_id along with features and label
+    ml_data = transformed_data.select("job_id", "features", F.col(target).alias("label"))
     
     # Apply log transformation to the target column
     print("Applying log transformation to the target column")
     ml_data = ml_data.withColumn("label", F.log1p(F.col("label"))) # Using log1p is generally safer
     
-    # Split and save data
+    # Split and save data (including job_id)
     print("Split and save data")
     (train_data, test_data) = ml_data.randomSplit([0.7, 0.3], seed=42)
-    train_data.repartition(3) \
-    .write \
-    .mode("overwrite") \
-    .format("json") \
-    .save("project/data/train")
-        
-    # Save test data to HDFS in JSON format
-    test_data.repartition(2) \
+
+    # Define schema for saving (including job_id)
+    output_schema = StructType([
+        StructField("job_id", StringType(), True), # Assuming job_id is String, adjust if needed
+        StructField("features", ml_data.schema["features"].dataType, True),
+        StructField("label", DoubleType(), True)
+    ])
+
+    # Save train data with explicit schema
+    train_data.select(F.col("job_id").cast(StringType()), "features", "label") \
+        .repartition(3) \
+        .write \
+        .mode("overwrite") \
+        .format("json") \
+        .save("project/data/train")
+
+    # Save test data with explicit schema
+    test_data.select(F.col("job_id").cast(StringType()), "features", "label") \
+        .repartition(2) \
         .write \
         .mode("overwrite") \
         .format("json") \
         .save("project/data/test")
-    
+
     spark.stop()
 
 if __name__ == "__main__":

@@ -7,7 +7,7 @@ from pprint import pprint
 
 from pyspark.sql import SparkSession
 from pyspark.sql import functions as F
-from pyspark.sql.types import StructType, StructField, DoubleType
+from pyspark.sql.types import StructType, StructField, DoubleType, StringType
 from pyspark.ml.linalg import VectorUDT # Import VectorUDT for schema
 
 from pyspark.ml import PipelineModel
@@ -42,10 +42,11 @@ def main():
     train_data_path = "project/data/train"
     test_data_path = "project/data/test"
 
-    # Define the schema for the input JSON data
+    # Define the schema for the input JSON data (including job_id)
     input_schema = StructType([
-        StructField("features", VectorUDT(), True), # Features are stored as vectors
-        StructField("label", DoubleType(), True)    # Label is a double (salary_avg)
+        StructField("job_id", StringType(), True),    # Added job_id
+        StructField("features", VectorUDT(), True),
+        StructField("label", DoubleType(), True)
     ])
 
     print(f"Loading training data from HDFS: {train_data_path}")
@@ -54,6 +55,15 @@ def main():
     print(f"Loading test data from HDFS: {test_data_path}")
     # Apply the explicit schema when reading
     test_data = spark.read.format("json").schema(input_schema).load(test_data_path)
+
+    # --- Load Original Data ---
+    print("Loading original job descriptions data from Hive...")
+    db = 'team14_projectdb'
+    original_table_name = 'job_descriptions_part'
+    original_df = spark.read.format("avro").table(f'{db}.{original_table_name}')
+    # Select necessary columns and cache
+    original_df = original_df.select("job_id", "*").filter(F.col("job_id").isNotNull()).cache()
+    print(f"Original data count: {original_df.count()}")
 
     # Cache data for better performance during iterative ML tasks
     train_data.cache()
@@ -132,16 +142,32 @@ def main():
     rmse1 = evaluator_rmse.evaluate(predictions1)
     r21 = evaluator_r2.evaluate(predictions1)
     # Store log-scale results for comparison table
-    results.append(("LinearRegression", str(model1), rmse1, r21))
+    results.append(("LinearRegression", rmse1, r21))
 
-    print("Converting Model 1 predictions back to original scale using expm1...")
-    predictions1_orig_scale = predictions1.withColumn("prediction", F.expm1(F.col("prediction")))
+    print("Joining Model 1 predictions with original data...")
+    # Select necessary columns from predictions (job_id, log label, log prediction)
+    predictions1_to_join = predictions1.select("job_id", F.col("label").alias("log_label"), F.col("prediction").alias("log_prediction"))
 
-    # Save Predictions 1 (NOW both label and prediction on original scale)
+    # Join with original data
+    enriched_predictions1 = original_df.join(predictions1_to_join, "job_id", "inner")
+
+    print("Converting Model 1 label and prediction back to original scale...")
+    enriched_predictions1 = enriched_predictions1 \
+        .withColumn("original_salary", F.expm1(F.col("log_label"))) \
+        .withColumn("predicted_salary", F.expm1(F.col("log_prediction")))
+
+    # Select all original columns + original_salary + predicted_salary
+    # Drop the temporary log columns and potentially duplicate job_id if necessary
+    # Let's dynamically get original columns except job_id to avoid duplication
+    original_cols = [col for col in original_df.columns if col != 'job_id']
+    final_output_cols1 = ['job_id'] + original_cols + ['original_salary', 'predicted_salary']
+    final_predictions1 = enriched_predictions1.select(final_output_cols1)
+
+    # Save Enriched Predictions 1
     predictions1_path_hdfs = "project/output/model1_predictions.csv"
-    print(f"Saving Model 1 predictions to HDFS: {predictions1_path_hdfs}")
-    run_hdfs_command(f"hdfs dfs -rm -r -f {predictions1_path_hdfs}") # Clean up previous predictions
-    predictions1_orig_scale.select(F.expm1(F.col("label")).alias("label"), "prediction") \
+    print(f"Saving enriched Model 1 predictions to HDFS: {predictions1_path_hdfs}")
+    run_hdfs_command(f"hdfs dfs -rm -r -f {predictions1_path_hdfs}")
+    final_predictions1 \
         .coalesce(1) \
         .write \
         .mode("overwrite") \
@@ -149,7 +175,7 @@ def main():
         .option("sep", ",") \
         .option("header", "true") \
         .save(predictions1_path_hdfs)
-    print("Model 1 predictions saved.")
+    print("Enriched Model 1 predictions saved.")
 
 
     # --- Model 2: Gradient-Boosted Trees (GBT) Regressor ---
@@ -216,16 +242,30 @@ def main():
     rmse2 = evaluator_rmse.evaluate(predictions2)
     r22 = evaluator_r2.evaluate(predictions2)
     # Store log-scale results for comparison table
-    results.append(("GBTRegressor", str(model2), rmse2, r22))
+    results.append(("GBTRegressor", rmse2, r22))
 
-    print("Converting Model 2 predictions back to original scale using expm1...")
-    predictions2_orig_scale = predictions2.withColumn("prediction", F.expm1(F.col("prediction")))
+    print("Joining Model 2 predictions with original data...")
+    # Select necessary columns from predictions (job_id, log label, log prediction)
+    predictions2_to_join = predictions2.select("job_id", F.col("label").alias("log_label"), F.col("prediction").alias("log_prediction"))
 
-    # Save Predictions 2 (NOW both label and prediction on original scale)
+    # Join with original data
+    enriched_predictions2 = original_df.join(predictions2_to_join, "job_id", "inner")
+
+    print("Converting Model 2 label and prediction back to original scale...")
+    enriched_predictions2 = enriched_predictions2 \
+        .withColumn("original_salary", F.expm1(F.col("log_label"))) \
+        .withColumn("predicted_salary", F.expm1(F.col("log_prediction")))
+
+    # Select all original columns + original_salary + predicted_salary
+    # Use the same column list logic as before
+    final_output_cols2 = ['job_id'] + original_cols + ['original_salary', 'predicted_salary']
+    final_predictions2 = enriched_predictions2.select(final_output_cols2)
+
+    # Save Enriched Predictions 2
     predictions2_path_hdfs = "project/output/model2_predictions.csv"
-    print(f"Saving Model 2 predictions to HDFS: {predictions2_path_hdfs}")
-    run_hdfs_command(f"hdfs dfs -rm -r -f {predictions2_path_hdfs}") # Clean up previous predictions
-    predictions2_orig_scale.select(F.expm1(F.col("label")).alias("label"), "prediction") \
+    print(f"Saving enriched Model 2 predictions to HDFS: {predictions2_path_hdfs}")
+    run_hdfs_command(f"hdfs dfs -rm -r -f {predictions2_path_hdfs}")
+    final_predictions2 \
         .coalesce(1) \
         .write \
         .mode("overwrite") \
@@ -233,12 +273,12 @@ def main():
         .option("sep", ",") \
         .option("header", "true") \
         .save(predictions2_path_hdfs)
-    print("Model 2 predictions saved.")
+    print("Enriched Model 2 predictions saved.")
 
 
     # --- Compare Models ---
     print("\n--- Comparing Models ---")
-    comparison_df = spark.createDataFrame(results, ["Model_Type", "Model_UID", "RMSE", "R2"])
+    comparison_df = spark.createDataFrame(results, ["Model_Type", "RMSE", "R2"])
     print("Model Comparison Results:")
     comparison_df.select("Model_Type", "RMSE", "R2").show(truncate=False)
 
@@ -259,6 +299,7 @@ def main():
     # --- Cleanup and Stop Spark ---
     train_data.unpersist()
     test_data.unpersist()
+    original_df.unpersist() # Unpersist original data
     print("\nStopping Spark Session...")
     spark.stop()
     print("Script finished successfully!")
