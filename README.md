@@ -82,7 +82,7 @@ flowchart LR
 
 ```bash
 # clone & bootstrap
-git clone [https://github.com/<your-org>/big-data-salary.git](https://github.com/IVproger/bigdata_course_project.git) && cd bigdata_course_project
+git clone https://github.com/IVproger/bigdata_course_project.git && cd bigdata_course_project
 python -m venv .venv && source .venv/bin/activate
 pip install -r requirements.txt
 
