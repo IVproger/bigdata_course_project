@@ -111,13 +111,15 @@ bash scripts/stage4.sh   # metrics → Hive for BI
 | **1 Data Collection** | Kaggle → PostgreSQL → Sqoop Avro in HDFS | `warehouse/*.avro` |
 | **2 Warehouse & EDA** | Partitioned + bucketed Hive table, 6 Spark-SQL analyses | `output/q*_results.csv` |
 | **3 Predictive ML** | Linear vs. GBT, 3-fold CV, log-salary target | `models/**`, `output/model*_predictions.csv` |
-| **4 Presentation** | KL divergence, Hive externals for Superset | `output/kl_divergence.csv` |
+| **4 Presentation** | KL divergence, Hive externals for Superset | `output/evaluation.csv `, `output/kl_divergence.csv`, `output/model1_predictions.csv`, `output/model2_predictions.csv`|
 
 Details live in [`docs/report_*.md`](docs/) for auditors and graders.
 
 ---
 
 ## 📊 Dashboard Preview
+
+[Dashboard Link](http://hadoop-03.uni.innopolis.ru:8808/superset/dashboard/97/)
 
 <p align="center">
   <img src="static/Superset_dash1.png" width="700" alt="Data description"/>
