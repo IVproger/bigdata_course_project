@@ -1,4 +1,4 @@
-# 🏗️ Big-Data Salary-Prediction Pipeline
+# 🏗️ Big-Data Salary Prediction project overview
 
 End-to-end Spark / Hadoop project that ingests **Kaggle job-description data**, turns it into an **analytics-ready Hive warehouse**, runs **Spark-SQL EDA**, trains & tunes **Spark-ML regression models**, and surfaces everything in an **Apache Superset dashboard**.
 
@@ -120,13 +120,13 @@ Details live in [`docs/report_*.md`](docs/) for auditors and graders.
 ## 📊 Dashboard Preview
 
 <p align="center">
-  <img src="static/EDA_dash1.png" width="700" alt="Superset overview dashboard"/>
+  <img src="static/Superset_dash1.png" width="700" alt="Data description"/>
 </p>
 
 <!-- Repeat for any other EDA screenshots -->
 <p align="center">
-  <img src="docs/img/salary_dist_by_role.png" width="350" alt="Salary distribution by role"/>
-  <img src="docs/img/model_rmse_comparison.png" width="350" alt="Model RMSE comparison"/>
+  <img src="static/EDA_dash1.png" width="350" alt="EDA"/>
+  <img src="static/Superset_dash2.png" width="350" alt="ML Modelling"/>
 </p>
 
 ---
