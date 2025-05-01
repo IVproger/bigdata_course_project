@@ -90,13 +90,14 @@ if __name__ == "__main__":
     output_path_hdfs = "project/output/kl_divergence.csv"
 
     # --- Load Predictions --- 
-    # Define schema for prediction files
+    # Define schema ONLY for the columns needed for KL divergence
     pred_schema = StructType([
-        StructField("label", DoubleType(), True),
-        StructField("prediction", DoubleType(), True)
+        StructField("original_salary", DoubleType(), True), # Updated column name
+        StructField("predicted_salary", DoubleType(), True) # Updated column name
     ])
 
     print(f"Loading Model 1 predictions from HDFS: {model1_pred_path}")
+    # Read only necessary columns using the specific schema
     pred1_df = spark.read.format("csv") \
                     .schema(pred_schema) \
                     .option("header", "true") \
@@ -105,6 +106,7 @@ if __name__ == "__main__":
     print(f"Model 1 predictions count: {pred1_df.count()}")
 
     print(f"Loading Model 2 predictions from HDFS: {model2_pred_path}")
+    # Read only necessary columns using the specific schema
     pred2_df = spark.read.format("csv") \
                     .schema(pred_schema) \
                     .option("header", "true") \
@@ -113,16 +115,16 @@ if __name__ == "__main__":
     print(f"Model 2 predictions count: {pred2_df.count()}")
 
     # --- Determine Bin Range --- 
-    # Use the original scale labels/predictions for binning (directly from CSV)
-    min_max_label = pred1_df.agg(F.min("label"), F.max("label")).first()
-    min_label = min_max_label["min(label)"]
-    max_label = min_max_label["max(label)"]
+    # Use the renamed columns for binning
+    min_max_label = pred1_df.agg(F.min("original_salary"), F.max("original_salary")).first()
+    min_label = min_max_label["min(original_salary)"] # Updated column name
+    max_label = min_max_label["max(original_salary)"] # Updated column name
 
-    min_max_pred1 = pred1_df.agg(F.min("prediction"), F.max("prediction")).first()
-    min_max_pred2 = pred2_df.agg(F.min("prediction"), F.max("prediction")).first()
+    min_max_pred1 = pred1_df.agg(F.min("predicted_salary"), F.max("predicted_salary")).first() # Updated column name
+    min_max_pred2 = pred2_df.agg(F.min("predicted_salary"), F.max("predicted_salary")).first() # Updated column name
 
-    global_min = min(min_label, min_max_pred1["min(prediction)"], min_max_pred2["min(prediction)"])
-    global_max = max(max_label, min_max_pred1["max(prediction)"], min_max_pred2["max(prediction)"])
+    global_min = min(min_label, min_max_pred1["min(predicted_salary)"], min_max_pred2["min(predicted_salary)"]) # Updated column names
+    global_max = max(max_label, min_max_pred1["max(predicted_salary)"], min_max_pred2["max(predicted_salary)"]) # Updated column names
 
     # Add a small buffer to avoid edge issues
     global_min -= EPSILON
@@ -132,29 +134,31 @@ if __name__ == "__main__":
 
     # --- Calculate Distributions ---
     print("Calculating probability distributions...")
-    # P (Actual Labels - Original Scale)
-    p_dist = get_probability_distribution(pred1_df, "label", global_min, global_max, NUM_BINS)
+    # P (Actual Labels - Original Scale) - Use updated column name
+    p_dist = get_probability_distribution(pred1_df, "original_salary", global_min, global_max, NUM_BINS)
     p_dist.cache()
     # print("P (Actual Labels) Distribution:")
     # p_dist.show(5, truncate=False)
 
-    # Q1 (Model 1 Predictions - Original Scale)
-    q1_dist = get_probability_distribution(pred1_df, "prediction", global_min, global_max, NUM_BINS)
+    # Q1 (Model 1 Predictions - Original Scale) - Use updated column name
+    q1_dist = get_probability_distribution(pred1_df, "predicted_salary", global_min, global_max, NUM_BINS)
     q1_dist.cache()
     # print("Q1 (Model 1 Predictions) Distribution:")
     # q1_dist.show(5, truncate=False)
     
-    # Q2 (Model 2 Predictions - Original Scale)
-    q2_dist = get_probability_distribution(pred2_df, "prediction", global_min, global_max, NUM_BINS)
+    # Q2 (Model 2 Predictions - Original Scale) - Use updated column name
+    q2_dist = get_probability_distribution(pred2_df, "predicted_salary", global_min, global_max, NUM_BINS)
     q2_dist.cache()
     # print("Q2 (Model 2 Predictions) Distribution:")
     # q2_dist.show(5, truncate=False)
 
     # --- Calculate KL Divergence ---
     print("Calculating KL Divergence...")
-    # Pass the correct column names for the distributions (using original column names now)
-    kl1 = calculate_kl(p_dist, q1_dist, p_col="label_prob", q_col="prediction_prob", bin_col="label_bin")
-    kl2 = calculate_kl(p_dist, q2_dist, p_col="label_prob", q_col="prediction_prob", bin_col="label_bin")
+    # The p_col and q_col names are generated inside the helper function based on input col_name, so they adapt automatically.
+    # Need to ensure the bin column name used for joining is correct.
+    # Assuming P distribution uses 'original_salary_bin' and Q distributions use 'predicted_salary_bin'
+    kl1 = calculate_kl(p_dist, q1_dist, p_col="original_salary_prob", q_col="predicted_salary_prob", bin_col="original_salary_bin")
+    kl2 = calculate_kl(p_dist, q2_dist, p_col="original_salary_prob", q_col="predicted_salary_prob", bin_col="original_salary_bin")
 
     print(f"KL Divergence (Model 1 vs Actual): {kl1}")
     print(f"KL Divergence (Model 2 vs Actual): {kl2}")
