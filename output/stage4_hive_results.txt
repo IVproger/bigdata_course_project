@@ -2,7 +2,8 @@ Connecting to jdbc:hive2://hadoop-03.uni.innopolis.ru:10001/team14_projectdb
 Connected to: Apache Hive (version 3.1.3)
 Driver: Hive JDBC (version 2.3.9)
 Transaction isolation: TRANSACTION_REPEATABLE_READ
-0: jdbc:hive2://hadoop-03.uni.innopolis.ru:10> -- HiveQL script to create external tables for Stage III results and KL diver gence
+0: jdbc:hive2://hadoop-03.uni.innopolis.ru:10> -- HiveQL script to create external tables for Stage III results and KL diver 
+gence
 0: jdbc:hive2://hadoop-03.uni.innopolis.ru:10> 
 0: jdbc:hive2://hadoop-03.uni.innopolis.ru:10> -- Use the project database
 0: jdbc:hive2://hadoop-03.uni.innopolis.ru:10> USE team14_projectdb;
@@ -316,7 +317,8 @@ INFO  : Completed executing command(queryId=hive_20250501173832_dd14dbb1-1c1c-4c
 INFO  : OK
 No rows affected (0.09 seconds)
 0: jdbc:hive2://hadoop-03.uni.innopolis.ru:10> 
-0: jdbc:hive2://hadoop-03.uni.innopolis.ru:10> -- Create external table for KL Divergence results (to be created by PySpark  script)
+0: jdbc:hive2://hadoop-03.uni.innopolis.ru:10> -- Create external table for KL Divergence results (to be created by PySpark  
+script)
 0: jdbc:hive2://hadoop-03.uni.innopolis.ru:10> CREATE EXTERNAL TABLE kl_divergence (
 . . . . . . . . . . . . . . . . . . . . . . .>     model_type STRING,
 . . . . . . . . . . . . . . . . . . . . . . .>     kl_divergence DOUBLE
