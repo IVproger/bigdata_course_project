@@ -596,10 +596,10 @@ Based on the project outcomes and challenges, several recommendations for future
 
 | Team Member Name | Contributions                                                                 |
 | :--------------- | :---------------------------------------------------------------------------- |
-| [Name 1]         | (e.g., Stage 1 implementation, PostgreSQL setup, Sqoop configuration)         |
-| [Name 2]         | (e.g., Stage 2 implementation, Hive optimization, Spark SQL EDA queries)      |
-| [Name 3]         | (e.g., Stage 3 implementation, Spark ML preprocessing, Model training/tuning) |
-| [Name 4]         | (e.g., Stage 4 implementation, KL divergence script, Superset integration prep) |
-| [Name ...]       | (e.g., Automation scripts (`stage*.sh`, `main.sh`), Documentation (`report*.md`, `README.md`), General Feature Analysis, Testing, Superset Dashboard Creation) |
+| Maxim Martyshov  | (e.g., Stage 1 implementation, PostgreSQL setup, Sqoop configuration)         |
+| Ivan Golov       | (e.g., Stage 2 implementation, Hive optimization, Spark SQL EDA queries)      |
+| Elisey Smirnov   | (e.g., Stage 3 implementation, Spark ML preprocessing, Model training/tuning) |
+| Roman Makeev     | (e.g., Stage 4 implementation, KL divergence script, Superset integration prep) |
+| All       | (e.g., Automation scripts (`stage*.sh`, `main.sh`), Documentation (`report*.md`, `README.md`), General Feature Analysis, Testing, Superset Dashboard Creation) |
 
 ---
