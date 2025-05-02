@@ -86,3 +86,93 @@
 . . . . . . . . . . . . . . . . . . . . . . .>     company_profile,
 . . . . . . . . . . . . . . . . . . . . . . .>     work_type  -- Must be last (partitio n column)
 . . . . . . . . . . . . . . . . . . . . . . .> FROM job_descriptions;
+0: jdbc:hive2://hadoop-03.uni.innopolis.ru:10> 
+0: jdbc:hive2://hadoop-03.uni.innopolis.ru:10> INSERT INTO table_schema VALUES
+. . . . . . . . . . . . . . . . . . . . . . .>     ('id', 'INT'),
+. . . . . . . . . . . . . . . . . . . . . . .>     ('job_id', 'BIGINT'),
+. . . . . . . . . . . . . . . . . . . . . . .>     ('experience', 'STRING'),
+. . . . . . . . . . . . . . . . . . . . . . .>     ('qualifications', 'STRING'),
+. . . . . . . . . . . . . . . . . . . . . . .>     ('salary_range', 'STRING'),
+. . . . . . . . . . . . . . . . . . . . . . .>     ('location', 'STRING'),
+. . . . . . . . . . . . . . . . . . . . . . .>     ('country', 'STRING'),
+. . . . . . . . . . . . . . . . . . . . . . .>     ('latitude', 'DECIMAL(9,6)'),
+. . . . . . . . . . . . . . . . . . . . . . .>     ('longitude', 'DECIMAL(9,6)'),
+. . . . . . . . . . . . . . . . . . . . . . .>     ('company_size', 'INT'),
+. . . . . . . . . . . . . . . . . . . . . . .>     ('job_posting_date', 'DATE'),
+. . . . . . . . . . . . . . . . . . . . . . .>     ('contact_person', 'STRING'),
+. . . . . . . . . . . . . . . . . . . . . . .>     ('preference', 'STRING'),
+. . . . . . . . . . . . . . . . . . . . . . .>     ('contact', 'STRING'),
+. . . . . . . . . . . . . . . . . . . . . . .>     ('job_title', 'STRING'),
+. . . . . . . . . . . . . . . . . . . . . . .>     ('role', 'STRING'),
+. . . . . . . . . . . . . . . . . . . . . . .>     ('job_portal', 'STRING'),
+. . . . . . . . . . . . . . . . . . . . . . .>     ('job_description', 'STRING'),
+. . . . . . . . . . . . . . . . . . . . . . .>     ('benefits', 'STRING'),
+. . . . . . . . . . . . . . . . . . . . . . .>     ('skills', 'STRING'),
+. . . . . . . . . . . . . . . . . . . . . . .>     ('responsibilities', 'STRING'),
+. . . . . . . . . . . . . . . . . . . . . . .>     ('company_name', 'STRING'),
+. . . . . . . . . . . . . . . . . . . . . . .>     ('company_profile', 'STRING'),
+. . . . . . . . . . . . . . . . . . . . . . .>     ('work_type', 'STRING');
+0: jdbc:hive2://hadoop-03.uni.innopolis.ru:10> 
+0: jdbc:hive2://hadoop-03.uni.innopolis.ru:10> -- Delete the unpartitioned Hive TABLE j ob_descriptions
+0: jdbc:hive2://hadoop-03.uni.innopolis.ru:10> DROP TABLE job_descriptions;
+0: jdbc:hive2://hadoop-03.uni.innopolis.ru:10> 
+0: jdbc:hive2://hadoop-03.uni.innopolis.ru:10> -- Verify the table was created correctl y
+0: jdbc:hive2://hadoop-03.uni.innopolis.ru:10> SHOW TABLES;
++------------------------+
+|        tab_name        |
++------------------------+
+| job_descriptions_part  |
+| table_schema           |
++------------------------+
+0: jdbc:hive2://hadoop-03.uni.innopolis.ru:10> 
+0: jdbc:hive2://hadoop-03.uni.innopolis.ru:10> -- Check the partitions in the table
+0: jdbc:hive2://hadoop-03.uni.innopolis.ru:10> SHOW PARTITIONS job_descriptions_part;
++----------------------+
+|      partition       |
++----------------------+
+| work_type=Contract   |
+| work_type=Full-Time  |
+| work_type=Intern     |
+| work_type=Part-Time  |
+| work_type=Temporary  |
++----------------------+
+0: jdbc:hive2://hadoop-03.uni.innopolis.ru:10> 
+0: jdbc:hive2://hadoop-03.uni.innopolis.ru:10> -- Check the bucketing in the table 
+0: jdbc:hive2://hadoop-03.uni.innopolis.ru:10> SELECT 
+. . . . . . . . . . . . . . . . . . . . . . .>   preference,
+. . . . . . . . . . . . . . . . . . . . . . .>   INPUT__FILE__NAME AS file,
+. . . . . . . . . . . . . . . . . . . . . . .>   COUNT(*) AS count
+. . . . . . . . . . . . . . . . . . . . . . .> FROM job_descriptions_part
+. . . . . . . . . . . . . . . . . . . . . . .> WHERE work_type = 'Contract'
+. . . . . . . . . . . . . . . . . . . . . . .> GROUP BY preference, INPUT__FILE__NAME;
++-------------+----------------------------------------------------+---------+
+| preference  |                        file                        |  count  |
++-------------+----------------------------------------------------+---------+
+| Female      | hdfs://hadoop-02.uni.innopolis.ru:8020/user/team14/project/hive/warehouse/job_descriptions_part/work_type=Contract/000001_0 | 107726  |
+| Male        | hdfs://hadoop-02.uni.innopolis.ru:8020/user/team14/project/hive/warehouse/job_descriptions_part/work_type=Contract/000002_0 | 107889  |
+| Both        | hdfs://hadoop-02.uni.innopolis.ru:8020/user/team14/project/hive/warehouse/job_descriptions_part/work_type=Contract/000002_0 | 107516  |
++-------------+----------------------------------------------------+---------+
+0: jdbc:hive2://hadoop-03.uni.innopolis.ru:10> 
+0: jdbc:hive2://hadoop-03.uni.innopolis.ru:10> -- Sample query to verify data
+0: jdbc:hive2://hadoop-03.uni.innopolis.ru:10> SELECT COUNT(*) FROM job_descriptions_pa rt;
++----------+
+|   _c0    |
++----------+
+| 1615940  |
++----------+
+0: jdbc:hive2://hadoop-03.uni.innopolis.ru:10> 
+0: jdbc:hive2://hadoop-03.uni.innopolis.ru:10> -- Sample query to check data distributi on by work type
+0: jdbc:hive2://hadoop-03.uni.innopolis.ru:10> SELECT work_type, COUNT(*) as job_count  
+. . . . . . . . . . . . . . . . . . . . . . .> FROM job_descriptions_part 
+. . . . . . . . . . . . . . . . . . . . . . .> GROUP BY work_type 
+. . . . . . . . . . . . . . . . . . . . . . .> ORDER BY job_count DESC; 
++------------+------------+
+| work_type  | job_count  |
++------------+------------+
+| Part-Time  | 324044     |
+| Temporary  | 323439     |
+| Contract   | 323131     |
+| Intern     | 323090     |
+| Full-Time  | 322236     |
++------------+------------+
+0: jdbc:hive2://hadoop-03.uni.innopolis.ru:10> 

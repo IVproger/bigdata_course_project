@@ -21,8 +21,8 @@ hdfs dfs -rm -r -f project/output >/dev/null 2>&1 || true
 echo "Recreating HDFS structure..."
 hdfs dfs -mkdir -p project/data/train
 hdfs dfs -mkdir -p project/data/test
-hdfs dfs -mkdir -p project/models
-hdfs dfs -mkdir -p project/output
+# hdfs dfs -mkdir -p project/models
+# hdfs dfs -mkdir -p project/output
 
 # --- Stage 3: Part 1 - Data Preprocessing ---
 echo "Running data preprocessing script..."

@@ -1,6 +1,3 @@
-#!/usr/bin/env python
-# calculate_kl.py
-
 import math
 from pyspark.sql import SparkSession
 from pyspark.sql import functions as F
@@ -53,7 +50,7 @@ def calculate_kl(p_df, q_df, p_col="label_prob", q_col="prediction_prob", bin_co
     # Join the two distributions on the bin number
     # Ensure the bin column names match for joining
     q_df_renamed = q_df.withColumnRenamed(q_df.columns[0], bin_col) # Rename Q's bin column
-    q_col_renamed = q_df.columns[1]
+    q_col_renamed = q_df.columns[1] # Get the renamed probability column name from Q
     
     joined_df = p_df.join(q_df_renamed, bin_col, "inner")
     
@@ -90,41 +87,57 @@ if __name__ == "__main__":
     output_path_hdfs = "project/output/kl_divergence.csv"
 
     # --- Load Predictions --- 
-    # Define schema ONLY for the columns needed for KL divergence
-    pred_schema = StructType([
-        StructField("original_salary", DoubleType(), True), # Updated column name
-        StructField("predicted_salary", DoubleType(), True) # Updated column name
-    ])
-
+    # Read the full CSV first, then select and cast the required columns
     print(f"Loading Model 1 predictions from HDFS: {model1_pred_path}")
-    # Read only necessary columns using the specific schema
-    pred1_df = spark.read.format("csv") \
-                    .schema(pred_schema) \
-                    .option("header", "true") \
-                    .load(model1_pred_path)
+    pred1_df_raw = spark.read.format("csv") \
+                        .option("header", "true") \
+                        .option("inferSchema", "false") \
+                        .load(model1_pred_path)
+
+    # Select and cast only the necessary columns
+    pred1_df = pred1_df_raw.select(
+        F.col("original_salary").cast(DoubleType()),
+        F.col("predicted_salary").cast(DoubleType())
+    ).na.drop() # Drop rows where casting might result in null (e.g., non-numeric values)
+    
     pred1_df.cache()
-    print(f"Model 1 predictions count: {pred1_df.count()}")
+    print(f"Model 1 predictions count after selecting columns: {pred1_df.count()}")
 
     print(f"Loading Model 2 predictions from HDFS: {model2_pred_path}")
-    # Read only necessary columns using the specific schema
-    pred2_df = spark.read.format("csv") \
-                    .schema(pred_schema) \
-                    .option("header", "true") \
-                    .load(model2_pred_path)
+    pred2_df_raw = spark.read.format("csv") \
+                        .option("header", "true") \
+                        .option("inferSchema", "false") \
+                        .load(model2_pred_path)
+
+    # Select and cast only the necessary columns
+    pred2_df = pred2_df_raw.select(
+        F.col("original_salary").cast(DoubleType()), # Assuming model2 output also has original_salary
+        F.col("predicted_salary").cast(DoubleType())
+    ).na.drop() # Drop rows where casting might result in null
+    
     pred2_df.cache()
-    print(f"Model 2 predictions count: {pred2_df.count()}")
+    print(f"Model 2 predictions count after selecting columns: {pred2_df.count()}")
 
     # --- Determine Bin Range --- 
-    # Use the renamed columns for binning
+    # Use the selected and casted columns
     min_max_label = pred1_df.agg(F.min("original_salary"), F.max("original_salary")).first()
-    min_label = min_max_label["min(original_salary)"] # Updated column name
-    max_label = min_max_label["max(original_salary)"] # Updated column name
+    min_label = min_max_label["min(original_salary)"] 
+    max_label = min_max_label["max(original_salary)"] 
 
-    min_max_pred1 = pred1_df.agg(F.min("predicted_salary"), F.max("predicted_salary")).first() # Updated column name
-    min_max_pred2 = pred2_df.agg(F.min("predicted_salary"), F.max("predicted_salary")).first() # Updated column name
+    min_max_pred1 = pred1_df.agg(F.min("predicted_salary"), F.max("predicted_salary")).first() 
+    min_max_pred2 = pred2_df.agg(F.min("predicted_salary"), F.max("predicted_salary")).first() 
 
-    global_min = min(min_label, min_max_pred1["min(predicted_salary)"], min_max_pred2["min(predicted_salary)"]) # Updated column names
-    global_max = max(max_label, min_max_pred1["max(predicted_salary)"], min_max_pred2["max(predicted_salary)"]) # Updated column names
+    # Handle potential None values if any aggregation result is empty
+    all_mins = [m for m in [min_label, min_max_pred1["min(predicted_salary)"], min_max_pred2["min(predicted_salary)"]] if m is not None]
+    all_maxs = [m for m in [max_label, min_max_pred1["max(predicted_salary)"], min_max_pred2["max(predicted_salary)"]] if m is not None]
+
+    if not all_mins or not all_maxs:
+        print("Error: Could not determine min/max salary range. Check input data.")
+        spark.stop()
+        exit(1)
+
+    global_min = min(all_mins)
+    global_max = max(all_maxs)
 
     # Add a small buffer to avoid edge issues
     global_min -= EPSILON
@@ -134,19 +147,19 @@ if __name__ == "__main__":
 
     # --- Calculate Distributions ---
     print("Calculating probability distributions...")
-    # P (Actual Labels - Original Scale) - Use updated column name
+    # P (Actual Labels - Original Scale) 
     p_dist = get_probability_distribution(pred1_df, "original_salary", global_min, global_max, NUM_BINS)
     p_dist.cache()
     # print("P (Actual Labels) Distribution:")
     # p_dist.show(5, truncate=False)
 
-    # Q1 (Model 1 Predictions - Original Scale) - Use updated column name
+    # Q1 (Model 1 Predictions - Original Scale) 
     q1_dist = get_probability_distribution(pred1_df, "predicted_salary", global_min, global_max, NUM_BINS)
     q1_dist.cache()
     # print("Q1 (Model 1 Predictions) Distribution:")
     # q1_dist.show(5, truncate=False)
     
-    # Q2 (Model 2 Predictions - Original Scale) - Use updated column name
+    # Q2 (Model 2 Predictions - Original Scale) 
     q2_dist = get_probability_distribution(pred2_df, "predicted_salary", global_min, global_max, NUM_BINS)
     q2_dist.cache()
     # print("Q2 (Model 2 Predictions) Distribution:")
@@ -154,11 +167,12 @@ if __name__ == "__main__":
 
     # --- Calculate KL Divergence ---
     print("Calculating KL Divergence...")
-    # The p_col and q_col names are generated inside the helper function based on input col_name, so they adapt automatically.
-    # Need to ensure the bin column name used for joining is correct.
-    # Assuming P distribution uses 'original_salary_bin' and Q distributions use 'predicted_salary_bin'
+    # The p_col and q_col names are generated inside the helper function based on input col_name.
+    # The bin_col name needs to match the bin column from the P distribution.
+    # The helper function `calculate_kl` renames the bin column from Q distribution internally.
     kl1 = calculate_kl(p_dist, q1_dist, p_col="original_salary_prob", q_col="predicted_salary_prob", bin_col="original_salary_bin")
     kl2 = calculate_kl(p_dist, q2_dist, p_col="original_salary_prob", q_col="predicted_salary_prob", bin_col="original_salary_bin")
+
 
     print(f"KL Divergence (Model 1 vs Actual): {kl1}")
     print(f"KL Divergence (Model 2 vs Actual): {kl2}")
@@ -177,11 +191,14 @@ if __name__ == "__main__":
     print(f"Saving KL Divergence results to HDFS: {output_path_hdfs}")
     # Clean up previous results first using HDFS commands via spark (less direct but avoids os calls)
     try:
-        dbutils = spark._jvm.org.apache.hadoop.fs.FileSystem.get(spark._jsc.hadoopConfiguration())
-        dbutils.delete(spark._jvm.org.apache.hadoop.fs.Path(output_path_hdfs), True) 
-        print(f"Successfully cleaned HDFS path: {output_path_hdfs}")
+        # Get Hadoop FileSystem object
+        fs = spark._jvm.org.apache.hadoop.fs.FileSystem.get(spark._jsc.hadoopConfiguration())
+        path = spark._jvm.org.apache.hadoop.fs.Path(output_path_hdfs)
+        if fs.exists(path):
+            fs.delete(path, True) # True for recursive delete
+            print(f"Successfully cleaned HDFS path: {output_path_hdfs}")
     except Exception as e:
-        print(f"Warning: Could not clean HDFS path {output_path_hdfs}. It might not exist yet. Error: {e}")
+        print(f"Warning: Could not clean HDFS path {output_path_hdfs}. It might not exist yet or other error occurred. Error: {e}")
         
     kl_df.coalesce(1) \
         .write \
@@ -201,4 +218,4 @@ if __name__ == "__main__":
 
     print("Stopping Spark Session...")
     spark.stop()
-    print("Script finished successfully!") 
+    print("Script finished successfully!")

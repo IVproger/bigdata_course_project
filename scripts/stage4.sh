@@ -35,7 +35,7 @@ spark-submit \
     --conf spark.executorEnv.PYSPARK_PYTHON=$PYSPARK_PYTHON \
     scripts/calculate_kl.py
 
-# --- Stage 4: Part 2 - Create Hive Tables ---
+--- Stage 4: Part 2 - Create Hive Tables ---
 echo "Creating Hive tables for Stage 3 results and KL divergence..."
 
 # --- HDFS Cleanup (for Hive table locations) ---
