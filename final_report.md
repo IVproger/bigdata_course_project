@@ -2,7 +2,7 @@
 
 ## Title Page
 
-**Project Title:** End-to-End Big Data Pipeline for Job Description Analysis and Salary Prediction  
+**Project Title:** End-to-End System for Job Description Analysis and Salary Prediction  
 **Team:** Team 14  
 **Course:** Big Data - IU S24  
 **Date:** 1/05/2025
