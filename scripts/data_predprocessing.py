@@ -308,6 +308,13 @@ def main():
     selected_columns = all_features + [target, 'job_id']
     df_selected = df.select(selected_columns)
     
+    # --- Save preprocessed data to Hive ---
+    print("Saving preprocessed data to Hive")
+    preprocessed_table_name = 'job_descriptions_preprocessed'
+    df_selected.write.mode("overwrite").saveAsTable(f'{db}.{preprocessed_table_name}')
+    print(f"Preprocessed data saved to {db}.{preprocessed_table_name}")
+    # --- End Save preprocessed data to Hive ---
+    
     # Build ML pipeline
     print("Build predprocessing pipeline")
     categorical_indexers = [StringIndexer(inputCol=c, outputCol=f"{c}_indexed", handleInvalid="skip") 

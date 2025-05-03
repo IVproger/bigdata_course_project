@@ -174,9 +174,9 @@ cython_debug/
 .pypirc
 
 data/job_descriptions.csv
-/data
-/secrets
+data
+secrets
 .venv.tar.gz
-/models
+models
 output/model1_predictions.csv
 output/model2_predictions.csv
