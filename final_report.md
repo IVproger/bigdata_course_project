@@ -252,7 +252,6 @@ Firstly, general EDA analysis has been conducted by running `scripts/feature_ana
 
 ### General EDA Charts
 
-
 ![company-state-counts](static/final_report/gen_eda_1.png)
 ![company-state-counts](static/final_report/gen_eda_2.png)
 ![company-state-counts](static/final_report/gen_eda_3.png)
@@ -291,7 +290,8 @@ These tables/files contain the aggregated data answering the specific analytical
 
 Visualizations for the EDA results were generated manually using Apache Superset, connecting to the PostgreSQL `q*_results` tables. These charts are saved as image files:
 
-*   ![Visualizing average salary by country](static/final_report/q1.jpg)
+![Visualizing average salary by country](static/final_report/eda_q1.png)
+
 **Insight:**  
 The choropleth map displays average salary levels across countries, derived from parsed salary ranges. Darker shades indicate higher average salaries. However, due to the synthetic nature of the data, these geographical distributions may not correspond to real economic trends.
 
@@ -299,9 +299,8 @@ The choropleth map displays average salary levels across countries, derived from
 This visualization helps business stakeholders benchmark compensation by region, support international hiring decisions, and guide job seekers toward high-paying locations.
 
 
-*   ![Visualizing top roles by gender preference](static/final_report/q2_1.jpg)
-*   ![Visualizing top roles by gender preference](static/final_report/q2_2.jpg)
-*   ![Visualizing top roles by gender preference](static/final_report/q2_3.jpg)
+![Visualizing top roles by gender preference](static/final_report/eda_q2-1.png)
+![Visualizing top roles by gender preference](static/final_report/eda_q2-2.png)
 
 **Insight:**  
 Roles like Interaction Designer and Network Administrator appear frequently across both genders. Slight variations exist, but given the synthetic data, these differences may not reflect actual workforce diversity.
@@ -310,7 +309,7 @@ Roles like Interaction Designer and Network Administrator appear frequently acro
 These visualizations assist stakeholders in understanding gender distribution across job functions, supporting diversity and inclusion initiatives in hiring and workforce development.
 
 
-*   ![Visualizing monthly job posting trends](static/final_report/q3.jpg)
+![Visualizing average salary by country](static/final_report/eda_q3.png)
 
 **Insight:**  
 The line chart indicates consistent job posting volumes over time, with minor fluctuations. These patterns likely result from the data generation process rather than actual market seasonality.
@@ -319,7 +318,7 @@ The line chart indicates consistent job posting volumes over time, with minor fl
 This visualization aids in identifying hiring cycles, enabling recruiters to optimize job ad timing and workforce planning.
 
 
-*   ![Visualizing job categories by count and average salary](static/final_report/q4.jpg)
+![Visualizing average salary by country](static/final_report/eda_q4.png)
 
 **Insight:**  
 Sectors like Technology, Management, and Data & Analytics show high job counts. The "Other" category's prominence suggests a placeholder or default classification in the synthetic data.
@@ -329,7 +328,7 @@ This chart helps stakeholders understand which industries are actively hiring, i
 
 
 
-*   ![Visualizing top job titles and their common qualifications](static/final_report/q5.jpg)
+![Visualizing average salary by country](static/final_report/eda_q5.png)
 
 **Insight:**  
 Roles such as UX/UI Designer, Software Engineer, and Digital Marketing Specialist are prevalent across qualifications like B.Tech, MBA, and B.Com. The data leans towards technical and business degrees.
@@ -338,7 +337,7 @@ Roles such as UX/UI Designer, Software Engineer, and Digital Marketing Specialis
 This visualization guides academic institutions and students toward in-demand skills and qualifications, aligning education with job market needs.
 
 
-*   ![Visualizing bi-annual trends for top roles](static/final_report/q6.jpg)
+![Visualizing average salary by country](static/final_report/eda_q6.png)
 
 **Insight:**  
 Trend lines show cyclic demand patterns for roles like Interaction Designer and Network Administrator. These patterns likely stem from the synthetic data's structure.
