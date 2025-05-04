@@ -252,17 +252,12 @@ Firstly, general EDA analysis has been conducted by running `scripts/feature_ana
 
 ### General EDA Charts
 
-*   ![company-state-counts](static/final_report/company-state-counts.jpg)
-*   ![correlation-with-target](static/final_report/correlation-with-target.jpg)
-*   ![features-correlation](static/final_report/features-correlation.jpg)
-*   ![gender-distribution](static/final_report/gender-distribution.jpg)
-*   ![industry-counts](static/final_report/industry-counts.jpg)
-*   ![job-portal-counts](static/final_report/job-portal-counts.jpg)
-*   ![preference-counts](static/final_report/preference-counts.jpg)
-*   ![qualification-counts](static/final_report/qualification-counts.jpg)
-*   ![sector-counts](static/final_report/sector-counts.jpg)
-*   ![target-statistics](static/final_report/target-statistics.jpg)
-*   ![work-type-counts](static/final_report/work-type-counts.jpg)
+
+![company-state-counts](static/final_report/gen_eda_1.png)
+![company-state-counts](static/final_report/gen_eda_2.png)
+![company-state-counts](static/final_report/gen_eda_3.png)
+![company-state-counts](static/final_report/gen_eda_4.png)
+![company-state-counts](static/final_report/gen_eda_5.png)
 
 **Insight:**  
 
