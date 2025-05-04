@@ -592,14 +592,12 @@ Based on the project outcomes and challenges, several recommendations for future
 
 ## 10. The Table of Contributions of Each Team Member
 
-*(Please fill this table with accurate contributions for each member of Team 14):*
-
 | Team Member Name | Contributions                                                                 |
 | :--------------- | :---------------------------------------------------------------------------- |
-| Maxim Martyshov  | (e.g., Stage 1 implementation, PostgreSQL setup, Sqoop configuration)         |
-| Ivan Golov       | (e.g., Stage 2 implementation, Hive optimization, Spark SQL EDA queries)      |
-| Elisey Smirnov   | (e.g., Stage 3 implementation, Spark ML preprocessing, Model training/tuning) |
-| Roman Makeev     | (e.g., Stage 4 implementation, KL divergence script, Superset integration prep) |
-| All       | (e.g., Automation scripts (`stage*.sh`, `main.sh`), Documentation (`report*.md`, `README.md`), General Feature Analysis, Testing, Superset Dashboard Creation) |
+| Maxim Martyshov  | Stage 1 implementation, PostgreSQL setup, Sqoop configuration         |
+| Ivan Golov       | Stage 2 implementation, Hive optimization, Spark SQL EDA queries      |
+| Elisey Smirnov   | Stage 3 implementation, Spark ML preprocessing, Model training/tuning |
+| Roman Makeev     | Stage 4 implementation, KL divergence script, Superset integration prep |
+| All       | Automation scripts (`stage*.sh`, `main.sh`), Documentation (`report*.md`, `README.md`), General Feature Analysis, Testing, Superset Dashboard Creation |
 
 ---
