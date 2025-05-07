@@ -586,12 +586,21 @@ Based on the project outcomes and challenges, several recommendations for future
 
 ## 10. The Table of Contributions of Each Team Member
 
-| Team Member Name | Contributions                                                                 |
-| :--------------- | :---------------------------------------------------------------------------- |
-| Maxim Martyshov  | Stage 1 implementation, PostgreSQL setup, Sqoop configuration         |
-| Ivan Golov       | Stage 2 implementation, Hive optimization, Spark SQL EDA queries      |
-| Elisey Smirnov   | Stage 3 implementation, Spark ML preprocessing, Model training/tuning |
-| Roman Makeev     | Stage 4 implementation, KL divergence script, Superset integration prep |
-| All       | Automation scripts (`stage*.sh`, `main.sh`), Documentation (`report*.md`, `README.md`), General Feature Analysis, Testing, Superset Dashboard Creation |
+**Clarifying percent influence**
 
+The user likely wants to add a column to the table that shows the percentage of the total contributions each team member made. To do this, I’d need to calculate each person’s contributions out of the total. For instance: Maxim contributed 3 out of 17, so his influence would be 17.65%. The same would apply for Ivan, Elisey, Roman, and the "All" group. I'll calculate these percentages and add a "Percent Influence" column.
+
+
+
+| Team Member Name | Contributions                                                                                                                                          | Number of Contributions | Percent Influence |
+| :--------------- | :----------------------------------------------------------------------------------------------------------------------------------------------------- | :---------------------: | ----------------: |
+| Maxim Martyshov  | Stage 1 implementation, PostgreSQL setup, Sqoop configuration                                                                                          |            3            |             17.6% |
+| Ivan Golov       | Stage 2 implementation, Hive optimization, Spark SQL EDA queries                                                                                       |            3            |             17.6% |
+| Elisey Smirnov   | Stage 3 implementation, Spark ML preprocessing, Model training/tuning                                                                                  |            3            |             17.6% |
+| Roman Makeev     | Stage 4 implementation, KL divergence script, Superset integration prep                                                                                |            3            |             17.6% |
+| **All**          | Automation scripts (`stage*.sh`, `main.sh`), Documentation (`report*.md`, `README.md`), General Feature Analysis, Testing, Superset Dashboard Creation |            5            |             29.4% |
+| **Totals**       | —                                                                                                                                                      |            17           |            100.0% |
+
+* Total distinct contribution‐items counted: **17** 
+* Percent Influence = (Number of Contributions ÷ 17) × 100, rounded to one decimal.
 ---
