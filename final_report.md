@@ -591,7 +591,7 @@ Based on the project outcomes and challenges, several recommendations for future
 | Maxim Martyshov  | Stage 1 implementation, PostgreSQL setup, Sqoop configuration                                                                                          |            3            |             17.6% |
 | Ivan Golov       | Stage 2 implementation, Hive optimization, Spark SQL EDA queries                                                                                       |            3            |             17.6% |
 | Elisey Smirnov   | Stage 3 implementation, Spark ML preprocessing, Model training/tuning                                                                                  |            3            |             17.6% |
-| Roman Makeev     | Stage 4 implementation, KL divergence script, Superset integration prep                                                                                |            3            |             17.6% |
+| Roman Makeev     | Data preprocessing script implementation + Stage 4 implementation, Superset integration prep                                                                                |            3            |             17.6% |
 | **All**          | Automation scripts (`stage*.sh`, `main.sh`), Documentation (`report*.md`, `README.md`), General Feature Analysis, Testing, Superset Dashboard Creation |            5            |             29.4% |
 | **Totals**       | —                                                                                                                                                      |            17           |            100.0% |
 
