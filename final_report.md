@@ -586,12 +586,6 @@ Based on the project outcomes and challenges, several recommendations for future
 
 ## 10. The Table of Contributions of Each Team Member
 
-**Clarifying percent influence**
-
-The user likely wants to add a column to the table that shows the percentage of the total contributions each team member made. To do this, I’d need to calculate each person’s contributions out of the total. For instance: Maxim contributed 3 out of 17, so his influence would be 17.65%. The same would apply for Ivan, Elisey, Roman, and the "All" group. I'll calculate these percentages and add a "Percent Influence" column.
-
-
-
 | Team Member Name | Contributions                                                                                                                                          | Number of Contributions | Percent Influence |
 | :--------------- | :----------------------------------------------------------------------------------------------------------------------------------------------------- | :---------------------: | ----------------: |
 | Maxim Martyshov  | Stage 1 implementation, PostgreSQL setup, Sqoop configuration                                                                                          |            3            |             17.6% |
